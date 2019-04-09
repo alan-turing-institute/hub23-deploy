@@ -8,7 +8,7 @@ See the following docs:
 
 #### Update `config.yaml` with the following config
 
-* Also modify `config-template.yaml`
+* Also modify `config-template.yaml` and `make-config-files.sh`
 
 ```
 config:
@@ -53,7 +53,7 @@ This will set up the redirection to the JupyterHub for login and spin up user se
 
 #### Modify the `auth:` section of `config.yaml` to include the following
 
-* Also modify `config-template.yaml`
+* Also modify `config-template.yaml` and `make-config-files.sh`
 
 ```
 auth:

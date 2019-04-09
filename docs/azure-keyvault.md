@@ -9,33 +9,37 @@ It assumes you have the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/i
 #### 1. Login to Azure
 
 ```
-az login
+az login --output none
 ```
-And login with your Turing account.
+
+Login with your Turing account.
 
 #### 2. Activate the Subscription
 
 Hub23 has its own subscription and so we have to activate that.
 
 To check which subscriptions you have access to, run the following:
+
 ```
 az account list --refresh --output table
 ```
+
 You should see `Turing-BinderHub` listed as an option.
 If not, request access by opening a TopDesk ticket.
 
 To activate the subscription, run the following:
+
 ```
 az account set -s Turing-BinderHub
 ```
 
 #### 3. Create a Resource Group
 
-Azure groups related resources together by assigning them a Resource Group.
+Azure groups related resources together by assigning them to a Resource Group.
 We need to create one for Hub23.
 
 ```
-az group create --name Hub23 --location "West Europe" --output table
+az group create --name Hub23 --location westeurope --output table
 ```
 
 * `--name` is what we'll use to identify resources relating to the BinderHub and should be short and descriptive.
@@ -81,16 +85,19 @@ The name follows the same rule as the key vault.
 #### 3. Add the SSH keys to the vault
 
 Add the private key:
+
 ```
 az keyvault secret set --vault-name hub23-keyvault --name ssh-key-Hub23cluster-private --file .secret/ssh-key-hub23cluster
 ```
 
 Add the public key:
+
 ```
 az keyvault secret set --vault-name hub23-keyvault --name ssh-key-Hub23cluster-public --file .secret/ssh-key-hub23cluster.pub
 ```
 
-**Now delete the local copies of the SSH keys**
+**Now delete the local copies of the SSH keys.**
+
 ```
 rm .secret/ssh-key-hub23cluster*
 ```
@@ -100,6 +107,7 @@ rm .secret/ssh-key-hub23cluster*
 We can create the tokens and save them to the vault in one step using the `--value` argument.
 
 Add the API token:
+
 ```
 az keyvault secret set --vault-name hub23-keyvault --name apiToken --value $(openssl rand -hex 32)
 ```
@@ -118,11 +126,13 @@ We will need certain secrets in order to create the `config.yaml` and `secret.ya
 #### 1. Download the SSH keys
 
 Download the private key:
+
 ```
 az keyvault secret download --vault-name hub23-keyvault --name ssh-key-Hub23cluster-private --file .secret/ssh-key-hub23cluster
 ```
 
 Download the public key:
+
 ```
 az keyvault secret download --vault-name hub23-keyvault --name ssh-key-Hub23cluster-public --file .secret/ssh-key-hub23cluster.pub
 ```
@@ -130,11 +140,13 @@ az keyvault secret download --vault-name hub23-keyvault --name ssh-key-Hub23clus
 #### 2. Download the API and secret tokens
 
 Download the API token:
+
 ```
 az keyvault secret download --vault-name hub23-keyvault --name apiToken --file .secret/apiToken.txt
 ```
 
 Download the secret token:
+
 ```
 az keyvault secret download --vault-name hub3-keyvault --name secretToken --file .secret/secretToken.txt
 ```
@@ -148,21 +160,25 @@ I (@sgibson91) have saved the Service Principal to the key vault for safe-keepin
 The following steps document how I did it and how one would download the Service Principal again.
 
 Add the app ID:
+
 ```
 az keyvault secret set --vault-name hub23-keyvault --name SP-appID --value <redacted>
 ```
 
 Add the key:
+
 ```
 az keyvault secret set --vault-name hub23-keyvault --name SP-key --value <redacted>
 ```
 
 Download the app ID:
+
 ```
 az keyvault secret download --vault-name hub23-keyvault --name SP-appID --file .secret/appID.txt
 ```
 
 Download the key:
+
 ```
 az keyvault secret download --vault-name hub23-keyvault --name SP-secret --file .secret/key.txt
 ```

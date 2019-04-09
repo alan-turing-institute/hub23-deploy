@@ -12,23 +12,26 @@ We assume you have the following CLI's installed:
 #### 1. Login to Azure
 
 ```
-az login
+az login --output none
 ```
 
-And login with your Turing account.
+Login with your Turing account.
 
 #### 2. Activate the Subscription
 
 Hub23 has its own subscription and so we have to activate that.
 
 To check which subscriptions you have access to, run the following:
+
 ```
 az account list --refresh --output table
 ```
+
 You should see `Turing-BinderHub` listed as an option.
 If not, request access by opening a TopDesk ticket.
 
 To activate the subscription, run the following:
+
 ```
 az account set -s Turing-BinderHub
 ```
@@ -39,7 +42,7 @@ Azure groups related resources together by assigning them a Resource Group.
 We need to create one for Hub23.
 
 ```
-az group create --name Hub23 --location "West Europe" --output table
+az group create --name Hub23 --location westeurope --output table
 ```
 
 * `--name` is what we'll use to identify resources relating to the BinderHub and should be short and descriptive.
@@ -72,6 +75,7 @@ We will require the following secrets:
 They should be downloaded to files in the `.secret` folder so that they are git-ignored.
 
 Download the Service Principal:
+
 ```
 az keyvault secret download --vault-name hub23-keyvault --name SP-appID --file .secret/appID.txt
 ```
@@ -81,11 +85,13 @@ az keyvault secret download --vault-name hub23-keyvault --name SP-key --file .se
 ```
 
 Download the public SSH key:
+
 ```
 az keyvault secret download --vault-name hub23-keyvault --name ssh-key-Hub23cluster-public --file .secret/ssh-key-hub23cluster.pub
 ```
 
 Download the API and secret tokens:
+
 ```
 az keyvault secret download --vault-name hub23-keyvault --name apiToken --file .secret/apiToken.txt
 ```
@@ -234,7 +240,7 @@ jupyterhub:
 
 We can then use [`sed`](http://www.grymoire.com/Unix/Sed.html) to insert the API and secret tokens.
 
-```bash
+```
 sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" -e "s/<secretToken>/$(cat .secret/secretToken.txt)/" -i .secret/secret.yaml
 ```
 
@@ -269,7 +275,7 @@ config:
 This command will add the repository of JupyterHub/BinderHub Helm Charts to your package manager.
 
 ```
-helm repo add https://jupyterhub.github.io/helm-chart
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 helm repo update
 ```
 
