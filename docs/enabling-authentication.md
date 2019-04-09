@@ -23,7 +23,7 @@ jupyterhub:
   hub:
     services:
       binder:
-        oauth_redirect_uri: "http://<binderhub_url>/oauth_callback"
+        oauth_redirect_uri: "http://<binder-ip>/oauth_callback"
         oauth_client_id: "binder-oauth-client-test"
     extraConfig:
       hub_extra: |
@@ -61,7 +61,7 @@ auth:
   github:
     clientId: "<your-github-client-id>"
     clientSecret: "<another-long-secret-string>"
-    callbackUrl: "http://<jupyterhub_url>/hub/oauth_callback"
+    callbackUrl: "http://<jupyter-ip>/hub/oauth_callback"
 ```
 
 Don't worry about `clientId` and `clientSecret` yet as we will generate these on GitHub.
