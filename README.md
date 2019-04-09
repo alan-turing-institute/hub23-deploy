@@ -52,8 +52,8 @@ kubectl --namespace=hub23 get svc binder
 To access the JupyterHub logs:
 ```
 # Print the running pods, find the one that begins with "hub-"
-kubectl get pods -n hub23
-kubectl logs hub-<random-string> -n hub23
+kubectl get pods --namespace hub23
+kubectl logs hub-<random-string> --namespace hub23
 ```
 
 <a name="changelog"></a>
