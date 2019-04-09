@@ -64,8 +64,6 @@ sed -e "s/<docker-org>/${docker_org}/" \
   -e "s/<prefix>/${prefix}/" \
   -e "s/<jupyter-ip>/${jupyter_ip}/" \
   -e "s/<binder-ip>/${binder_ip}/" \
-#  -e "s/<clientId>/$(cat .secret/clientId.txt)/" \
-#  -e "s/<clientSecret>/$(cat .secret/clientSecret.txt)/" \
   config-template.yaml > .secret/config.yaml
 
 # Delete downloaded secret files
@@ -79,3 +77,6 @@ echo Your BinderHub files have been configured:
 echo ".secret/config.yaml        .secret/secret.yaml"
 echo
 echo "Binder IP: " `kubectl --namespace=hub23 get svc binder | awk '{ print $4}' | tail -n 1`
+
+#  -e "s/<clientId>/$(cat .secret/clientId.txt)/" \
+#  -e "s/<clientSecret>/$(cat .secret/clientSecret.txt)/" \
