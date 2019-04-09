@@ -12,6 +12,7 @@ cluster=hub23cluster       # k8s cluster name
 docker_org=binderhubtest   # DockerHub organisation
 prefix=hub23-dev           # Docker image prefix
 jupyter_ip=104.40.238.90   # IP address of JupyterHub
+binder_ip=52.232.80.19     # IP address of Binder page
 
 # Get DockerHub login details
 # User MUST be a member of docker_org
@@ -46,6 +47,12 @@ az keyvault secret download --vault-name ${vault_name} -n apiToken -f .secret/ap
 # Download secretToken
 az keyvault secret download --vault-name ${vault_name} -n secretToken -f .secret/secretToken.txt
 
+# Download GitHub client ID
+az keyvault secret download --vault-name ${vault_name} -n clientId -f .secret/clientId.txt
+
+# Download GitHub client secret
+az keyvault secret download --vault-name ${vault_name} -n clientSecret -f .secret/clientSecret.txt
+
 # Populate .secret/secret.yaml
 sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
   -e "s/<secretToken>/$(cat .secret/secretToken.txt)/" \
@@ -55,11 +62,17 @@ sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
 # Populate .secret/config.yaml
 sed -e "s/<docker-org>/${docker_org}/" \
   -e "s/<prefix>/${prefix}/" \
-  -e "s/<jupyter-ip>/${jupyter_ip}/" config-template.yaml > .secret/config.yaml
+  -e "s/<jupyter-ip>/${jupyter_ip}/" \
+  -e "s/<binder-ip>/${binder_ip}/" \
+  -e "s/<clientId>/$(cat .secret/clientId.txt)/" \
+  -e "s/<clientSecret>/$(cat .secret/clientSecret.txt)/" \
+  config-template.yaml > .secret/config.yaml
 
 # Delete downloaded secret files
 rm .secret/apiToken.txt
 rm .secret/secretToken.txt
+rm .secret/clientId.txt
+rm .secret/clientSecret.txt
 
 # End the script with some outputs
 echo Your BinderHub files have been configured:
