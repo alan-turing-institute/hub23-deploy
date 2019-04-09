@@ -13,7 +13,7 @@ jupyterhub:
   hub:
     services:
       binder:
-        oauth_redirect_uri: "http://<binderhub_ip>/oauth_callback"
+        oauth_redirect_uri: "http://<binder-ip>/oauth_callback"
         oauth_client_id: "binder-oauth-client-test"
     extraConfig:
       hub_extra: |
@@ -36,11 +36,11 @@ jupyterhub:
 
   auth:
     type: github
-      github:
-        clientId: "<clientId>"
-        clientSecret: "<clientSecret>"
-        callbackUrl: "http://<jupyterhub_ip>/hub/oauth_callback"
-        orgWhitelist:
-          - "binderhub-test-org"
-      scopes:
-        - "read:user"
+    github:
+      clientId: "<clientId>"
+      clientSecret: "<clientSecret>"
+      callbackUrl: "http://<jupyter-ip>/hub/oauth_callback"
+      orgWhitelist:
+        - "binderhub-test-org"
+    scopes:
+      - "read:user"
