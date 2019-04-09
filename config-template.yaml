@@ -44,3 +44,7 @@ jupyterhub:
         - "binderhub-test-org"
     scopes:
       - "read:user"
+
+  prePuller:
+    continuous:
+      enabled: true
