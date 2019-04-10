@@ -60,3 +60,5 @@ where `<acrID>` is the output of Step 5.
 
 **This step does not work.**
 **Need a different Service Principal to create role assignments for the ACR.**
+
+**Make sure you're logged into the ACR!!**
