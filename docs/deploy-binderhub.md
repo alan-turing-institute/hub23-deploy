@@ -100,7 +100,9 @@ az keyvault secret download --vault-name hub23-keyvault --name apiToken --file .
 az keyvault secret download --vault-name hub23-keyvault --name secretToken --file .secret/secretToken.txt
 ```
 
-#### 3. Create the Kubernetes cluster
+## Create the Kubernetes cluster
+
+#### 1. Create the AKS cluster
 
 The following command will deploy a Kubernetes cluster into the Hub23 resource group.
 This command has been known to take between 7 and 30 minutes to execute depending on resource availability in the location we set when creating the resource group.
@@ -129,7 +131,7 @@ rm .secret/appID.txt
 rm .secret/key.txt
 ```
 
-#### 4. Get credentials for `kubectl`
+#### 2. Get credentials for `kubectl`
 
 We need to configure the local installation of the Kubernetes CLI to work with the version deployed onto the cluster, and do so with the following command.
 
@@ -139,7 +141,7 @@ az aks get-credentials --name hub23cluster --resource-group Hub23 --output table
 
 This command would need to be repeated when trying to manage the cluster from another computer or if you have been working with a different cluster.
 
-#### 5. Check the cluster is fully functional
+#### 3. Check the cluster is fully functional
 
 Output the status of the nodes.
 
