@@ -1,5 +1,8 @@
 # Changing the logo on the Binder page
 
+See these docs:
+* https://binderhub.readthedocs.io/en/latest/customizing.html#template-customization
+
 #### 1. Add the logo image file to the `static` folder
 
 This can be any valid image file.
