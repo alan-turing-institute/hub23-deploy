@@ -115,7 +115,7 @@ az extension add --name aks-preview
 #### 2. Register scale set feature provider
 
 ```
-az feature --name VMSSPreview --namespace Microsoft.ContainerServie
+az feature --name VMSSPreview --namespace Microsoft.ContainerService
 ```
 
 This will take a while to register.
