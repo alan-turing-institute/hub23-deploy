@@ -1,11 +1,30 @@
 # Optimizing the JupyterHub for Auto-Scaling
 
 See the following docs:
+* https://zero-to-jupyterhub.readthedocs.io/en/latest/user-management.html#culling-user-pods
 * https://zero-to-jupyterhub.readthedocs.io/en/latest/optimization.html
 * https://discourse.jupyter.org/t/planning-placeholders-with-jupyterhub-helm-chart-0-8-tested-on-mybinder-org/213
 * https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html
 
 All config code snippets should be added to `.secret/config.yaml` (and `config-template.yaml` updated accordingly).
+
+## Culling user pods
+
+JupyterHub will automatically delete any user pods that have no activity for a period of time.
+This helps free up computational resources and keeps costs down if you are using an autoscaling cluster.
+
+In JupyterHub, “inactivity” is defined as no response from the user’s browser.
+JupyterHub constantly pings the user’s JupyterHub browser session to check whether it is open.
+This means that leaving the computer running with the JupyterHub window open will **not** be treated as inactivity.
+
+By default, JupyterHub will run the culling process every ten minutes and will cull any user pods that have been inactive for more than one hour.
+You can configure this behavior in your `config.yaml` file with the following code snippet.
+
+```
+cull:
+  timeout: <max-idle-seconds-before-user-pod-is-deleted>
+  every: <number-of-seconds-this-check-is-done>
+```
 
 ## Efficient Cluster Autoscaling
 
@@ -88,7 +107,7 @@ config:
           matchNodePurpose: require
 ```
 
-## Using available nodes efficientyly (user scheduler)
+## Using available nodes efficiently (user scheduler)
 
 If you have users starting new servers while the total number of active users is decreasing, how will you free up a node so it can be scaled down?
 
