@@ -419,3 +419,41 @@ Double check this form, but I didn't change any of the defaults.
 Save and configure this rule.
 
 <html><img src="figures/set-autoscaling-rule.png" alt="set-autoscaling-rule" height="504" width="999"></html>
+
+## Assigning labels to nodes
+
+We will label the three core nodes and add a Node Affinity to the `config.yaml` file in order to keep the core Pods on the core nodes.
+
+See the following docs:
+* https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html#scheduling-corepods
+
+#### 1. Label the 3 minimum nodes as system nodes
+
+Use the following command to get the names of the 3 core nodes.
+
+```
+kubectl get nodes
+```
+
+Label each node with a `node-purpose=system` label as follows.
+
+```
+kubectl label nodes <node-name> hub.jupyter.org/node-purpose=core
+```
+
+#### 2. Update `config.yaml` with Node Affinity setting
+
+Add the following to `config.yaml`.
+
+```
+jupyterhub:
+  scheduling:
+        # match core pods to nodes with label 'hub.jupyter.org/node-purpose=core'
+    corePods:
+      nodeAffinity:
+        # matchNodePurpose valid options:
+        # - ignore
+        # - prefer (the default)
+        # - require
+        matchNodePurpose: require
+```
