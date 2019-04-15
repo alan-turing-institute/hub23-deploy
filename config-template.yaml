@@ -1,14 +1,57 @@
 config:
   BinderHub:
+    # connect image registry
     use_registry: true
     image_prefix: <docker-org>/<prefix>-
+
+    # jupyterhub address
     hub_url: http://<jupyter-ip>
+
+    # allow use of own logo
     template_path: /etc/binderhub/custom/templates
     extra_static_path: /etc/binderhub/custom/static
     extra_static_url_prefix: /extra_static/
     template_variables:
       EXTRA_STATIC_URL_PREFIX: "/extra_static/"
 
+jupyterhub:
+  # cull config was taken from mybinder.org
+  # assume they know what they're doing
+  cull:
+    # cull every 11 minutes so it is out of phase
+    # with the proxy check-routes interval of five minutes
+    every: 660
+    timeout: 600
+    # maxAge is 6 hours: 6 * 3600 = 21600
+    maxAge: 21600
+
+  # pre-pull images onto pods so that users aren't left waiting as long
+  prePuller:
+    continuous:
+      enabled: true
+
+  scheduling:
+    # schedule 3 dummy pods to reduce user wait time
+    podPriority:
+      enabled: true
+    userPlaceholder:
+      # Specify three dummy user pods will be used as placeholders
+      replicas: 3
+
+    # enable user scheduler to facilitate the efficient scheduling of user pods
+    userScheduler:
+      enabled: true
+
+    # match core pods to nodes with label 'hub.jupyter.org/node-purpose=core'
+    corePods:
+      nodeAffinity:
+        # matchNodePurpose valid options:
+        # - ignore
+        # - prefer (the default)
+        # - require
+        matchNodePurpose: require
+
+# allow use of own logo
 initContainers:
   - name: git-clone-templates
     image: alpine/git
