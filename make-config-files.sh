@@ -11,8 +11,8 @@ vault_name=hub23-keyvault  # Key vault name
 cluster=hub23cluster       # k8s cluster name
 docker_org=binderhubtest   # DockerHub organisation
 prefix=hub23-dev           # Docker image prefix
-jupyter_ip=51.144.177.244  # IP address of JupyterHub
-binder_ip=52.136.225.252   # IP address of Binder page
+jupyter_ip=40.68.113.76    # IP address of JupyterHub
+binder_ip=13.95.216.253    # IP address of Binder page
 
 # Get DockerHub login details
 # User MUST be a member of docker_org
@@ -23,13 +23,13 @@ read -sp "DockerHub password: " docker_pass
 echo
 
 # Login to Azure
-az login --output none
+az login -o none
 
 # Set subscription
 az account set -s ${sub}
 
 # Configure Azure credentials for hub23cluster
-az aks get-credentials --name ${cluster} --resource-group ${res_grp} --output table
+az aks get-credentials -n ${cluster} -g ${res_grp} -o table
 
 # Initialise helm
 helm init --client-only
@@ -67,4 +67,4 @@ rm .secret/secretToken.txt
 echo Your BinderHub files have been configured:
 echo ".secret/config.yaml        .secret/secret.yaml"
 echo
-echo "Binder IP: " `kubectl --namespace=hub23 get svc binder | awk '{ print $4}' | tail -n 1`
+echo "Binder IP: " `kubectl get svc binder -n hub23 | awk '{ print $4}' | tail -n 1`
