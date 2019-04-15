@@ -376,3 +376,46 @@ kubectl --namespace=hub23 get svc binder
 ```
 
 Check the deployment is working by launching a repo, e.g.: https://github.com/binder-examples/requirements
+
+## Enabling Autoscaling
+
+We need to enforce an autoscaling rule in the [Azure Portal](https://portal.azure.com/).
+
+#### 1. Registering Subscription with Microsoft.Insights
+
+On the first attempt to configure an autoscaling rule for the Virtual Machine Scale Set, it was denied as the active subscription was not registed to use "Microsoft.Insights"
+This allows use of the "Monitoring" options in Azure - most usefully the Metrics so we can watch how much CPU etc. the BinderHub is using.
+
+The following command will register Microsoft.Insights for use on the active subscription.
+
+```
+az provider register --namespace microsoft.insights
+```
+
+To check the status of the registration, run the following command.
+
+```
+az provider show -n microsoft.insights
+```
+
+#### 2. Setting an Autoscaling Rule
+
+Under "Resources" on the "Turing-BinderHub" subscription blade, select the Virtual Machine Scale Set.
+It should be named something like "aks-nodepool1-<random-number>-vmss".
+
+<html><img src="figures/select-vmss.png" alt="select-vmss" height="504" width="999"></html>
+
+From the left hand side menu, select "Scaling".
+
+<html><img src="figures/select-scaling.png" alt="select-scaling" height="504" width="999"></html>
+
+Click the blue "Enable autoscaling" button and an auto-generated form will appear.
+We will add a rule that will add 1 new instance (or node) when the average CPU usage over a 10 minute period is greater than 70%.
+
+Make sure the "Scale based on metric" option is selected and then select "+ Add new rule".
+This will pop up a pre-filled rule form for 70% average CPU usage over a 10 minute period.
+Double check this form, but I didn't change any of the defaults.
+
+Save and configure this rule.
+
+<html><img src="figures/set-autoscaling-rule.png" alt="set-autoscaling-rule" height="504" width="999"></html>
