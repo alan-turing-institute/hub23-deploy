@@ -60,6 +60,7 @@ initContainers:
       - --single-branch
       - --branch=master
       - --depth=1
+      - --
       - https://github.com/alan-turing-institute/hub23-deploy/
       - /etc/binderhub/custom
     securityContext:
