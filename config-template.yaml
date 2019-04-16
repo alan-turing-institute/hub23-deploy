@@ -61,7 +61,7 @@ initContainers:
       - --branch=master
       - --depth=1
       - --
-      - https://github.com/alan-turing-institute/hub23-deploy/
+      - https://github.com/alan-turing-institute/hub23-custom-files
       - /etc/binderhub/custom
     securityContext:
       runAsUser: 0
