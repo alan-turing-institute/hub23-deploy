@@ -6,7 +6,7 @@ See the following docs:
 * https://discourse.jupyter.org/t/planning-placeholders-with-jupyterhub-helm-chart-0-8-tested-on-mybinder-org/213
 * https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html
 
-All config code snippets should be added to `.secret/config.yaml` (and `config-template.yaml` updated accordingly).
+All config code snippets should be added to `.secret/config.yaml` (and `config-template.yaml`/`make-config-files.sh` updated accordingly).
 
 ## Culling user pods
 
@@ -70,42 +70,38 @@ Many users arrive to the JupyterHub during the day causing new nodes to be added
 Some system pods end up on the new nodes with user pods.
 At night, when the _culler_ has removed many inactive pods, the nodes are now free from user pods but cannot be removing since there is a single system pod remaining.
 
-To avoid scale down failures, use a _dedicated node pool_ for the user pods.
-That way, all the important system pods will run at one or a limited set of nodes, so the autoscaling user nodes can scale from 0 to X and back to 0.
+The JupyterHub documentation recommends using a _dedicated node pool_ for users here.
+However, multiple node pools per Kubernetes cluster are not currently supported (though see [Azure/AKS#287](https://github.com/Azure/AKS/issues/287)).
+Instead we setup a node affinity for core pods to remain on the 3 nodes that were deployed.
 
-#### Using a dedicated node pool for users
+#### Labelling nodes for core purpose
 
-We can use [taints and tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) to set up dedicated node pool for user pods.
-If we add a taint to all the nodes in the node pool, and a toleration on the user pods to tolerate being scheduled on a tainted node, we have practically dedicated the node pool to be used only by user pods.
+Add a label to all the nodes in the node pool.
 
-1. Setup a node pool (with autoscaling; `deploy-binderhub-with-autoscaling.md`), a certain label, and a certain taint.
+1. Setup a node pool (with autoscaling; `deploy-binderhub-with-autoscaling.md`) and a certain label.
 
-  * The label: `hub.jupyter.org/node-purpose=user`
-    **NOTE:** This must be a Kubernetes label.
+  * The label: `hub.jupyter.org/node-purpose=core`
+    ```
+    kubectl label nodes <node-name> hub.jupyter.org/node-prupose=core
+    ```
+    Use `kubectl get nodes` to ascertain `<node-name>`.
 
-  * The taint: `hub.jupyter.org/dedicated=user:NoSchedule`
-    **NOTE:** May need to replace `/` with `_` due to Cloud limitations. Both are tolerated.
+2. Make core pods require to be scheduled on the node pool setup above.
 
-2. Make user pods require to be scheduled on the node pool setup above.
+   The default setting is to make core pods _prefer_ to be scheduled on nodes with the `hub.jupyter.org/node-purpose=core` label, but we can make it a _requirement_ by using the code snippet below.
 
-   By not requiring the user pods to schedule on their dedicated node, we may fill up the nodes where other software runs.
-   This can cause a `helm upgrade` command to fail.
-   For example, you may have run out of resources for non-user pods that cannot schedule on the autoscaling node pool as they need during a rolling update.
-
-   The default setting is to make user pods _prefer_ to be scheduled on nodes with the `hub.jupyter.org/node-purpose=user` label, but we can make it a _requirement_ by using the code snippet below.
-
-```
-config:
-  jupyterhub:
-    scheduling:
-      userPods:
-        nodeAffinity:
-          # matchNodePurpose valid options:
-          # - ignore
-          # - prefer (the default)
-          # - require
-          matchNodePurpose: require
-```
+   ```
+   config:
+     jupyterhub:
+       scheduling:
+         corePods:
+           nodeAffinity:
+             # matchNodePurpose valid options:
+             # - ignore
+             # - prefer (the default)
+             # - require
+             matchNodePurpose: require
+   ```
 
 ## Using available nodes efficiently (user scheduler)
 
