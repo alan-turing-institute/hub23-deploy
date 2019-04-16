@@ -3,6 +3,8 @@
 See these docs:
 * https://binderhub.readthedocs.io/en/latest/customizing.html#template-customization
 
+The html content must be publicly hosted so these changes must happen in the [alan-turing-institute/hub23-custom-files](https://github.com/alan-turing-institute/hub23-custom-files) repo.
+
 #### 1. Add the logo image file to the `static` folder
 
 This can be any valid image file.
@@ -40,7 +42,8 @@ initContainers:
       - --single-branch
       - --branch=master
       - --depth=1
-      - https://github.com/alan-turing-institute/hub23-deploy/
+      - --
+      - https://github.com/alan-turing-institute/hub23-custom-files
       - /etc/binderhub/custom
     securityContext:
       runAsUser: 0
