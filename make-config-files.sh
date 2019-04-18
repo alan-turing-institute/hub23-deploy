@@ -5,14 +5,15 @@
 # connect to the Turing BinderHub (Hub23)
 
 # Variables
-sub=Turing-BinderHub       # Azure BinderHub subscription
-res_grp=Hub23              # Azure Resource Group
-vault_name=hub23-keyvault  # Key vault name
-cluster=hub23cluster       # k8s cluster name
-docker_org=binderhubtest   # DockerHub organisation
-prefix=hub23-dev           # Docker image prefix
-jupyter_ip=40.68.113.76    # IP address of JupyterHub
-binder_ip=13.95.216.253    # IP address of Binder page
+sub=Turing-BinderHub         # Azure BinderHub subscription
+res_grp=Hub23                # Azure Resource Group
+vault_name=hub23-keyvault    # Key vault name
+cluster=hub23cluster         # k8s cluster name
+docker_org=binderhubtest     # DockerHub organisation
+prefix=hub23-dev             # Docker image prefix
+jupyter_ip=40.68.113.76      # IP address of JupyterHub
+binder_ip=13.95.216.253      # IP address of Binder page
+org_name=binderhub-test-org  # GitHub organisation name
 
 # Get DockerHub login details
 # User MUST be a member of docker_org
@@ -47,6 +48,10 @@ az keyvault secret download --vault-name ${vault_name} -n apiToken -f .secret/ap
 # Download secretToken
 az keyvault secret download --vault-name ${vault_name} -n secretToken -f .secret/secretToken.txt
 
+# Download GitHub OAuth client ID and secret
+az keyvault secret download --vault-name ${vault_name} -n github-client-id -f .secret/ghClientID.txt
+az keyvault secret download --vault-name ${vault_name} -n github-client-secret -f .secret/ghClientSecret.txt
+
 # Populate .secret/secret.yaml
 sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
   -e "s/<secretToken>/$(cat .secret/secretToken.txt)/" \
@@ -57,6 +62,10 @@ sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
 sed -e "s/<docker-org>/${docker_org}/" \
   -e "s/<prefix>/${prefix}/" \
   -e "s/<jupyter-ip>/${jupyter_ip}/" \
+  -e "s/<binder-ip>/${binder_ip}/" \
+  -e "s/<github-client-id>/$(cat .secret/ghClientID.txt)/" \
+  -e "s/<github-client-secret>/$(cat .secret/ghClientSecret.txt)/" \
+  -e "s/<github-org-name>/${org_name}/" \
   config-template.yaml > .secret/config.yaml
 
 # Delete downloaded secret files
