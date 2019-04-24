@@ -30,7 +30,7 @@ az login -o none
 az account set -s ${sub}
 
 # Configure Azure credentials for hub23cluster
-az aks get-credentials -n ${cluster} -g ${res_grp} -o table
+az aks get-credentials -n ${cluster} -g ${res_grp}
 
 # Initialise helm
 helm init --client-only
