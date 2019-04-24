@@ -61,6 +61,7 @@ kubectl logs hub-<random-string> --namespace hub23
 
 A record of the latest BinderHub Chart version deployed (reverse chronological order).
 
-* 
+*
+* 2019-04-24: `0.2.0-7b2c4f8`
 * 2019-04-16: `0.2.0-1eac3a0`
 * 2019-03-22: `0.2.0-3b53fce`
