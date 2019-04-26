@@ -51,6 +51,13 @@ jupyterhub:
   singleuser:
     # to make notebook servers aware of hub
     cmd: jupyterhub-singleuser
+    # limit CPUs and RAM
+    memory:
+      limit: 2G
+      guarantee: 2G
+    cpu:
+      limit: 1
+      guarantee: 1
 
   auth:
     type: github
