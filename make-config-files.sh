@@ -63,14 +63,17 @@ sed -e "s/<docker-org>/${docker_org}/" \
   -e "s/<prefix>/${prefix}/" \
   -e "s/<jupyter-ip>/${jupyter_ip}/" \
   -e "s/<binder-ip>/${binder_ip}/" \
-  -e "s/<github-client-id>/$(cat .secret/ghClientID.txt)/" \
-  -e "s/<github-client-secret>/$(cat .secret/ghClientSecret.txt)/" \
+  -e "s/<github-oauth-id>/$(cat .secret/ghClientID.txt)/" \
+  -e "s/<github-oauth-secret>/$(cat .secret/ghClientSecret.txt)/" \
   -e "s/<github-org-name>/${org_name}/" \
   config-template.yaml > .secret/config.yaml
+
 
 # Delete downloaded secret files
 rm .secret/apiToken.txt
 rm .secret/secretToken.txt
+rm .secret/ghClientID.txt
+rm .secret/ghClientSecret.txt
 
 # End the script with some outputs
 echo Your BinderHub files have been configured:
