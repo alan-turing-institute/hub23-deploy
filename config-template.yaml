@@ -18,6 +18,15 @@ config:
       EXTRA_STATIC_URL_PREFIX: "/extra_static/"
 
 jupyterhub:
+  # cull config was taken from mybinder.org
+  # assume they know what they're doing
+  cull:
+    # cull every 11 minutes so it is out of phase
+    # with the proxy check-routes interval of five minutes
+    every: 660
+    timeout: 600
+    # maxAge is 6 hours: 6 * 3600 = 21600
+    maxAge: 21600
 
   hub:
     services:
@@ -39,30 +48,20 @@ jupyterhub:
               return super().start()
         c.JupyterHub.spawner_class = BinderSpawner
 
-    singleuser:
-      # to make notebook servers aware of hub
-      cmd: jupyterhub-singleuser
+  singleuser:
+    # to make notebook servers aware of hub
+    cmd: jupyterhub-singleuser
 
-    auth:
-      type: github
-      github:
-        clientId: "<github-oauth-id>"
-        clientSecret: "<github-oauth-secret>"
-        callbackUrl: "http://<jupyter-ip>/hub/oauth_callback"
-        orgWhitelist:
-          - "<github-org-name>"
-      scopes:
-        - "read:user"
-
-  # cull config was taken from mybinder.org
-  # assume they know what they're doing
-  cull:
-    # cull every 11 minutes so it is out of phase
-    # with the proxy check-routes interval of five minutes
-    every: 660
-    timeout: 600
-    # maxAge is 6 hours: 6 * 3600 = 21600
-    maxAge: 21600
+  auth:
+    type: github
+    github:
+      clientId: "<github-oauth-id>"
+      clientSecret: "<github-oauth-secret>"
+      callbackUrl: "http://<jupyter-ip>/hub/oauth_callback"
+      orgWhitelist:
+        - "<github-org-name>"
+    scopes:
+      - "read:user"
 
   # pre-pull images onto pods so that users aren't left waiting as long
   prePuller:
