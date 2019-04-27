@@ -68,7 +68,6 @@ sed -e "s/<docker-org>/${docker_org}/" \
   -e "s/<github-org-name>/${org_name}/" \
   config-template.yaml > .secret/config.yaml
 
-
 # Delete downloaded secret files
 rm .secret/apiToken.txt
 rm .secret/secretToken.txt
