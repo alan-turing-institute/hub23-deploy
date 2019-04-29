@@ -223,6 +223,7 @@ helm version
 ```
 
 You must have at least version 2.11.0 and the client (`helm`) and server (`tiller`) versions must match.
+The server may take a little while to appear.
 
 ## Installing a BinderHub
 
@@ -258,6 +259,10 @@ registry:
 ```
 
 As in the above step, you could use `sed` to input these variables.
+
+#### b. Connecting with an Azure Container Registry (ACR)
+
+See `docs/create-azure-container-registry.md`.
 
 #### 2. Create a `config.yaml` file
 
@@ -323,7 +328,7 @@ config:
     hub_url: http://<IP in EXTERNAL IP>
 ```
 
-Update the Helm Chart to deploy the change.
+Upgrade the Helm Chart to deploy the change.
 
 ```
 helm upgrade hub23 jupyterhub/binderhub --version=0.2.0-3b53fce -f .secret/secret.yaml -f .secret/config.yaml
