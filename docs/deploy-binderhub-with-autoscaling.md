@@ -465,3 +465,66 @@ jupyterhub:
         # - require
         matchNodePurpose: require
 ```
+
+## Increasing GitHub API limit
+
+**N.B.:** This step is not strictly necessary though is recommended before sharing the Binder link with others.
+
+By default, GitHub allows 60 API requests per hour.
+We can create an Access Token to authenticate the BinderHub and hence increase this limit to 5,000 requests an hour.
+This is advisable if you are expecting users to hosts repositories on your BinderHub.
+
+#### 1. Create a Personal Access Token
+
+Create a new token with default,read-pnly permissions (do not check any boxes) [here](https://github.com/settings/tokens/new/).
+
+Immediately copy the token as you will not be able to see it again!
+
+#### 2. Add the token to the Azure Keyvault
+
+Save the token to the Azure Keyvault so it can be recovered.
+
+```
+az keyvault secret set \
+  --vault-name hub23-keyvault \
+  --name binderhub-access-token \
+  --value <PASTE-TOKEN-HERE>
+```
+
+#### 3. Update `secret-template.yaml`
+
+Update `secret-template.yaml` with the following.
+
+```
+jupyterhub:
+  config:
+    GitHubRepoProvider:
+      access_token: <accessToken>
+```
+
+#### 4. Update `make-config-files.sh`
+
+Update `make-config-files.sh` to pull the access token from the keyvault and insert it into `.secret.secret.yaml`.
+
+```
+# Download the access token
+az keyvault secret download \
+  --vault-name hub23-keyvault \
+  --name binderhub-access-token \
+  --file .secret/accessToken.txt
+
+# Populate secret.yaml file
+sed -e "s/<accessToken>/$(cat .secret/accessToken.txt)/" \
+  secret-template.yaml > .secret/secret.yaml
+
+# Delete the local copy of the token
+rm .secret/accessToken.txt
+```
+
+#### 5. Upgrade the `helm` chart
+
+Upgrade the `helm` chart to roll out the change to the BinderHub.
+
+```
+helm upgrade hub23 jupyterhub/binderhub --version=0.2.0-<commit-hash> -f .secret/secret.yaml -f .secret/config.yaml
+```
