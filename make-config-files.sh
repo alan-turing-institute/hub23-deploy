@@ -48,6 +48,9 @@ az keyvault secret download --vault-name ${vault_name} -n apiToken -f .secret/ap
 # Download secretToken
 az keyvault secret download --vault-name ${vault_name} -n secretToken -f .secret/secretToken.txt
 
+# Download access token
+az keyvault secret download --vault-name ${vault_name} -n binderhub-access-token -f .secret/accessToken.txt
+
 # Download GitHub OAuth client ID and secret
 az keyvault secret download --vault-name ${vault_name} -n github-client-id -f .secret/ghClientID.txt
 az keyvault secret download --vault-name ${vault_name} -n github-client-secret -f .secret/ghClientSecret.txt
@@ -56,7 +59,9 @@ az keyvault secret download --vault-name ${vault_name} -n github-client-secret -
 sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
   -e "s/<secretToken>/$(cat .secret/secretToken.txt)/" \
   -e "s/<docker-id>/$docker_id/" \
-  -e "s/<password>/$docker_pass/" secret-template.yaml > .secret/secret.yaml
+  -e "s/<password>/$docker_pass/" \
+  -e "s/<accessToken>/$(cat .secret/accessToken.txt)/" \
+  secret-template.yaml > .secret/secret.yaml
 
 # Populate .secret/config.yaml
 sed -e "s/<docker-org>/${docker_org}/" \
@@ -71,6 +76,7 @@ sed -e "s/<docker-org>/${docker_org}/" \
 # Delete downloaded secret files
 rm .secret/apiToken.txt
 rm .secret/secretToken.txt
+rm .secret/accessToken.txt
 rm .secret/ghClientID.txt
 rm .secret/ghClientSecret.txt
 
