@@ -1,4 +1,4 @@
-# Optimizing the JupyterHub for Auto-Scaling
+# Optimizing the JupyterHub for Autoscaling
 
 See the following docs:
 * https://zero-to-jupyterhub.readthedocs.io/en/latest/user-management.html#culling-user-pods
@@ -19,11 +19,13 @@ This means that leaving the computer running with the JupyterHub window open wil
 
 By default, JupyterHub will run the culling process every ten minutes and will cull any user pods that have been inactive for more than one hour.
 You can configure this behavior in your `config.yaml` file with the following code snippet.
+The culler can also be configured to cull pods that have existed for over a given length of time via the `maxAge` argument.
 
 ```
 cull:
   timeout: <max-idle-seconds-before-user-pod-is-deleted>
   every: <number-of-seconds-this-check-is-done>
+  maxAge: <number-of-seconds-the-pods-has-been-active>
 ```
 
 ## Efficient Cluster Autoscaling
@@ -43,7 +45,7 @@ Hence dummy users or _user-placeholders_ with low priority can be added to take 
 The lower priority pod will be preempted to make room for the higher priority pod.
 The now evicted user-placeholder will signal the CA that it needs to scale up.
 
-User placeholders will have the same resource requests as the default user.
+User-placeholders will have the same resource requests as the default user.
 Therefore, if you have 3 user placeholders running, real users will only need to wait for a scale up if more than 3 users arrive in a time interval less than it takes to make a node ready for use.
 
 Add the following code snippet to use 3 user-placeholders.
@@ -62,8 +64,8 @@ config:
 ### Scaling down efficiently
 
 To scale down, [certain technical criteria](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node) need to be met.
-Most importantly for a node to be scaled down, it must be free from pods that aren't allowed to be disrupted.
-Such pods are e.g. real user pods, important system pods, and some JupyterHub pods.
+Most importantly for a node to be scaled down, it must be free from pods that are not allowed to be disrupted.
+Such pods are for example real user pods, important system pods, and some JupyterHub pods.
 
 Consider the following scenario.
 Many users arrive to the JupyterHub during the day causing new nodes to be added by the CA.
@@ -78,7 +80,7 @@ Instead we setup a node affinity for core pods to remain on the 3 nodes that wer
 
 Add a label to all the nodes in the node pool.
 
-1. Setup a node pool (with autoscaling; `deploy-binderhub-with-autoscaling.md`) and a certain label.
+1. Setup a node pool (with autoscaling; `docs/deploy-binderhub-with-autoscaling.md`) and a certain label.
 
   * The label: `hub.jupyter.org/node-purpose=core`
     ```
@@ -131,7 +133,7 @@ A user will have to wait for a requested Docker image if it isn't already pulled
 If the image is large, this can be a long wait!
 
 In the case when a new node is added (Cluster Autoscaler), the _continuous-image-puller_ will pull a user's container.
-This users a daemonset to force Kubernetes to pull the user image on all nodes as soon as a node is present.
+This uses a daemonset to force Kubernetes to pull the user image on all nodes as soon as a node is present.
 
 The continuous-image-puller is disabled by default and the following snippet is added to `config.yaml` to enable it.
 
