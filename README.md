@@ -56,6 +56,11 @@ kubectl get pods --namespace hub23
 kubectl logs hub-<random-string> --namespace hub23
 ```
 
+To find out more info about a Pod:
+```
+kubectl describe pod <POD-NAME> --namespace hub23
+```
+
 <a name="changelog"></a>
 ## Changelog
 
