@@ -58,7 +58,7 @@ We will require some info from the key vault in order to deploy the Kubernetes c
 
 #### 1. Create a secrets folder
 
-Create a folder in which to download the secrets so.
+Create a folder in which to download the secrets to.
 This will be git-ignored.
 
 ```
@@ -122,7 +122,7 @@ This will take a while to register.
 Run the following command to check the status.
 
 ```
-az feature list -o table --query "[?contains(name, 'Microsoft.ContainerService/VMSSPreview')].{Name:name,State:properties.state}"
+az feature list --output table --query "[?contains(name, 'Microsoft.ContainerService/VMSSPreview')].{Name:name,State:properties.state}"
 ```
 
 #### 3. Refresh the registration
@@ -261,6 +261,7 @@ helm version
 ```
 
 You must have at least version 2.11.0 and the client (`helm`) and server (`tiller`) versions must match.
+The server may take some time to appear.
 
 ## Installing a BinderHub
 
@@ -296,6 +297,10 @@ registry:
 ```
 
 As in the above step, you could use `sed` to input these variables.
+
+#### b. Connecting an Azure Container Registry (ACR)
+
+See `docs/create-azure-container-registry.md`.
 
 #### 2. Create a `config.yaml` file
 
@@ -416,13 +421,16 @@ Make sure the "Scale based on metric" option is selected and then select "+ Add 
 This will pop up a pre-filled rule form for 70% average CPU usage over a 10 minute period.
 Double check this form, but I didn't change any of the defaults.
 
+We then need to add a rule to scale the cluster back.
+Select "+ Add new rule" again and change the fields so that when average CPU usage over 10 minutes is less than 5%, the instance count is decreased by 1.
+
 Save and configure this rule.
 
 <html><img src="figures/set-autoscaling-rule.png" alt="set-autoscaling-rule" height="504" width="999"></html>
 
 ## Assigning labels to nodes
 
-We will label the three core nodes and add a Node Affinity to the `config.yaml` file in order to keep the core Pods on the core nodes.
+We will label the three core nodes and add a Node Affinity to the `config.yaml` file in order to keep the core Pods on the "core" nodes.
 
 See the following docs:
 * https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html#scheduling-corepods
