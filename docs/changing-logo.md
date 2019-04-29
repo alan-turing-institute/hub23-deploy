@@ -13,12 +13,10 @@ This can be any valid image file.
 
 In `templates/page.html`, change the name of the image to match that of your chosen file.
 
-The file should look as follows.
+The line should look as follows.
 
 ```
-{% extends "templates/page.html" %}
-
-{% block logo_image %}"{{ EXTRA_STATIC_URL_PREFIX }}<image-name>"{% endblock logo_image %}
+<img id="logo" src={% block logo_image %}"/extra_static/<image-name>"{% endblock logo_image %} width="390px" />
 ```
 
 ####3. Update `config.yaml`
@@ -62,7 +60,8 @@ extraVolumeMounts:
 
 #### 4. Upgrade the BinderHub deployment and visit the Binder page!
 
-Upgrade the Chart with the following command. 
+Upgrade the Chart with the following command.
+The most recent commit-hash used should be logged in the Changelog section of the root README.
 
 ```
 helm upgrade hub23 jupyterhub/binderhub --version=0.2.0-<commit-hash> -f .secret/secret.yaml -f .secret/config.yaml
