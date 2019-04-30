@@ -406,7 +406,7 @@ az provider show -n microsoft.insights
 #### 2. Setting an Autoscaling Rule
 
 Under "Resources" on the "Turing-BinderHub" subscription blade, select the Virtual Machine Scale Set.
-It should be named something like "aks-nodepool1-<random-number>-vmss".
+It should be named something like `aks-nodepool1-<random-number>-vmss`.
 
 <html><img src="figures/select-vmss.png" alt="select-vmss" height="504" width="999"></html>
 
