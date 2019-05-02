@@ -48,15 +48,15 @@ If the Hub is being problematic, for example, throwing "Internal Server Error" m
 
 Scale down the Hub:
 ```
-kubectl scale deployment hub --replicas=0 -n hub23
+kubectl scale deployment hub --replicas=0 --namespace hub23
 ```
 
 Wait until the `hub-` pod has been terminated.
-Use `kubectl get pods -n hub23` to check it's status.
+Use `kubectl get pods --namespace hub23` to check it's status.
 
 Scale the Hub back up:
 ```
-kubectl scale deployment hub --replicas=1 -n hub23
+kubectl scale deployment hub --replicas=1 --namespace hub23
 ```
 
 ## Useful commands
