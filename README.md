@@ -42,6 +42,23 @@ where `<commit-hash>` can be found [here](https://jupyterhub.github.io/helm-char
 
 Please try to keep track of the deployed `<commit-hash>` [below](#changelog).
 
+## Restarting the JupyterHub
+
+If the Hub is being problematic, for example, throwing "Internal Server Error" messages or not spinning up user nodes, it can be restarted with the following commands.
+
+Scale down the Hub:
+```
+kubectl scale deployment hub --replicas=0 -n hub23
+```
+
+Wait until the `hub-` pod has been terminated.
+Use `kubectl get pods -n hub23` to check it's status.
+
+Scale the Hub back up:
+```
+kubectl scale deployment hub --replicas=1 -n hub23
+```
+
 ## Useful commands
 
 To print the IP address of the Binder page:
@@ -61,7 +78,6 @@ To find out more info about a Pod:
 kubectl describe pod <POD-NAME> --namespace hub23
 ```
 
-<a name="changelog"></a>
 ## Changelog
 
 A record of the latest BinderHub Chart version deployed (reverse chronological order).
