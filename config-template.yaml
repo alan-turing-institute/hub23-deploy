@@ -53,14 +53,18 @@ jupyterhub:
     cmd: jupyterhub-singleuser
     # limit CPUs and RAM
     memory:
-      limit: 2G
-      guarantee: 2G
+      limit: 1G
+      guarantee: 1G
     cpu:
-      limit: 1
-      guarantee: 1
+      limit: .5
+      guarantee: .5
 
   auth:
     type: github
+    admin:
+      access: true
+      users:
+        - sgibson91
     github:
       clientId: "<github-oauth-id>"
       clientSecret: "<github-oauth-secret>"
