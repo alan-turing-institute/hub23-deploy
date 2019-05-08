@@ -11,9 +11,8 @@ vault_name=hub23-keyvault    # Key vault name
 cluster=hub23cluster         # k8s cluster name
 docker_org=binderhubtest     # DockerHub organisation
 prefix=hub23-dev             # Docker image prefix
-jupyter_ip=40.68.113.76      # IP address of JupyterHub
-binder_ip=13.95.216.253      # IP address of Binder page
 org_name=binderhub-test-org  # GitHub organisation name
+hub_name=hub23               # BinderHub name
 
 # Get DockerHub login details
 # User MUST be a member of docker_org
@@ -38,6 +37,10 @@ helm init --client-only
 # Make sure the JupyterHub/BinderHub Helm Chart repo is installed and up-to-date
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 helm repo update
+
+# get IP addresses of JupyterHub and Binder
+jupyter_ip=`kubectl get svc proxy-public -n ${hub_name} | awk '{ print $4}' | tail -n 1`
+binder_ip=`kubectl get svc binder -n ${hub_name} | awk '{ print $4}' | tail -n 1`
 
 # Make a secrets folder
 mkdir -p .secret
@@ -84,4 +87,4 @@ rm .secret/ghClientSecret.txt
 echo Your BinderHub files have been configured:
 echo ".secret/config.yaml        .secret/secret.yaml"
 echo
-echo "Binder IP: " `kubectl get svc binder -n hub23 | awk '{ print $4}' | tail -n 1`
+echo "Binder IP: " `kubectl get svc binder -n ${hub_name} | awk '{ print $4}' | tail -n 1`
