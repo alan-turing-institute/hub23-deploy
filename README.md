@@ -40,7 +40,7 @@ helm upgrade hub23 jupyterhub/binderhub --version=0.2.0-<commit-hash> -f .secret
 ```
 where `<commit-hash>` can be found [here](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub).
 
-Please try to keep track of the deployed `<commit-hash>` [below](#changelog).
+Please try to keep track of the deployed `<commit-hash>` in the [changelog](changelog.md).
 
 ## Restarting the JupyterHub
 
@@ -77,13 +77,3 @@ To find out more info about a Pod:
 ```
 kubectl describe pod <POD-NAME> --namespace hub23
 ```
-
-## Changelog
-
-A record of the latest BinderHub Chart version deployed (reverse chronological order).
-
-*
-* 2019-05-07: `0.2.0-5536a0f`
-* 2019-04-24: `0.2.0-7b2c4f8`
-* 2019-04-16: `0.2.0-1eac3a0`
-* 2019-03-22: `0.2.0-3b53fce`
