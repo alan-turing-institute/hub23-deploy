@@ -43,7 +43,7 @@ where `<commit-hash>` can be found [here](https://jupyterhub.github.io/helm-char
 
 `upgrade.sh` pulls the latest helm chart repository and upgrades the helm chart according to the version number supplied as a command line argument.
 
-Please try to keep track of the deployed `<commit-hash>` in the [changelog](changelog.md).
+Please try to keep track of the deployed `<commit-hash>` in the [changelog](changelog.txt).
 
 ## Restarting the JupyterHub
 
