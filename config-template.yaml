@@ -18,6 +18,10 @@ config:
       EXTRA_STATIC_URL_PREFIX: "/extra_static/"
 
 jupyterhub:
+  # enable rbac
+  rbac:
+    enabled: true
+
   # cull config was taken from mybinder.org
   # assume they know what they're doing
   cull:
@@ -91,15 +95,6 @@ jupyterhub:
     userScheduler:
       enabled: true
 
-    # match core pods to nodes with label 'hub.jupyter.org/node-purpose=core'
-    corePods:
-      nodeAffinity:
-        # matchNodePurpose valid options:
-        # - ignore
-        # - prefer (the default)
-        # - require
-        matchNodePurpose: require
-
 # allow customisation of web pages
 initContainers:
   - name: git-clone-templates
@@ -123,7 +118,3 @@ extraVolumes:
 extraVolumeMounts:
   - name: custom-templates
     mountPath: /etc/binderhub/custom
-
-# enable rbac
-rbac:
-  enabled: true
