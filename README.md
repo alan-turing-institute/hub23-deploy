@@ -36,9 +36,12 @@ This will ensure that a future developer (someone else or future-you!) can recre
 
 To upgrade the BinderHub Helm Chart:
 ```
-helm upgrade hub23 jupyterhub/binderhub --version=0.2.0-<commit-hash> -f .secret/secret.yaml -f .secret/config.yaml
+chmod 700 upgrade.sh
+./upgrade.sh <commit-hash>
 ```
 where `<commit-hash>` can be found [here](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub).
+
+`upgrade.sh` pulls the latest helm chart repository and upgrades the helm chart according to the version number supplied as a command line argument.
 
 Please try to keep track of the deployed `<commit-hash>` in the [changelog](changelog.md).
 
