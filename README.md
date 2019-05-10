@@ -37,7 +37,7 @@ This will ensure that a future developer (someone else or future-you!) can recre
 To upgrade the BinderHub Helm Chart:
 ```
 chmod 700 upgrade.sh
-./upgrade.sh <commit-hash>
+./upgrade.sh hub23 <commit-hash>
 ```
 where `<commit-hash>` can be found [here](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub).
 
