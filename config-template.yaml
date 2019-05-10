@@ -18,10 +18,6 @@ config:
       EXTRA_STATIC_URL_PREFIX: "/extra_static/"
 
 jupyterhub:
-  # enable rbac
-  rbac:
-    enabled: true
-
   # cull config was taken from mybinder.org
   # assume they know what they're doing
   cull:
