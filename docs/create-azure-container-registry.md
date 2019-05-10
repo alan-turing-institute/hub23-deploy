@@ -40,9 +40,15 @@ ACR name must be globally unique and consist of only lowercase alphanumeric char
 az acr create --name hub23registry --resource-group Hub23 --sku Standard
 ```
 
-Note the following values: `loginServer`.
+Note the following value: `loginServer: hub23-registry.azurecr.io`.
 
-#### 5. Get ACR resource ID
+#### 5. Login to the ACR
+
+```
+az acr login --name hub23registry
+```
+
+#### 6. Get ACR resource ID
 
 Keep a note of this output for the next step.
 
@@ -50,15 +56,46 @@ Keep a note of this output for the next step.
 az acr show --resource-group Hub23 --name hub23registry --query "id" --output tsv
 ```
 
-#### 6. Grant access for the Kubernetes cluster to pull images stored in ACR
+#### 7. Create a Kubernetes secret to access the ACR
 
 ```
-az role assignment create --assignee $(cat .secret/SP-appID.txt) --scope <acrID> --role acrpull
+kubectl create secret docker-registry hub23-docker-decret \
+    --docker-server hub23registry.azurecr.io \
+    --docker-email hub23registry@turing.ac.uk \
+    --docker-username=$(cat .secret/appID.txt) \
+    --docker-password $(cat .secret/key.txt)
 ```
 
-where `<acrID>` is the output of Step 5.
+az acr update -n hub23registry --admin-enabled true
 
-**This step does not work.**
-**Need a different Service Principal to create role assignments for the ACR.**
+az acr credential show -n hub23registry
 
-**Make sure you're logged into the ACR!!**
+Update `secret.yaml`
+
+The value of `password` is copied from `az acr credential show` command.
+
+```
+jupyterhub:
+  hub:
+    services:
+      binder:
+        apiToken: "xxxxxx"
+  proxy:
+    secretToken: "xxxxxx"
+registry:
+  url: https://binderhubregistry.azurecr.io
+  password: |
+    {
+      "passwords": [
+        {
+          "name": "password",
+          "value": "xxxxxx"
+        },
+        {
+          "name": "password2",
+          "value": "xxxxxx"
+        }
+      ],
+      "username": "binderHubRegistry"
+    }
+```
