@@ -1,0 +1,2 @@
+cluster_name,vm_type,node_number,vm_cost_pernode_permonth_usd,acr_name,sku_tier,acr_cost_perday_usd
+hub23cluster,Standard_d2_v3,3,87.60,hub23registry,Standard,0.667
