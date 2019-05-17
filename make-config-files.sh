@@ -84,6 +84,7 @@ rm .secret/ghClientID.txt
 rm .secret/ghClientSecret.txt
 
 # End the script with some outputs
+echo
 echo Your BinderHub files have been configured:
 echo ".secret/config.yaml        .secret/secret.yaml"
 echo
