@@ -1,0 +1,13 @@
+{
+  "cluster": [
+    "name": "hub23cluster",
+    "vm_type": "Standard_D2_v3",
+    "node_number": 3,
+    "cost_pernode_permonth_usd": 87.60
+  ],
+  "acr": [
+    "name": "hub23registry",
+    "sku_tier": "Standard",
+    "cost_perday_usd": 0.667
+  ]
+}
