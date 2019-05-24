@@ -27,12 +27,13 @@ def calculate_costs(billing_info, contingency):
 Function to calculate various monthly and yearly costs of the cluster and container
 registry required to run a BinderHub. A contingency value is parsed from the
 command line in order to account for autoscaling.
-    :param billing_info:
-    :param contingency:
-    :return:
+
+    :param billing_info: a dict object containing the billing information
+    :param contingency: the desired contingency percentage (float, 0 < contingency < 1)
+    :return: updated instance of billing_info (dict)
     """
     # Time stamp the calculations
-    billing_info["datetime_calculated_utc"] = "{0}".format(datetime.datetime.utcnow())
+    billing_info["datetime_calculated_utc"] = f"{datetime.datetime.utcnow()}"
 
     # Calculate total VM cost per month
     billing_info["cluster"]["cost_permonth_usd"] = (
@@ -103,9 +104,8 @@ if __name__ == "__main__":
         except yaml.YAMLError as exc:
             print(exc)
 
-    # # Calculate costs
+    # Calculate costs
     billing_info = calculate_costs(billing_info, contingency)
-    print(billing_info)
 
     # Print Costs
     summary_stats(billing_info, args.contingency)
