@@ -80,3 +80,8 @@ To find out more info about a Pod:
 ```
 kubectl describe pod <POD-NAME> --namespace hub23
 ```
+
+## Changelog
+
+The [changelog](./changelog.txt) is a file tracking how up to date with the [BinderHub helm chart](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub) Hub23 is.
+Also if something breaks between chart updates, then the breaking changes between versions can be tracked.
