@@ -47,6 +47,13 @@ az group create --name Hub23 --location westeurope --output table
 * `--location` sets the [data centre](https://azure.microsoft.com/en-gb/global-infrastructure/locations/) that will host the resources.
 * `--output table` prints the info in a human-readable format.
 
+**NOTE:** If the resource group already exists, this step can be skipped.
+Test if the resource group exists by running the following.
+
+```
+az group exists --name Hub23
+```
+
 #### 4. Create the key vault
 
 **Key vault names must be lower case and/or numerical and may only include hyphens (`-`), no underscores (`_`) or other non-alphanumeric characters.**
