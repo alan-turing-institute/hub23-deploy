@@ -1,2 +1,5 @@
 # Ignore .secret folder
 .secret/*
+
+# Ignore VSCode settings
+.vscode/
