@@ -22,7 +22,7 @@ pip install -r requirements.txt
 python calculate_billing.py
 ```
 
-This will output the total monthlyly cost of the ACR and Kubernetes cluster with and
+This will output the total monthly cost of the ACR and Kubernetes cluster with and
 without a contingency. By default, the script calculates a 10% contingency but other
 contingencies may be calculated by parsing the `--contingency [-c]` flag.
 
