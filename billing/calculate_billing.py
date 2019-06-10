@@ -111,7 +111,3 @@ if __name__ == "__main__":
 
     # Print Costs
     summary_stats(billing_info, args.contingency, args.months)
-
-    # # Output calculations
-    # with open("hub23_billing_calc.yaml", "w") as stream:
-    #     yaml.dump(billing_info, stream)
