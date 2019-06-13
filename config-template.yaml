@@ -2,7 +2,7 @@ config:
   BinderHub:
     # connect image registry and set image prefix
     use_registry: true
-    image_prefix: <docker-org>/<prefix>-
+    image_prefix: <acr-name>.azurecr.io/<prefix>-
 
     # jupyterhub IP address
     hub_url: http://<jupyter-ip>
@@ -16,6 +16,10 @@ config:
     extra_static_url_prefix: /extra_static/
     template_variables:
       EXTRA_STATIC_URL_PREFIX: "/extra_static/"
+
+  # Authenticate against registry
+  DockerRegistry:
+    token_url: "https://<acr-name>.azurecr.io/oauth2/token?service=<acr-name>.azurecr.io"
 
 jupyterhub:
   # cull config was taken from mybinder.org
