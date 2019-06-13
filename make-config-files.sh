@@ -59,7 +59,7 @@ sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
   -e "s/<secretToken>/$(cat .secret/secretToken.txt)/" \
   -e "s/<acr-name>/${registry}/" \
   -e "s/<username>/$(cat .secret/appID.txt)/" \
-  -e "s/<password>/$(cat .secret/appKey.txt)" \
+  -e "s/<password>/$(cat .secret/appKey.txt)/" \
   -e "s/<accessToken>/$(cat .secret/accessToken.txt)/" \
   secret-template.yaml > .secret/secret.yaml
 
