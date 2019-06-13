@@ -9,18 +9,10 @@ sub=Turing-BinderHub         # Azure BinderHub subscription
 res_grp=Hub23                # Azure Resource Group
 vault_name=hub23-keyvault    # Key vault name
 cluster=hub23cluster         # k8s cluster name
-docker_org=binderhubtest     # DockerHub organisation
-prefix=hub23-dev             # Docker image prefix
+registry=hub23registry       # Azure Container Registry
+prefix=hub23/binder-dev             # Docker image prefix
 org_name=binderhub-test-org  # GitHub organisation name
 hub_name=hub23               # BinderHub name
-
-# Get DockerHub login details
-# User MUST be a member of docker_org
-echo Please provide your DockerHub login details.
-echo This DockerHub account MUST be a member of: ${docker_org}
-read -p "DockerHub ID: " docker_id
-read -sp "DockerHub password: " docker_pass
-echo
 
 # Login to Azure
 az login -o none
@@ -58,17 +50,22 @@ az keyvault secret download --vault-name ${vault_name} -n binderhub-access-token
 az keyvault secret download --vault-name ${vault_name} -n github-client-id -f .secret/ghClientID.txt
 az keyvault secret download --vault-name ${vault_name} -n github-client-secret -f .secret/ghClientSecret.txt
 
+# Download Service Principal AppID and Key
+az keyvault secret download --vault-name ${vault_name} -n SP-appID -f .secret/appID.txt
+az keyvault secret download --vault-name ${vault_name} -n SP-key -f .secret/appKey.txt
+
 # Populate .secret/secret.yaml
 sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
   -e "s/<secretToken>/$(cat .secret/secretToken.txt)/" \
-  -e "s/<docker-id>/$docker_id/" \
-  -e "s/<password>/$docker_pass/" \
+  -e "s/<acr-name>/${registry}/" \
+  -e "s/<username>/$(cat .secret/appID.txt)/" \
+  -e "s/<password>/$(cat .secret/appKey.txt)" \
   -e "s/<accessToken>/$(cat .secret/accessToken.txt)/" \
   secret-template.yaml > .secret/secret.yaml
 
 # Populate .secret/config.yaml
-sed -e "s/<docker-org>/${docker_org}/" \
-  -e "s/<prefix>/${prefix}/" \
+sed -e "s/<acr-name>/${registry}/g" \
+  -e "s@<prefix>@${prefix}@" \
   -e "s/<jupyter-ip>/${jupyter_ip}/" \
   -e "s/<binder-ip>/${binder_ip}/" \
   -e "s/<github-oauth-id>/$(cat .secret/ghClientID.txt)/" \
@@ -82,6 +79,8 @@ rm .secret/secretToken.txt
 rm .secret/accessToken.txt
 rm .secret/ghClientID.txt
 rm .secret/ghClientSecret.txt
+rm .secret/appID.txt
+rm .secret/appKey.txt
 
 # End the script with some outputs
 echo
