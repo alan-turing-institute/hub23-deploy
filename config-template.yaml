@@ -7,9 +7,6 @@ config:
     # jupyterhub IP address
     hub_url: http://<jupyter-ip>
 
-    # enable authentication
-    auth_enabled: true
-
     # allow customisation of web pages
     template_path: /etc/binderhub/custom/templates
     extra_static_path: /etc/binderhub/custom/static
@@ -32,29 +29,7 @@ jupyterhub:
     # maxAge is 6 hours: 6 * 3600 = 21600
     maxAge: 21600
 
-  hub:
-    services:
-      binder:
-        oauth_redirect_uri: "http://<binder-ip>/oauth_callback"
-        oauth_client_id: "binder-oauth-client-test"
-    extraConfig:
-      hub_extra: |
-        c.JupyterHub.redirect_to_server = False
-
-      binder: |
-        from kubespawner import KubeSpawner
-
-        class BinderSpawner(KubeSpawner):
-          def start(self):
-              if 'image' in self.user_options:
-                # binder service sets the image spec via user options
-                self.image = self.user_options['image']
-              return super().start()
-        c.JupyterHub.spawner_class = BinderSpawner
-
   singleuser:
-    # to make notebook servers aware of hub
-    cmd: jupyterhub-singleuser
     # limit CPUs and RAM
     memory:
       limit: 1G
@@ -62,21 +37,6 @@ jupyterhub:
     cpu:
       limit: .5
       guarantee: .5
-
-  auth:
-    type: github
-    admin:
-      access: true
-      users:
-        - sgibson91
-    github:
-      clientId: "<github-oauth-id>"
-      clientSecret: "<github-oauth-secret>"
-      callbackUrl: "http://<jupyter-ip>/hub/oauth_callback"
-      orgWhitelist:
-        - "<github-org-name>"
-    scopes:
-      - "read:user"
 
   # pre-pull images onto pods so that users aren't left waiting as long
   prePuller:
