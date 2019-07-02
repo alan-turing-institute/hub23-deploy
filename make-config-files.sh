@@ -10,7 +10,7 @@ res_grp=Hub23                # Azure Resource Group
 vault_name=hub23-keyvault    # Key vault name
 cluster=hub23cluster         # k8s cluster name
 registry=hub23registry       # Azure Container Registry
-prefix=hub23/binder-dev             # Docker image prefix
+prefix=hub23/binder-dev      # Docker image prefix
 org_name=binderhub-test-org  # GitHub organisation name
 hub_name=hub23               # BinderHub name
 
@@ -38,21 +38,44 @@ binder_ip=`kubectl get svc binder -n ${hub_name} | awk '{ print $4}' | tail -n 1
 mkdir -p .secret
 
 # Download apiToken
-az keyvault secret download --vault-name ${vault_name} -n apiToken -f .secret/apiToken.txt
+az keyvault secret download \
+--vault-name ${vault_name} \
+-n apiToken \
+-f .secret/apiToken.txt
 
 # Download secretToken
-az keyvault secret download --vault-name ${vault_name} -n secretToken -f .secret/secretToken.txt
+az keyvault secret download \
+--vault-name ${vault_name} \
+-n secretToken \
+-f .secret/secretToken.txt
 
 # Download access token
-az keyvault secret download --vault-name ${vault_name} -n binderhub-access-token -f .secret/accessToken.txt
+az keyvault secret download \
+--vault-name ${vault_name} \
+-n binderhub-access-token \
+-f .secret/accessToken.txt
 
 # Download GitHub OAuth client ID and secret
-az keyvault secret download --vault-name ${vault_name} -n github-client-id -f .secret/ghClientID.txt
-az keyvault secret download --vault-name ${vault_name} -n github-client-secret -f .secret/ghClientSecret.txt
+az keyvault secret download \
+--vault-name ${vault_name} \
+-n github-client-id \
+-f .secret/ghClientID.txt
+
+az keyvault secret download \
+--vault-name ${vault_name} \
+-n github-client-secret \
+-f .secret/ghClientSecret.txt
 
 # Download Service Principal AppID and Key
-az keyvault secret download --vault-name ${vault_name} -n SP-appID -f .secret/appID.txt
-az keyvault secret download --vault-name ${vault_name} -n SP-key -f .secret/appKey.txt
+az keyvault secret download \
+--vault-name ${vault_name} \
+-n SP-appID \
+-f .secret/appID.txt
+
+az keyvault secret download \
+--vault-name ${vault_name} \
+-n SP-key \
+-f .secret/appKey.txt
 
 # Populate .secret/secret.yaml
 sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
