@@ -1,4 +1,4 @@
-# Deploy a BinderHub on the Turing's Azure subscription
+# Deploy an Autoscaling BinderHub on the Turing's Azure subscription
 
 This document walks through the steps required to deploy Hub23 (the Turing hosted BinderHub) onto the Turing's Azure subscription.
 
