@@ -37,7 +37,7 @@ This will ensure that a future developer (someone else or future-you!) can recre
 To upgrade the BinderHub Helm Chart:
 ```
 chmod 700 upgrade.sh
-./upgrade.sh hub23 <commit-hash>
+./upgrade.sh <commit-hash>
 ```
 where `<commit-hash>` can be found [here](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub).
 
@@ -64,16 +64,16 @@ kubectl scale deployment hub --replicas=1 --namespace hub23
 
 ## Useful commands
 
-To print the IP address of the Binder page:
+To print the pods and IP addresses of the Binder page and JupyterHub:
 ```
-kubectl --namespace=hub23 get svc binder
+chmod 700 info.sh
+./info.sh
 ```
 
 To access the JupyterHub logs:
 ```
-# Print the running pods, find the one that begins with "hub-"
-kubectl get pods --namespace hub23
-kubectl logs hub-<random-string> --namespace hub23
+chmod 700 logs.sh
+./logs.sh
 ```
 
 To find out more info about a Pod:
