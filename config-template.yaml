@@ -74,6 +74,10 @@ jupyterhub:
 
   auth:
     type: github
+    admin:
+      access: true
+      users:
+        - sgibson91
     github:
       clientId: "<github-client-id>"
       clientSecret: "<github-client-secret>"
