@@ -78,3 +78,7 @@ jupyterhub:
       clientId: "<github-client-id>"
       clientSecret: "<github-client-secret>"
       callbackUrl: "http://<jupyterhub-ip>/hub/oauth_callback"
+      orgWhitelist:
+        - "<github-org-name>"
+    scopes:
+      - "read:user"
