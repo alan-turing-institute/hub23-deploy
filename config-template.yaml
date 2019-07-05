@@ -4,8 +4,10 @@ config:
     use_registry: true
     image_prefix: <acr-name>.azurecr.io/<prefix>-
 
+    auth_enabled: true
+
     # jupyterhub IP address
-    hub_url: http://<jupyter-ip>
+    hub_url: http://<jupyterhub-ip>
 
   # Authenticate against registry
   DockerRegistry:
@@ -22,7 +24,29 @@ jupyterhub:
     # maxAge is 6 hours: 6 * 3600 = 21600
     maxAge: 21600
 
+  hub:
+    services:
+      binder:
+        oauth_redirect_uri: "http://<binder-ip>/oauth_callback"
+        oauth_client_id: "binder-oauth-client-test"
+    extraConfig:
+      hub_extra: |
+        c.JupyterHub.redirect_to_server = False
+
+      binder: |
+        from kubespawner import KubeSpawner
+
+        class BinderSpawner(KubeSpawner):
+          def start(self):
+            if 'image' in self.user_options:
+              # binder service sets the image spec via user options
+              self.image = self.user_options['image']
+            return super().start()
+        c.JupyterHub.spawner_class = BinderSpawner
+
   singleuser:
+    # to make notebook servers aware of hub
+    cmd: jupyterhub-singleuser
     # limit CPUs and RAM
     memory:
       limit: 1G
@@ -47,3 +71,10 @@ jupyterhub:
     # enable user scheduler to facilitate the efficient scheduling of user pods
     userScheduler:
       enabled: true
+
+  auth:
+    type: github
+    github:
+      clientId: "<github-client-id>"
+      clientSecret: "<github-client-secret>"
+      callbackUrl: "http://<jupyterhub-ip>/hub/oauth_callback"

@@ -18,6 +18,8 @@ secret_names=(
   apiToken
   secretToken
   binderhub-access-token
+  github-client-id
+  github-client-secret
   SP-appID
   SP-key
 )
@@ -65,8 +67,10 @@ sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
 # Populate .secret/config.yaml
 sed -e "s/<acr-name>/${registry}/g" \
   -e "s@<prefix>@${prefix}@" \
-  -e "s/<jupyter-ip>/${jupyter_ip}/" \
+  -e "s/<jupyterhub-ip>/${jupyter_ip}/" \
   -e "s/<binder-ip>/${binder_ip}/" \
+  -e "s/<github-client-id>/$(cat .secret/github-client-id.txt)/" \
+  -e "s/<github-client-secret>/$(cat .secret/github-client-secret.txt)/" \
   -e "s/<github-org-name>/${org_name}/" \
   config-template.yaml > .secret/config.yaml
 
