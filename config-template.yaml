@@ -2,20 +2,16 @@ config:
   BinderHub:
     # connect image registry and set image prefix
     use_registry: true
-    image_prefix: <docker-org>/<prefix>-
+    image_prefix: <acr-name>.azurecr.io/<prefix>-
 
-    # jupyterhub IP address
-    hub_url: http://<jupyter-ip>
-
-    # enable authentication
     auth_enabled: true
 
-    # allow customisation of web pages
-    template_path: /etc/binderhub/custom/templates
-    extra_static_path: /etc/binderhub/custom/static
-    extra_static_url_prefix: /extra_static/
-    template_variables:
-      EXTRA_STATIC_URL_PREFIX: "/extra_static/"
+    # jupyterhub IP address
+    hub_url: http://<jupyterhub-ip>
+
+  # Authenticate against registry
+  DockerRegistry:
+    token_url: "https://<acr-name>.azurecr.io/oauth2/token?service=<acr-name>.azurecr.io"
 
 jupyterhub:
   # cull config was taken from mybinder.org
@@ -42,10 +38,10 @@ jupyterhub:
 
         class BinderSpawner(KubeSpawner):
           def start(self):
-              if 'image' in self.user_options:
-                # binder service sets the image spec via user options
-                self.image = self.user_options['image']
-              return super().start()
+            if 'image' in self.user_options:
+              # binder service sets the image spec via user options
+              self.image = self.user_options['image']
+            return super().start()
         c.JupyterHub.spawner_class = BinderSpawner
 
   singleuser:
@@ -58,21 +54,6 @@ jupyterhub:
     cpu:
       limit: .5
       guarantee: .5
-
-  auth:
-    type: github
-    admin:
-      access: true
-      users:
-        - sgibson91
-    github:
-      clientId: "<github-oauth-id>"
-      clientSecret: "<github-oauth-secret>"
-      callbackUrl: "http://<jupyter-ip>/hub/oauth_callback"
-      orgWhitelist:
-        - "<github-org-name>"
-    scopes:
-      - "read:user"
 
   # pre-pull images onto pods so that users aren't left waiting as long
   prePuller:
@@ -91,26 +72,17 @@ jupyterhub:
     userScheduler:
       enabled: true
 
-# allow customisation of web pages
-initContainers:
-  - name: git-clone-templates
-    image: alpine/git
-    args:
-      - clone
-      - --single-branch
-      - --branch=master
-      - --depth=1
-      - --
-      - https://github.com/alan-turing-institute/hub23-custom-files
-      - /etc/binderhub/custom
-    securityContext:
-      runAsUser: 0
-    volumeMounts:
-      - name: custom-templates
-        mountPath: /etc/binderhub/custom
-extraVolumes:
-  - name: custom-templates
-    emptyDir: {}
-extraVolumeMounts:
-  - name: custom-templates
-    mountPath: /etc/binderhub/custom
+  auth:
+    type: github
+    admin:
+      access: true
+      users:
+        - sgibson91
+    github:
+      clientId: "<github-client-id>"
+      clientSecret: "<github-client-secret>"
+      callbackUrl: "http://<jupyterhub-ip>/hub/oauth_callback"
+      orgWhitelist:
+        - "<github-org-name>"
+    scopes:
+      - "read:user"
