@@ -14,6 +14,16 @@ prefix=hub23/binder-dev      # Docker image prefix
 org_name=binderhub-test-org  # GitHub organisation name
 hub_name=hub23               # BinderHub name
 
+secret_names=(
+  apiToken
+  secretToken
+  binderhub-access-token
+  github-client-id
+  github-client-secret
+  SP-appID
+  SP-key
+)
+
 # Login to Azure
 az login -o none
 
@@ -37,53 +47,21 @@ binder_ip=`kubectl get svc binder -n ${hub_name} | awk '{ print $4}' | tail -n 1
 # Make a secrets folder
 mkdir -p .secret
 
-# Download apiToken
-az keyvault secret download \
---vault-name ${vault_name} \
--n apiToken \
--f .secret/apiToken.txt
-
-# Download secretToken
-az keyvault secret download \
---vault-name ${vault_name} \
--n secretToken \
--f .secret/secretToken.txt
-
-# Download access token
-az keyvault secret download \
---vault-name ${vault_name} \
--n binderhub-access-token \
--f .secret/accessToken.txt
-
-# Download GitHub OAuth client ID and secret
-az keyvault secret download \
---vault-name ${vault_name} \
--n github-client-id \
--f .secret/ghClientID.txt
-
-az keyvault secret download \
---vault-name ${vault_name} \
--n github-client-secret \
--f .secret/ghClientSecret.txt
-
-# Download Service Principal AppID and Key
-az keyvault secret download \
---vault-name ${vault_name} \
--n SP-appID \
--f .secret/appID.txt
-
-az keyvault secret download \
---vault-name ${vault_name} \
--n SP-key \
--f .secret/appKey.txt
+# Download secrets
+for secret_name in ${secret_names[@]}; do
+  az keyvault secret download \
+  --vault-name ${vault_name} \
+  -n ${secret_name} \
+  -f .secret/${secret_name}.txt
+done
 
 # Populate .secret/secret.yaml
 sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
   -e "s/<secretToken>/$(cat .secret/secretToken.txt)/" \
   -e "s/<acr-name>/${registry}/" \
-  -e "s/<username>/$(cat .secret/appID.txt)/" \
-  -e "s/<password>/$(cat .secret/appKey.txt)/" \
-  -e "s/<accessToken>/$(cat .secret/accessToken.txt)/" \
+  -e "s/<username>/$(cat .secret/SP-appID.txt)/" \
+  -e "s/<password>/$(cat .secret/SP-key.txt)/" \
+  -e "s/<accessToken>/$(cat .secret/binderhub-access-token.txt)/" \
   secret-template.yaml > .secret/secret.yaml
 
 # Populate .secret/config.yaml
@@ -91,19 +69,15 @@ sed -e "s/<acr-name>/${registry}/g" \
   -e "s@<prefix>@${prefix}@" \
   -e "s/<jupyter-ip>/${jupyter_ip}/" \
   -e "s/<binder-ip>/${binder_ip}/" \
-  -e "s/<github-oauth-id>/$(cat .secret/ghClientID.txt)/" \
-  -e "s/<github-oauth-secret>/$(cat .secret/ghClientSecret.txt)/" \
+  -e "s/<github-oauth-id>/$(cat .secret/github-client-id.txt)/" \
+  -e "s/<github-oauth-secret>/$(cat .secret/github-client-secret.txt)/" \
   -e "s/<github-org-name>/${org_name}/" \
   config-template.yaml > .secret/config.yaml
 
 # Delete downloaded secret files
-rm .secret/apiToken.txt
-rm .secret/secretToken.txt
-rm .secret/accessToken.txt
-rm .secret/ghClientID.txt
-rm .secret/ghClientSecret.txt
-rm .secret/appID.txt
-rm .secret/appKey.txt
+for secret_name in ${secret_names[@]}; do
+  rm .secret/${secret_name}.txt
+done
 
 # End the script with some outputs
 echo
