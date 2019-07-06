@@ -1,5 +1,6 @@
 config:
   BinderHub:
+    # allow customisation of webpages
     template_path: /etc/binderhub/custom/templates
     extra_static_path: /etc/binderhub/custom/static
     extra_static_url_prefix: /extra_static/
@@ -93,13 +94,14 @@ jupyterhub:
     scopes:
       - "read:user"
 
+# allow customisation of webpages
 initContainers:
   - name: git-clone-templates
     image: alpine/git
     args:
       - clone
       - --single-branch
-      - --branch=feature/logo-update
+      - --branch=master
       - --depth=1
       - --
       - https://github.com/alan-turing-institute/hub23-deploy
