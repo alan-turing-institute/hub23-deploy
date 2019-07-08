@@ -26,4 +26,16 @@ We will create a subdomain in the Turing domain.
 
 ## Creating A records
 
+We will now set A records that point to the IP addresses of the JupyterHub and Binder page.
 
+1. When viewing the DNS zone on the Azure Portal, click "+ Record set"
+
+2. In the **Name** field, enter "binder" or "hub" (depending on which IP you choose to set a record for first, the process is the same for both).
+
+3. Set **Alias record set** to "Yes" and this will bring up some new options.
+
+4. Make sure the subscription is set to "Turing-BinderHub".
+   Under **Azure resource** select one of the two items under **Public IP Address**.
+   If you view these resources (under the resource group beginning `MC_`), you will be able to see the IP addresses they refer to. Compare these with the output of `info.sh` in order to ascertain which one is Binder and which is JupyterHub.
+
+5. Click "OK" and repeat the process for the second IP address.
