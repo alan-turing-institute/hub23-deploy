@@ -5,14 +5,16 @@
 # connect to the Turing BinderHub (Hub23)
 
 # Variables
-sub=Turing-BinderHub         # Azure BinderHub subscription
-res_grp=Hub23                # Azure Resource Group
-vault_name=hub23-keyvault    # Key vault name
-cluster=hub23cluster         # k8s cluster name
-registry=hub23registry       # Azure Container Registry
-prefix=hub23/binder-dev      # Docker image prefix
-org_name=binderhub-test-org  # GitHub organisation name
-hub_name=hub23               # BinderHub name
+sub=Turing-BinderHub                  # Azure BinderHub subscription
+res_grp=Hub23                         # Azure Resource Group
+vault_name=hub23-keyvault             # Key vault name
+cluster=hub23cluster                  # k8s cluster name
+registry=hub23registry                # Azure Container Registry
+prefix=hub23/binder-dev               # Docker image prefix
+org_name=binderhub-test-org           # GitHub organisation name
+hub_name=hub23                        # BinderHub name
+jupyterhub_ip=hub.hub23.turing.ac.uk  # JupyterHub address
+binder_ip=binder.hub23.turing.ac.uk   # Binder page address
 
 secret_names=(
   apiToken
@@ -40,10 +42,6 @@ helm init --client-only
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 helm repo update
 
-# get IP addresses of JupyterHub and Binder
-jupyter_ip=`kubectl get svc proxy-public -n ${hub_name} | awk '{ print $4}' | tail -n 1`
-binder_ip=`kubectl get svc binder -n ${hub_name} | awk '{ print $4}' | tail -n 1`
-
 # Make a secrets folder
 mkdir -p .secret
 
@@ -67,7 +65,7 @@ sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
 # Populate .secret/config.yaml
 sed -e "s/<acr-name>/${registry}/g" \
   -e "s@<prefix>@${prefix}@" \
-  -e "s/<jupyterhub-ip>/${jupyter_ip}/" \
+  -e "s/<jupyterhub-ip>/${jupyterhub_ip}/" \
   -e "s/<binder-ip>/${binder_ip}/" \
   -e "s/<github-client-id>/$(cat .secret/github-client-id.txt)/" \
   -e "s/<github-client-secret>/$(cat .secret/github-client-secret.txt)/" \
