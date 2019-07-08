@@ -3,7 +3,7 @@
 See these docs:
 * https://binderhub.readthedocs.io/en/latest/customizing.html#template-customization
 
-The html content must be publicly hosted so these changes must happen in the [alan-turing-institute/hub23-custom-files](https://github.com/alan-turing-institute/hub23-custom-files) repo.
+The html content must be publicly hosted so the repo must remain public.
 
 #### 1. Add the logo image file to the `static` folder
 
@@ -41,7 +41,7 @@ initContainers:
       - --branch=master
       - --depth=1
       - --
-      - https://github.com/alan-turing-institute/hub23-custom-files
+      - https://github.com/alan-turing-institute/hub23-deploy
       - /etc/binderhub/custom
     securityContext:
       runAsUser: 0
@@ -64,11 +64,11 @@ Upgrade the Chart with the following command.
 The most recent commit-hash used should be logged in the Changelog section of the root README.
 
 ```
-helm upgrade hub23 jupyterhub/binderhub --version=0.2.0-<commit-hash> -f .secret/secret.yaml -f .secret/config.yaml
+./upgrade.sh <commit-hash>
 ```
 
 Get the IP address of the Binder page with the following command.
 
 ```
-kubectl --namespace hub23 get svc binder
+./info.sh
 ```
