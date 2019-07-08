@@ -82,4 +82,4 @@ echo
 echo Your BinderHub files have been configured:
 echo ".secret/config.yaml        .secret/secret.yaml"
 echo
-echo "Binder IP: " `kubectl get svc binder -n ${hub_name} | awk '{ print $4}' | tail -n 1`
+echo "Binder IP (binder.hub23.turing.ac.uk): " `kubectl get svc binder -n ${hub_name} | awk '{ print $4}' | tail -n 1`
