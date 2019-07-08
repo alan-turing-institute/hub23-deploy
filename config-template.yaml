@@ -11,6 +11,7 @@ config:
     use_registry: true
     image_prefix: <acr-name>.azurecr.io/<prefix>-
 
+    # Enable authentication
     auth_enabled: true
 
     # jupyterhub IP address
