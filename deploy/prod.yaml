@@ -1,0 +1,18 @@
+projectName: hub23
+
+binderhub:
+  config:
+    BinderHub:
+      build_node_selector:
+        hub.jupyter.org/node-purpose: user
+  nodeSelector:
+    hub.jupyter.org/node-purpose: core
+
+  jupyterhub:
+    proxy:
+      nodeSelector:
+        hub.jupyter.org/node-purpose: core
+
+kube-lego:
+  nodeSelector:
+    hub.jupyter.org/node-purpose: core
