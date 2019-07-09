@@ -12,38 +12,33 @@ Three command line interfaces are used to manage Hub23:
 
 ## Usage
 
-`make-config-files.sh` is a shell script to automatically recreate the configuration files in order to maintain or upgrade Hub23.
+`generate-config.sh` is a shell script to automatically recreate the configuration files in order to maintain or upgrade Hub23.
 
 ```
-chmod 700 make-config-files.sh
-./make-config-files.sh
+chmod 700 generate-config.sh
+./generate-config.sh
 ```
 
-This will populate `secret-template.yaml` and `config-template.yaml` (using [`sed`](http://www.grymoire.com/Unix/Sed.html)) with the appropriate information and save the output as `.secret/secret.yaml` and `.secret/config.yaml`. It will ask for your Docker ID and password and your account must be a member of the DockerHub organisation `binderhubtest`.
+This will populate `secret-template.yaml` and `prod-template.yaml` (using [`sed`](http://www.grymoire.com/Unix/Sed.html)) with the appropriate information and save the output as `.secret/secret.yaml` and `.secret/prod.yaml`.
 
-`.secret/` is a git-ignored folder so that the `secret.yaml` and `config.yaml` files (and any secrets downloaded in the process of creating them) cannot be pushed to GitHub.
-
-Lastly, the script will print the Binder IP address.
+`.secret/` is a git-ignored folder so that the `secret.yaml` and `prod.yaml` files (and any secrets downloaded in the process of creating them) cannot be pushed to GitHub.
 
 ## Maintaining or Upgrading Hub23
 
-If changes are made to `.secret/secret.yaml` and/or `.secret/config.yaml` during development, make sure that:
-* the new format is reflected in `secret-template.yaml` and/or `config-template.yaml` and any new secrets/tokens/passwords are redacted;
+If changes are made to `.secret/secret.yaml` and/or `.secret/prod.yaml` during development, make sure that:
+* the new format is reflected in `secret-template.yaml` and/or `prod-template.yaml` and any new secrets/tokens/passwords are redacted;
 * new secrets/tokens/passwords are added to the Azure key vault (see `docs/azure-keyvault.md`);
-* `make-config-files.sh` is updated in order to populate the templates with the appropriate information (i.e. using `sed`).
+* `generate-config.sh` is updated in order to populate the templates with the appropriate information (i.e. using `sed`).
 
 This will ensure that a future developer (someone else or future-you!) can recreate the configuration files for Hub23.
 
 To upgrade the BinderHub Helm Chart:
 ```
 chmod 700 upgrade.sh
-./upgrade.sh <commit-hash>
+./upgrade.sh
 ```
-where `<commit-hash>` can be found [here](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub).
 
-`upgrade.sh` pulls the latest helm chart repository and upgrades the helm chart according to the version number supplied as a command line argument.
-
-Please try to keep track of the deployed `<commit-hash>` in the [changelog](changelog.txt).
+`upgrade.sh` updates the local helm chart repository and upgrades the helm deployment.
 
 ## Restarting the JupyterHub
 
@@ -80,8 +75,3 @@ To find out more info about a Pod:
 ```
 kubectl describe pod <POD-NAME> --namespace hub23
 ```
-
-## Changelog
-
-The [changelog](./changelog.txt) is a file tracking how up to date with the [BinderHub helm chart](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub) Hub23 is.
-Also if something breaks between chart updates, then the breaking changes between versions can be tracked.
