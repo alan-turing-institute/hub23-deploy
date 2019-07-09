@@ -1,7 +1,15 @@
 #!/bin/bash
 
+# Initialise helm
+helm init --client-only
+
+# Make sure the JupyterHub/BinderHub Helm Chart repo is installed and up-to-date
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 helm repo update
-helm upgrade hub23 jupyterhub/binderhub --version=$1 -f .secret/secret.yaml -f .secret/config.yaml
+# Update local chart
+cd Hub23 && helm dependency update && cd ..
+
+helm upgrade hub23 Hub23 --version=v0.0.1 -f .secret/secret.yaml -f .secret/prod.yaml
 echo
 kubectl get pods -n hub23
 echo
