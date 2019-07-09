@@ -9,7 +9,7 @@ helm repo update
 # Update local chart
 cd Hub23 && helm dependency update && cd ..
 
-helm upgrade hub23 Hub23 --version=v0.0.1 -f .secret/secret.yaml -f .secret/prod.yaml
+helm upgrade hub23 hub23-chart --version=v0.0.1 -f .secret/secret.yaml -f .secret/prod.yaml
 echo
 kubectl get pods -n hub23
 echo
