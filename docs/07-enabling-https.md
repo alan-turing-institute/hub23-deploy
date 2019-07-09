@@ -1,6 +1,6 @@
-# Enabling Page Redirection and HTTPS
+# Enabling Page Redirection
 
-These docs will walk through how to create a DNS at which the Binder page and JupyterHub are found and how to enable these addresses with HTTPS.
+These docs will walk through how to create a DNS at which the Binder page and JupyterHub are found.
 
 ## Creating a new DNS Zone
 
