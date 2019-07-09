@@ -3,16 +3,23 @@ projectName: hub23
 binderhub:
   config:
     BinderHub:
+      build_node_selector:
+        hub.jupyter.org/node-purpose: user
       hub_url: https://<jupyterhub-ip>
       image_prefix: <acr-name>.azurecr.io/<prefix>-
     DockerRegistry:
       token_url: "https://<acr-name>.azurecr.io/oauth2/token?service=<acr-name>.azurecr.io"
+  nodeSelector:
+    hub.jupyter.org/node-purpose: core
 
   ingress:
     hosts:
       - <binder-ip>
 
   jupyterhub:
+    proxy:
+      nodeSelector:
+        hub.jupyter.org/node-purpose: core
     ingress:
       hosts:
         - <jupyterhub-ip>
@@ -55,6 +62,10 @@ binderhub:
           - "<github-org-name>"
       scopes:
         - "read:user"
+
+kube-lego:
+  nodeSelector:
+    hub.jupyter.org/node-purpose: core
 
 nginx-ingress:
   controller:
