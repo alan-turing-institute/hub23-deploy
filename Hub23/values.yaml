@@ -1,0 +1,130 @@
+binderhub:
+  config:
+    BinderHub:
+      use_registry: true
+      auth_enabled: true
+      template_path: /etc/binderhub/custom/templates
+      extra_static_path: /etc/binderhub/custom/static
+      extra_static_url_prefix: /extra_static/
+      template_variables:
+        EXTRA_STATIC_URL_PREFIX: "/extra_static/"
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    https:
+      enabled: true
+      type: kube-lego
+
+  jupyterhub:
+    ingress:
+      enabled: true
+      annotations:
+        ingress.kubernetes.io/proxy-body-size: 64m
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'true'
+    cull:
+      every: 660
+      timeout: 600
+      maxAge: 21600
+    scheduling:
+      podPriority:
+        enabled: true
+      userPlaceholder:
+        replicas: 3
+      userScheduler:
+        enabled: true
+    singleuser:
+      cmd: jupyterhub-singleuser
+      memory:
+        limit: 1G
+        guarantee: 1G
+      cpu:
+        limit: .5
+        guarantee: .5
+    prePuller:
+      continuous:
+        enabled: true
+    hub:
+      resources:
+        requests:
+          cpu: "0.25"
+          memory: 512Mi
+        limits:
+          cpu: "2"
+          memory: 1Gi
+    proxy:
+      chp:
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: "0.25"
+          limits:
+            memory: 512Mi
+            cpu: "0.5"
+      nginx:
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: "0.25"
+          limits:
+            memory: 1Gi
+            cpu: 1
+
+  initContainers:
+    - name: git-clone-templates
+      image: alpine/git
+      args:
+        - clone
+        - --single-branch
+        - --branch=master
+        - --depth=1
+        - --
+        - https://github.com/alan-turing-institute/hub23-deploy
+        - /etc/binderhub/custom
+      securityContext:
+        runAsUser: 0
+      volumeMounts:
+        - name: custom-templates
+          mountPath: /etc/binderhub/custom
+  extraVolumes:
+    - name: custom-templates
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: custom-templates
+      mountPath: /etc/binderhub/custom
+
+nginx-ingress:
+  rbac:
+    create: true
+  defaultBackend:
+    minAvailable: 0
+
+  controller:
+    replicaCount: 2
+    scope:
+      enable: true
+    config:
+      # Allow POSTs of up to 64MB, for large notebook support
+      proxy-body-size: 64MB
+    resources:
+      requests:
+        cpu: 0.25
+        memory: 240Mi
+      limits:
+        cpu: 0.5
+        memory: 240Mi
+
+    service:
+      # Preserve client IPs
+      externalTrafficPolicy: local
+
+kube-lego:
+  config:
+    LEGO_EMAIL: hub23registry@turing.ac.uk
+    LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
+  rbac:
+    create: true
+  image:
+    tag: 0.1.7
