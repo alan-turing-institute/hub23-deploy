@@ -5,7 +5,6 @@
 # connect to the Turing BinderHub (Hub23)
 
 # Variables
-sub=Turing-BinderHub                  # Azure BinderHub subscription
 res_grp=Hub23                         # Azure Resource Group
 vault_name=hub23-keyvault             # Key vault name
 cluster=hub23cluster                  # k8s cluster name
@@ -26,13 +25,7 @@ secret_names=(
   SP-key
 )
 
-# Login to Azure
-az login -o none
-
-# Set subscription
-az account set -s ${sub}
-
-# Configure Azure credentials for hub23cluster
+# Authenticate to k8s cluster
 az aks get-credentials -n ${cluster} -g ${res_grp}
 
 # Initialise helm
@@ -41,6 +34,8 @@ helm init --client-only
 # Make sure the JupyterHub/BinderHub Helm Chart repo is installed and up-to-date
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 helm repo update
+# Update local chart
+cd Hub23 && helm dependency update && cd ..
 
 # Make a secrets folder
 mkdir -p .secret
@@ -63,14 +58,14 @@ sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
   secret-template.yaml > .secret/secret.yaml
 
 # Populate .secret/config.yaml
-sed -e "s/<acr-name>/${registry}/g" \
+sed -e "s/<jupyterhub-ip>/${jupyterhub_ip}/" \
+  -e "s/<acr-name>/${registry}/g" \
   -e "s@<prefix>@${prefix}@" \
-  -e "s/<jupyterhub-ip>/${jupyterhub_ip}/" \
   -e "s/<binder-ip>/${binder_ip}/" \
   -e "s/<github-client-id>/$(cat .secret/github-client-id.txt)/" \
   -e "s/<github-client-secret>/$(cat .secret/github-client-secret.txt)/" \
   -e "s/<github-org-name>/${org_name}/" \
-  config-template.yaml > .secret/config.yaml
+  prod-template.yaml > .secret/prod.yaml
 
 # Delete downloaded secret files
 for secret_name in ${secret_names[@]}; do
@@ -80,6 +75,6 @@ done
 # End the script with some outputs
 echo
 echo Your BinderHub files have been configured:
-echo ".secret/config.yaml        .secret/secret.yaml"
+ls .secret/
 echo
 echo "Binder IP (binder.hub23.turing.ac.uk): " `kubectl get svc binder -n ${hub_name} | awk '{ print $4}' | tail -n 1`
