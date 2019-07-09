@@ -28,15 +28,6 @@ secret_names=(
 # Authenticate to k8s cluster
 az aks get-credentials -n ${cluster} -g ${res_grp}
 
-# Initialise helm
-helm init --client-only
-
-# Make sure the JupyterHub/BinderHub Helm Chart repo is installed and up-to-date
-helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-helm repo update
-# Update local chart
-cd Hub23 && helm dependency update && cd ..
-
 # Make a secrets folder
 mkdir -p .secret
 
