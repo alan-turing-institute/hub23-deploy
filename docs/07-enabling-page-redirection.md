@@ -39,3 +39,9 @@ We will now set A records that point to the IP addresses of the JupyterHub and B
    If you view these resources (under the resource group beginning `MC_`), you will be able to see the IP addresses they refer to. Compare these with the output of `info.sh` in order to ascertain which one is Binder and which is JupyterHub.
 
 5. Click "OK" and repeat the process for the second IP address.
+
+## Update `make-config-files.sh`
+
+Make sure to update `make-config-files.sh` to parse the new DNS names to the appropriate parts of `config.yaml`, instead of the raw IP address.
+If you have GitHub OAuth enabled, the DNS names will have to be inserted instead of the IP addresses in the OAuth app as well.
+This shouldn't generate a new Client ID or Secret.
