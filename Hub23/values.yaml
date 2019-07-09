@@ -35,6 +35,9 @@ binderhub:
         replicas: 3
       userScheduler:
         enabled: true
+      userPods:
+        nodeAffinity:
+          matchNodePurpose: require
     singleuser:
       cmd: jupyterhub-singleuser
       memory:
