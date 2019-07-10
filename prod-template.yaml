@@ -1,5 +1,3 @@
-projectName: hub23
-
 binderhub:
   config:
     BinderHub:
