@@ -9,3 +9,6 @@
 
 # Ignore requirements lock
 */requirements.lock
+
+# Ignore packaged helm charts
+*.tgz
