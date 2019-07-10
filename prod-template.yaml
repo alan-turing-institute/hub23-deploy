@@ -7,12 +7,21 @@ binderhub:
       image_prefix: <acr-name>.azurecr.io/<prefix>-
     DockerRegistry:
       token_url: "https://<acr-name>.azurecr.io/oauth2/token?service=<acr-name>.azurecr.io"
+    GitHubRepoProvider:
+      access_token: <accessToken>
+
+  registry:
+    url: https://<acr-name>.azurecr.io
+    username: <username>
+    password: <password>
 
   ingress:
     hosts:
       - <binder-ip>
 
   jupyterhub:
+    proxy:
+      secretToken: "<secretToken>"
     ingress:
       hosts:
         - <jupyterhub-ip>
@@ -24,6 +33,7 @@ binderhub:
     hub:
       services:
         binder:
+          apiToken: "<apiToken>"
           oauth_redirect_uri: "http://<binder-ip>/oauth_callback"
           oauth_client_id: "binder-oauth-client-test"
       extraConfig:
