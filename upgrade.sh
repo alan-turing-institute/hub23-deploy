@@ -7,9 +7,9 @@ helm init --client-only
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 helm repo update
 # Update local chart
-cd Hub23 && helm dependency update && cd ..
+cd hub23-chart && helm dependency update && cd ..
 
-helm upgrade --wait --install hub23 Hub23 --version=v0.0.1 -f deploy/prod.yaml -f .secret/prod.yaml
+helm upgrade --wait --install hub23 hub23-chart --version=v0.0.1 -f deploy/prod.yaml -f .secret/prod.yaml
 echo
 kubectl get pods -n hub23
 echo
