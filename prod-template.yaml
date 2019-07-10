@@ -70,3 +70,7 @@ nginx-ingress:
   controller:
     service:
       loadBalancerIP: <load-balancer-ip>
+
+kube-lego:
+  config:
+    LEGO_EMAIL: <acr-name>@turing.ac.uk

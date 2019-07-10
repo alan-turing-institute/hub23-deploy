@@ -125,7 +125,6 @@ nginx-ingress:
 
 kube-lego:
   config:
-    LEGO_EMAIL: hub23registry@turing.ac.uk
     LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
   rbac:
     create: true
