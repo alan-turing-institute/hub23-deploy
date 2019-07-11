@@ -40,18 +40,11 @@ for secret_name in ${secret_names[@]}; do
 done
 
 # Populate .secret/prod.yaml
-sed -e "s/<jupyterhub-ip>/${jupyterhub_ip}/" \
-  -e "s/<acr-name>/${registry}/g" \
-  -e "s@<prefix>@${prefix}@" \
-  -e "s/<binder-ip>/${binder_ip}/" \
-  -e "s/<github-client-id>/$(cat .secret/github-client-id.txt)/" \
-  -e "s/<github-client-secret>/$(cat .secret/github-client-secret.txt)/" \
-  -e "s/<github-org-name>/${org_name}/" \
+sed -e "s/<acr-name>/${registry}/g" \
   -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" \
   -e "s/<secretToken>/$(cat .secret/secretToken.txt)/" \
   -e "s/<username>/$(cat .secret/SP-appID.txt)/" \
   -e "s/<password>/$(cat .secret/SP-key.txt)/" \
-  -e "s/<accessToken>/$(cat .secret/binderhub-access-token.txt)/" \
   prod-template.yaml > .secret/prod.yaml
 
 # Delete downloaded secret files
