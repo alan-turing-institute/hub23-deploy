@@ -1,74 +1,13 @@
 binderhub:
-  config:
-    BinderHub:
-      hub_url: https://<jupyterhub-ip>
-      image_prefix: <acr-name>.azurecr.io/<prefix>-
-    DockerRegistry:
-      token_url: "https://<acr-name>.azurecr.io/oauth2/token?service=<acr-name>.azurecr.io"
-    GitHubRepoProvider:
-      access_token: <accessToken>
-
   registry:
     url: https://<acr-name>.azurecr.io
     username: <username>
     password: <password>
 
-  ingress:
-    hosts:
-      - <binder-ip>
-
   jupyterhub:
-    proxy:
-      secretToken: "<secretToken>"
-    ingress:
-      hosts:
-        - <jupyterhub-ip>
-      tls:
-        - secretName: kubelego-tls-jupyterhub-hub
-          hosts:
-            - <jupyterhub-ip>
-
     hub:
       services:
         binder:
           apiToken: "<apiToken>"
-          oauth_redirect_uri: "http://<binder-ip>/oauth_callback"
-          oauth_client_id: "binder-oauth-client-test"
-      extraConfig:
-        hub_extra: |
-          c.JupyterHub.redirect_to_server = False
-
-        binder: |
-          from kubespawner import KubeSpawner
-
-          class BinderSpawner(KubeSpawner):
-            def start(self):
-              if 'image' in self.user_options:
-                # binder service sets the image spec via user options
-                self.image = self.user_options['image']
-              return super().start()
-          c.JupyterHub.spawner_class = BinderSpawner
-
-    auth:
-      type: github
-      admin:
-        access: true
-        users:
-          - sgibson91
-      github:
-        clientId: "<github-client-id>"
-        clientSecret: "<github-client-secret>"
-        callbackUrl: "http://<jupyterhub-ip>/hub/oauth_callback"
-        orgWhitelist:
-          - "<github-org-name>"
-      scopes:
-        - "read:user"
-
-nginx-ingress:
-  controller:
-    service:
-      loadBalancerIP: <load-balancer-ip>
-
-kube-lego:
-  config:
-    LEGO_EMAIL: <acr-name>@turing.ac.uk
+    proxy:
+      secretToken: "<secretToken>"
