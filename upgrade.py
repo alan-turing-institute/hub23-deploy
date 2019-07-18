@@ -15,8 +15,18 @@ def parse_args():
 
     return parser.parse_args()
 
-def main():
-    args = parse_args()
+def find_version():
+    from yaml import safe_load as load
+
+    with open("changelog.txt", "r") as f:
+        changelog = load(f)
+
+    keys = list(changelog.keys())
+    return changelog[keys[-1]]
+
+def main(version=None):
+    if version is None:
+        version = find_version()
 
     subprocess.check_call([
         "helm", "repo", "add", "jupyter", "https://jupyterhub.github.io/helm-chart"
@@ -25,7 +35,7 @@ def main():
 
     subprocess.check_call([
         "helm", "upgrade", "hub23", "jupyterhub/binderhub",
-        f"--version={args.version}",
+        f"--version={version}",
         "-f", os.path.join(".secret", "secret.yaml"),
         "-f", os.path.join(".secret", "config.yaml")
     ])
@@ -40,4 +50,5 @@ def main():
     print(f"Binder IP (binder.hub23.turing.ac.uk): {output}")
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    main(version=args.version)
