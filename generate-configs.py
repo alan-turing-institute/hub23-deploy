@@ -5,7 +5,7 @@ import subprocess
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description=""
+        description="Script to generate configuration files for a BinderHub deployment"
     )
 
     parser.add_argument(
@@ -13,47 +13,47 @@ def parse_args():
         "--vault-name",
         type=str,
         default="hub23-keyvault",
-        help=""
+        help="Name of the Azure Key Vault where secrets are stored"
     )
     parser.add_argument(
         "-r",
         "--registry-name",
         type=str,
         default="hub23registry",
-        help=""
+        help="Name of the Azure Container Service to connect to the BinderHub"
     )
     parser.add_argument(
         "-p",
         "--image-prefix",
         type=str,
         default="hub23/binder-dev",
-        help=""
+        help="Image prefix to prepend to Docker images"
     )
     parser.add_argument(
         "-o",
         "--org-name",
         type=str,
         default="binderhub-test-org",
-        help=""
+        help="GitHub organisation name for authentication"
     )
     parser.add_argument(
         "-j",
         "--jupyterhub-ip",
         type=str,
         default="hub.hub23.turing.ac.uk",
-        help=""
+        help="IP address of the JupyterHub"
     )
     parser.add_argument(
         "-b",
         "--binder-ip",
         type=str,
         default="binder.hub23.turing.ac.uk",
-        help=""
+        help="IP address of the Binder page"
     )
     parser.add_argument(
         "--identity",
         action="store_true",
-        help=""
+        help="Login to Azure using a Managed System Identity"
     )
 
     return parser.parse_args()
