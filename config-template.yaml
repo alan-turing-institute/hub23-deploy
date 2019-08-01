@@ -9,17 +9,17 @@ config:
 
     # connect image registry and set image prefix
     use_registry: true
-    image_prefix: <acr-name>.azurecr.io/<prefix>-
+    image_prefix: {registry_name}.azurecr.io/{image_prefix}-
 
     # Enable authentication
     auth_enabled: true
 
     # jupyterhub IP address
-    hub_url: http://<jupyterhub-ip>
+    hub_url: http://{jupyterhub_ip}
 
   # Authenticate against registry
   DockerRegistry:
-    token_url: "https://<acr-name>.azurecr.io/oauth2/token?service=<acr-name>.azurecr.io"
+    token_url: "https://{registry_name}.azurecr.io/oauth2/token?service={registry_name}.azurecr.io"
 
 jupyterhub:
   # cull config was taken from mybinder.org
@@ -35,7 +35,7 @@ jupyterhub:
   hub:
     services:
       binder:
-        oauth_redirect_uri: "http://<binder-ip>/oauth_callback"
+        oauth_redirect_uri: "http://{binder_ip}/oauth_callback"
         oauth_client_id: "binder-oauth-client-test"
     extraConfig:
       hub_extra: |
@@ -87,11 +87,11 @@ jupyterhub:
       users:
         - sgibson91
     github:
-      clientId: "<github-client-id>"
-      clientSecret: "<github-client-secret>"
-      callbackUrl: "http://<jupyterhub-ip>/hub/oauth_callback"
+      clientId: "{github_client_id}"
+      clientSecret: "{github_client_secret}"
+      callbackUrl: "http://{jupyterhub_ip}/hub/oauth_callback"
       orgWhitelist:
-        - "<github-org-name>"
+        - "{org_name}"
     scopes:
       - "read:user"
 
@@ -114,7 +114,7 @@ initContainers:
         mountPath: /etc/binderhub/custom
 extraVolumes:
   - name: custom-templates
-    emptyDir: {}
+    emptyDir: {{}}
 extraVolumeMounts:
   - name: custom-templates
     mountPath: /etc/binderhub/custom
