@@ -15,11 +15,11 @@ def parse_args():
         help="BinderHub name/Helm release name"
     )
     parser.add_argument(
-        "-v",
-        "--version",
+        "-z",
+        "--chart-name",
         type=str,
-        default=None,
-        help="Helm Chart version to upgrade to. Optional."
+        default="hub23-chart",
+        help="Local hHelm Chart name"
     )
     parser.add_argument(
         "-c",
@@ -47,22 +47,6 @@ def parse_args():
     )
 
     return parser.parse_args()
-
-def find_version():
-    """Find the latest Helm Chart version deployed
-
-    Returns
-    -------
-    version
-        String.
-    """
-    from yaml import safe_load as load
-
-    with open("changelog.txt", "r") as f:
-        changelog = load(f)
-
-    keys = list(changelog.keys())
-    return changelog[keys[-1]]
 
 def azure_setup(cluster_name, resource_group, identity=False):
     """Setup kubectl and helm to access BinderHub cluster
@@ -116,23 +100,16 @@ def main():
     # Setup Azure
     azure_setup(args.cluster_name, args.resource_group, identity=args.identity)
 
-    if args.version is None:
-        # Find most recent deployed version
-        version = find_version()
-
-    # Pulling/updating Helm Chart repo
-    print("Adding and updating JupyterHub/BinderHub Helm Chart")
-    subprocess.check_call([
-        "helm", "repo", "add", "jupyter", "https://jupyterhub.github.io/helm-chart"
-    ])
-    subprocess.check_call(["helm", "repo", "update"])
+    # Updating local chart
+    os.chdir(args.chart_name)
+    subprocess.check_call(["helm", "dependency", "update"])
+    os.chdir(os.pardir)
 
     # Helm Upgrade Command
     helm_upgrade_cmd = [
-        "helm", "upgrade", args.hub_name, "jupyterhub/binderhub",
-        f"--version={version}",
-        "-f", os.path.join(".secret", "secret.yaml"),
-        "-f", os.path.join(".secret", "config.yaml"),
+        "helm", "upgrade", args.hub_name, args.chart_name,
+        "-f", os.path.join("deploy", "prod.yaml"),
+        "-f", os.path.join(".secret", "prod.yaml"),
         "--wait"
     ]
     if args.dry_run:
