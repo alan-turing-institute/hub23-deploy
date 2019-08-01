@@ -3,35 +3,37 @@ import argparse
 import subprocess
 
 def parse_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Script to upgrade a helm chart for a BinderHub deployment on Azure"
+    )
 
     parser.add_argument(
         "-n",
         "--hub-name",
         type=str,
         default="hub23",
-        help=""
+        help="BinderHub name/Helm release name"
     )
     parser.add_argument(
         "-v",
         "--version",
         type=str,
         default=None,
-        help="Helm Chart version to upgrade to"
+        help="Helm Chart version to upgrade to. Optional."
     )
     parser.add_argument(
         "-c",
         "--cluster-name",
         type=str,
         default="hub23cluster",
-        help=""
+        help="Name of Azure Kubernetes Service"
     )
     parser.add_argument(
         "-g",
         "--resource-group",
         type=str,
         default="Hub23",
-        help=""
+        help="Azure Resource Group"
     )
     parser.add_argument(
         "--identity",
@@ -41,7 +43,7 @@ def parse_args():
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help=""
+        help="Performs a dry-run upgrade of the Helm Chart"
     )
 
     return parser.parse_args()
