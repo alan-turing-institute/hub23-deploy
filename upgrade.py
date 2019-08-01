@@ -19,7 +19,7 @@ def parse_args():
         "--chart-name",
         type=str,
         default="hub23-chart",
-        help="Local hHelm Chart name"
+        help="Local Helm Chart name"
     )
     parser.add_argument(
         "-c",
