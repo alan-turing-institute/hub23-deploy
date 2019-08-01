@@ -1,3 +1,6 @@
+rbac:
+  enabled: true
+
 binderhub:
   config:
     BinderHub:
