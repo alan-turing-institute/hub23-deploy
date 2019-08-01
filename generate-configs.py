@@ -16,41 +16,6 @@ def parse_args():
         help="Name of the Azure Key Vault where secrets are stored"
     )
     parser.add_argument(
-        "-r",
-        "--registry-name",
-        type=str,
-        default="hub23registry",
-        help="Name of the Azure Container Service to connect to the BinderHub"
-    )
-    parser.add_argument(
-        "-p",
-        "--image-prefix",
-        type=str,
-        default="hub23/binder-dev",
-        help="Image prefix to prepend to Docker images"
-    )
-    parser.add_argument(
-        "-o",
-        "--org-name",
-        type=str,
-        default="binderhub-test-org",
-        help="GitHub organisation name for authentication"
-    )
-    parser.add_argument(
-        "-j",
-        "--jupyterhub-ip",
-        type=str,
-        default="hub.hub23.turing.ac.uk",
-        help="IP address of the JupyterHub"
-    )
-    parser.add_argument(
-        "-b",
-        "--binder-ip",
-        type=str,
-        default="binder.hub23.turing.ac.uk",
-        help="IP address of the Binder page"
-    )
-    parser.add_argument(
         "--identity",
         action="store_true",
         help="Login to Azure using a Managed System Identity"
@@ -76,9 +41,6 @@ def get_secrets(vault_name, identity=False):
     secret_names = [
         "apiToken",
         "secretToken",
-        "binderhub-access-token",
-        "github-client-id",
-        "github-client-secret",
         "SP-appID",
         "SP-key"
     ]
@@ -137,34 +99,18 @@ def main():
     secrets = get_secrets(args.vault_name, args.identity)
 
     print("Generating configuration files")
-    for filename in ["config", "secret"]:
+    for filename in ["prod"]:
         print(f"Reading template file for: {filename}")
 
         with open(f"{filename}-template.yaml", "r") as f:
             template = f.read()
 
-        if filename == "config":
-            template = template.format(
-                registry_name=args.registry_name,
-                image_prefix=args.image_prefix,
-                jupyterhub_ip=args.jupyterhub_ip,
-                binder_ip=args.binder_ip,
-                github_client_id=secrets["github-client-id"],
-                github_client_secret=secrets["github-client-secret"],
-                org_name=args.org_name
-            )
-
-        elif filename == "secret":
-            template = template.format(
-                apiToken=secrets["apiToken"],
-                secretToken=secrets["secretToken"],
-                registry_name=args.registry_name,
-                username=secrets["SP-appID"],
-                password=secrets["SP-key"],
-                accessToken=secrets["binderhub-access-token"]
-            )
-        else:
-            raise FileNotFoundError("Unknown file")
+        template = template.format(
+            apiToken=secrets["apiToken"],
+            secretToken=secrets["secretToken"],
+            username=secrets["SP-appID"],
+            password=secrets["SP-key"]
+        )
 
         print(f"Writing YAML file for: {filename}")
         with open(os.path.join(secret_dir, f"{filename}.yaml"), "w") as f:
