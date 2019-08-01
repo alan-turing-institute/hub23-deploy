@@ -1,12 +1,12 @@
 binderhub:
   registry:
-    username: <username>
-    password: <password>
+    username: {username}
+    password: {password}
 
   jupyterhub:
     hub:
       services:
         binder:
-          apiToken: "<apiToken>"
+          apiToken: "{apiToken}"
     proxy:
-      secretToken: "<secretToken>"
+      secretToken: "{secretToken}"
