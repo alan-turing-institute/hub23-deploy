@@ -8,6 +8,9 @@ binderhub:
     DockerRegistry:
       token_url: "https://hub23registry.azurecr.io/oauth2/token?service=hub23registry.azurecr.io"
 
+  registry:
+    url: https://hub23registry.azurecr.io
+
   ingress:
     hosts:
       - binder.hub23.turing.ac.uk

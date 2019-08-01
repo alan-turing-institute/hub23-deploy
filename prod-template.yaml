@@ -1,6 +1,5 @@
 binderhub:
   registry:
-    url: https://<acr-name>.azurecr.io
     username: <username>
     password: <password>
 
