@@ -161,7 +161,7 @@ def main():
     res = p3.communicate()
     if p3.returncode == 0:
         output = res[0].decode(encoding="utf-8")
-        print(f"Binder IP (binder.hub23.turing.ac.uk): {output}")
+        print(f"Binder IP: {output}")
     else:
         err_msg = res[1].decode(encoding="utf-8")
         raise Exception(err_msg)
