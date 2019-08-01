@@ -130,7 +130,7 @@ def main():
     # Helm Upgrade Command
     helm_upgrade_cmd = [
         "helm", "upgrade", args.hub_name, "jupyterhub/binderhub",
-        f"--version={version}",
+        f"--version={args.version}",
         "-f", os.path.join(".secret", "secret.yaml"),
         "-f", os.path.join(".secret", "config.yaml"),
         "--wait"
