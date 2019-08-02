@@ -51,7 +51,7 @@ where:
 
 `generate-configs.py` will populate `secret-template.yaml` and `config-template.yaml` with the appropriate information and save the output as `.secret/secret.yaml` and `.secret/config.yaml`.
 
-`.secret/` is a git-ignored folder so that the `secret.yaml` and `prod.yaml` files (and any secrets downloaded in the process of creating them) cannot be pushed to GitHub.
+`.secret/` is a git-ignored folder so that the secrets contained in `.secret/prod.yaml` cannot be pushed to GitHub.
 
 ## Maintaining or Upgrading Hub23
 
