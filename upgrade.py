@@ -1,7 +1,8 @@
 import os
 import logging
 import argparse
-import subprocess
+from run_command import *
+from subprocess import check_call
 
 # Setup logging config
 logging.basicConfig(
@@ -77,44 +78,30 @@ def azure_setup(cluster_name, resource_group, identity=False):
     else:
         logging.info("Login to Azure")
 
-    proc = subprocess.Popen(
-        login_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    res = proc.communicate()
-    if proc.returncode == 0:
-        logging.info("Successfully logged into Azure")
+    result = run_cmd(login_cmd)
+    if result["returncode"] == 0:
+        print("Successfully logged into Azure")
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        logging.error(err_msg)
-        raise Exception(err_msg)
+        logging.error(result["err_msg"]
+        raise Exception(result["err_msg"])
 
+    aks_cmd = ["az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group]
     logging.info(f"Setting kubectl context for: {cluster_name}")
-    proc = subprocess.Popen(
-        ["az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
-    res = proc.communicate()
-    if proc.returncode == 0:
-        logging.info(res[0].decode(encoding="utf-8"))
+    result = run_cmd(aks_cmd)
+    if result["returncode'] == 0:
+        logging.info(result["output"])
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        logging.error(err_msg)
-        raise Exception(err_msg)
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
+    helm_cmd = ["helm", "init", "--client-only"]
     logging.info("Initialising Helm")
-    proc = subprocess.Popen(
-        ["helm", "init", "--client-only"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
-    res = proc.communicate()
+    result = run_cmd(helm_cmd)
     if proc.returncode == 0:
-        logging.info(res[0].decode(encoding="utf-8"))
+        logging.info(result["output"])
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        logging.error(err_msg)
-        raise Exception(err_msg)
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
 def main():
     args = parse_args()
@@ -129,18 +116,13 @@ def main():
     logging.info(f"Updating local chart dependencies: {args.chart_name}")
     os.chdir(args.chart_name)
 
-    proc = subprocess.Popen(
-        ["helm", "dependency", "update"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
-    res = proc.communicate()
-    if proc.returncode == 0:
-        logging.info(res[0].decode(encoding="utf-8"))
+    update_cmd = ["helm", "dependency", "update"]
+    result = run_cmd(update_cmd)
+    if result["returncode"] == 0:
+        logging.info(result["output"])
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        logging.error(err_msg)
-        raise Exception(err_msg)
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
     os.chdir(os.pardir)
 
@@ -151,59 +133,41 @@ def main():
         "-f", os.path.join(".secret", "prod.yaml"),
         "--wait"
     ]
+
     if args.dry_run:
         helm_upgrade_cmd.append("--dry-run")
         logging.info(f"Performing a dry-run helm upgrade for: {args.hub_name}")
     else:
         logging.info(f"Upgrading helm chart for: {args.hub_name}")
-    proc = subprocess.Popen(
-        helm_upgrade_cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
-    res = proc.communicate()
-    if proc.returncode == 0:
-        logging.info(res[0].decode(encoding="utf-8"))
+              
+    result = run_cmd(helm_upgrade_cmd)
+    if result["returncode"] == 0:
+        logging.info(result["output"])
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        logging.error(err_msg)
-        raise Exception(err_msg)
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
     # Print the pods
     logging.info(f"Printing pod status for: {args.hub_name}")
-    proc = subprocess.Popen(
-        ["kubectl", "get", "pods", "-n", args.hub_name],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
-    res = proc.communicate()
-    if proc.returncode == 0:
-        logging.info(res[0].decode(encoding="utf-8"))
+    pod_cmd = ["kubectl", "get", "pods", "-n", args.hub_name]
+    result = run_cmd(pod_cmd)
+    if result["returncode"] == 0:
+        logging.info(result["output"])
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        logging.error(err_msg)
-        raise Exception(err_msg)
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
     # Fetching the Binder IP address
-    logging.info("Fetching IP addresses")
+    logging.info("Fetching IP address")
     kubectl_cmd = ["kubectl", "get", "svc", "binder", "-n", args.hub_name]
     awk_cmd = ["awk", "{ print $4}"]
     tail_cmd = ["tail", "-n", "1"]
 
-    p1 = subprocess.Popen(kubectl_cmd, stdout=subprocess.PIPE)
-    p2 = subprocess.Popen(awk_cmd, stdin=p1.stdout, stdout=subprocess.PIPE)
-    p1.stdout.close()
-    p3 = subprocess.Popen(tail_cmd, stdin=p2.stdout, stdout=subprocess.PIPE)
-    p2.stdout.close()
-
-    res = p3.communicate()
-    if p3.returncode == 0:
-        output = res[0].decode(encoding="utf-8")
-        logging.info(f"Binder IP: {output}")
+    result = run_pipe_cmd([kubectl_cmd, awk_cmd, tail_cmd])
+    if result["returncode"] == 0:
+        print(f"Binder IP: {result['output']}")
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        logging.error(err_msg)
-        raise Exception(err_msg)
+        raise Exception(result["err_msg"])
 
 if __name__ == "__main__":
     main()
