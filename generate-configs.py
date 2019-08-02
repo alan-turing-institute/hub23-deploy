@@ -1,7 +1,18 @@
 import os
 import json
+import logging
 import argparse
-import subprocess
+from run_command import run_cmd
+from subprocess import check_output
+
+# Setup logging config
+logging.basicConfig(
+    level=logging.DEBUG,
+    filename="generate-configs.log",
+    filemode="a",
+    format="[%(asctime)s %(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -14,6 +25,41 @@ def parse_args():
         type=str,
         default="hub23-keyvault",
         help="Name of the Azure Key Vault where secrets are stored"
+    )
+    parser.add_argument(
+        "-r",
+        "--registry-name",
+        type=str,
+        default="hub23registry",
+        help="Name of the Azure Container Service to connect to the BinderHub"
+    )
+    parser.add_argument(
+        "-p",
+        "--image-prefix",
+        type=str,
+        default="hub23/binder-dev",
+        help="Image prefix to prepend to Docker images"
+    )
+    parser.add_argument(
+        "-o",
+        "--org-name",
+        type=str,
+        default="binderhub-test-org",
+        help="GitHub organisation name for authentication"
+    )
+    parser.add_argument(
+        "-j",
+        "--jupyterhub-ip",
+        type=str,
+        default="hub.hub23.turing.ac.uk",
+        help="IP address of the JupyterHub"
+    )
+    parser.add_argument(
+        "-b",
+        "--binder-ip",
+        type=str,
+        default="binder.hub23.turing.ac.uk",
+        help="IP address of the Binder page"
     )
     parser.add_argument(
         "--identity",
@@ -48,32 +94,25 @@ def get_secrets(vault_name, identity=False):
     secrets = {}
 
     # Login to Azure
-    print("Logging into Azure")
+    login_cmd = ["az", "login"]
     if identity:
-        proc = subprocess.Popen(
-            ["az", "login", "--identity"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
+        login_cmd.append("--identity")
+        logging.info("Logging into Azure with a Managed System Identity")
     else:
-        proc = subprocess.Popen(
-            ["az", "login"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
+        logging.info("Login to Azure")
 
-    res = proc.communicate()
-    if proc.returncode == 0:
-        print("Successfully logged into Azure")
+    result = run_cmd(login_cmd)
+    if result["returncode"] == 0:
+        logging.info("Successfully logged into Azure")
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        raise Exception(err_msg)
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
     # Get secrets
     for secret in secret_names:
-        print(f"Pulling secret: {secret}")
+        logging.info(f"Pulling secret: {secret}")
         # Get secret information and convert to json
-        json_out = subprocess.check_output([
+        json_out = check_output([
             "az", "keyvault", "secret", "show", "-n", secret,
             "--vault-name", vault_name
         ]).decode(encoding="utf-8")
@@ -90,17 +129,16 @@ def main():
     # Make a secrets folder
     secret_dir = ".secret"
     if not os.path.exists(secret_dir):
-        print(f"Creating directory: {secret_dir}")
+        logging.info(f"Creating directory: {secret_dir}")
         os.mkdir(secret_dir)
-        print(f"Created directory: {secret_dir}")
+        logging.info(f"Created directory: {secret_dir}")
     else:
-        print(f"Directory already exists: {secret_dir}")
+        logging.info(f"Directory already exists: {secret_dir}")
 
     secrets = get_secrets(args.vault_name, args.identity)
 
-    print("Generating configuration files")
     for filename in ["prod"]:
-        print(f"Reading template file for: {filename}")
+        logging.info(f"Reading template file for: {filename}")
 
         with open(f"{filename}-template.yaml", "r") as f:
             template = f.read()
@@ -109,14 +147,14 @@ def main():
             apiToken=secrets["apiToken"],
             secretToken=secrets["secretToken"],
             username=secrets["SP-appID"],
-            password=secrets["SP-key"]
+            password=secrets["SP-key"],
         )
 
-        print(f"Writing YAML file for: {filename}")
+        logging.info(f"Writing YAML file for: {filename}")
         with open(os.path.join(secret_dir, f"{filename}.yaml"), "w") as f:
             f.write(template)
 
-    print(f"BinderHub files have been configured: {os.listdir(secret_dir)}")
+    logging.info(f"BinderHub files have been configured: {os.listdir(secret_dir)}")
 
 if __name__ == "__main__":
     main()
