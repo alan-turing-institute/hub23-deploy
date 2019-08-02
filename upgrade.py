@@ -1,6 +1,16 @@
 import os
+import logging
 import argparse
 import subprocess
+
+# Setup logging config
+logging.basicConfig(
+    level=logging.DEBUG,
+    filename="upgrade.log",
+    filemode="a",
+    format="[%(asctime)s %(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -60,47 +70,43 @@ def azure_setup(cluster_name, resource_group, identity=False):
     identity
         Boolean.
     """
-    print("Logging into Azure")
+    login_cmd = ["az", "login"]
     if identity:
-        proc = subprocess.Popen(
-            ["az", "login", "--identity"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
+        login_cmd.append("--identity")
+        logging.info("Login to Azure with Managed System Identity")
     else:
-        proc = subprocess.Popen(
-            ["az", "login"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
+        logging.info("Login to Azure")
 
+    proc = subprocess.Popen(
+        login_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     res = proc.communicate()
     if proc.returncode == 0:
-        print("Successfully logged into Azure")
+        logging.info("Successfully logged into Azure")
     else:
         err_msg = res[1].decode(encoding="utf-8")
+        logging.error(err_msg)
         raise Exception(err_msg)
 
-    print(f"Setting kubectl context for: {cluster_name}")
+    logging.info(f"Setting kubectl context for: {cluster_name}")
     subprocess.check_call([
         "az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group
     ])
 
-    print("Initialising Helm")
-    subprocess.check_call([
-        "helm", "init", "--client-only"
-    ])
+    logging.info("Initialising Helm")
+    output = subprocess.check_call(["helm", "init", "--client-only"])
 
 def main():
     args = parse_args()
 
     if args.dry_run:
-        print("THIS IS A DRY-RUN. HELM CHART WILL NOT BE UPGRADED.")
+        logging.info("THIS IS A DRY-RUN. HELM CHART WILL NOT BE UPGRADED.")
 
     # Setup Azure
     azure_setup(args.cluster_name, args.resource_group, identity=args.identity)
 
     # Updating local chart
+    logging.info(f"Updating local chart dependencies: {args.chart_name}")
     os.chdir(args.chart_name)
     subprocess.check_call(["helm", "dependency", "update"])
     os.chdir(os.pardir)
@@ -114,17 +120,19 @@ def main():
     ]
     if args.dry_run:
         helm_upgrade_cmd.append("--dry-run")
-        print("Performing a dry-run helm upgrade")
+        logging.info(f"Performing a dry-run helm upgrade for: {args.hub_name}")
     else:
-        print("Upgrading helm chart")
+        logging.info(f"Upgrading helm chart for: {args.hub_name}")
     subprocess.check_call(helm_upgrade_cmd)
 
     # Print the pods
+    logging.info(f"Printing pod status for: {args.hub_name}")
     subprocess.check_call([
         "kubectl", "get", "pods", "-n", args.hub_name
     ])
 
     # Fetching the Binder IP address
+    logging.info("Fetching IP addresses")
     kubectl_cmd = ["kubectl", "get", "svc", "binder", "-n", args.hub_name]
     awk_cmd = ["awk", "{ print $4}"]
     tail_cmd = ["tail", "-n", "1"]
@@ -138,9 +146,10 @@ def main():
     res = p3.communicate()
     if p3.returncode == 0:
         output = res[0].decode(encoding="utf-8")
-        print(f"Binder IP: {output}")
+        logging.info(f"Binder IP: {output}")
     else:
         err_msg = res[1].decode(encoding="utf-8")
+        logging.error(err_msg)
         raise Exception(err_msg)
 
 if __name__ == "__main__":

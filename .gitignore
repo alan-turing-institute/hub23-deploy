@@ -12,3 +12,6 @@
 
 # Ignore packaged helm charts
 *.tgz
+
+# Ignore log files
+*.log
