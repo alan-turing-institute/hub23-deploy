@@ -80,15 +80,15 @@ def azure_setup(cluster_name, resource_group, identity=False):
 
     result = run_cmd(login_cmd)
     if result["returncode"] == 0:
-        print("Successfully logged into Azure")
+        logging.info("Successfully logged into Azure")
     else:
-        logging.error(result["err_msg"]
+        logging.error(result["err_msg"])
         raise Exception(result["err_msg"])
 
     aks_cmd = ["az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group]
     logging.info(f"Setting kubectl context for: {cluster_name}")
     result = run_cmd(aks_cmd)
-    if result["returncode'] == 0:
+    if result["returncode"] == 0:
         logging.info(result["output"])
     else:
         logging.error(result["err_msg"])
@@ -97,7 +97,7 @@ def azure_setup(cluster_name, resource_group, identity=False):
     helm_cmd = ["helm", "init", "--client-only"]
     logging.info("Initialising Helm")
     result = run_cmd(helm_cmd)
-    if proc.returncode == 0:
+    if result["returncode"] == 0:
         logging.info(result["output"])
     else:
         logging.error(result["err_msg"])
@@ -139,7 +139,7 @@ def main():
         logging.info(f"Performing a dry-run helm upgrade for: {args.hub_name}")
     else:
         logging.info(f"Upgrading helm chart for: {args.hub_name}")
-              
+
     result = run_cmd(helm_upgrade_cmd)
     if result["returncode"] == 0:
         logging.info(result["output"])
