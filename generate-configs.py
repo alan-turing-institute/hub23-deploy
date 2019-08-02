@@ -1,7 +1,8 @@
 import os
 import json
 import argparse
-import subprocess
+from run_command import run_cmd
+from subprocess import check_output
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -86,32 +87,24 @@ def get_secrets(vault_name, identity=False):
     secrets = {}
 
     # Login to Azure
-    print("Logging into Azure")
+    login_cmd = ["az", "login"]
     if identity:
-        proc = subprocess.Popen(
-            ["az", "login", "--identity"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
+        login_cmd.append("--identity")
+        print("Logging into Azure with a Managed System Identity")
     else:
-        proc = subprocess.Popen(
-            ["az", "login"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
+        print("Login to Azure")
 
-    res = proc.communicate()
-    if proc.returncode == 0:
+    result = run_cmd(login_cmd)
+    if result["returncode"] == 0:
         print("Successfully logged into Azure")
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        raise Exception(err_msg)
+        raise Exception(result["err_msg"])
 
     # Get secrets
     for secret in secret_names:
         print(f"Pulling secret: {secret}")
         # Get secret information and convert to json
-        json_out = subprocess.check_output([
+        json_out = check_output([
             "az", "keyvault", "secret", "show", "-n", secret,
             "--vault-name", vault_name
         ]).decode(encoding="utf-8")
