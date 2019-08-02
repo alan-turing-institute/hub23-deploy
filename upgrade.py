@@ -1,6 +1,7 @@
 import os
 import argparse
-import subprocess
+from run_command import *
+from subprocess import check_call
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -76,36 +77,27 @@ def azure_setup(cluster_name, resource_group, identity=False):
     identity
         Boolean.
     """
-    print("Logging into Azure")
-    if identity:
-        proc = subprocess.Popen(
-            ["az", "login", "--identity"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-    else:
-        proc = subprocess.Popen(
-            ["az", "login"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
+    login_cmd = ["az", "login"]
 
-    res = proc.communicate()
-    if proc.returncode == 0:
+    if identity:
+        login_cmd.append("--identity")
+        print("Logging into Azure with a Managed System Identity")
+    else:
+        print("Logging into Azure")
+
+    result = run_cmd(login_cmd)
+    if result["returncode"] == 0:
         print("Successfully logged into Azure")
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        raise Exception(err_msg)
+        raise Exception(result["err_msg"])
 
     print(f"Setting kubectl context for: {cluster_name}")
-    subprocess.check_call([
+    check_call([
         "az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group
     ])
 
     print("Initialising Helm")
-    subprocess.check_call([
-        "helm", "init", "--client-only"
-    ])
+    check_call(["helm", "init", "--client-only"])
 
 def main():
     args = parse_args()
@@ -122,49 +114,45 @@ def main():
 
     # Pulling/updating Helm Chart repo
     print("Adding and updating JupyterHub/BinderHub Helm Chart")
-    subprocess.check_call([
+    check_call([
         "helm", "repo", "add", "jupyter", "https://jupyterhub.github.io/helm-chart"
     ])
-    subprocess.check_call(["helm", "repo", "update"])
+    check_call(["helm", "repo", "update"])
 
     # Helm Upgrade Command
     helm_upgrade_cmd = [
         "helm", "upgrade", args.hub_name, "jupyterhub/binderhub",
-        f"--version={args.version}",
         "-f", os.path.join(".secret", "secret.yaml"),
         "-f", os.path.join(".secret", "config.yaml"),
         "--wait"
     ]
+
+    if args.version is None:
+        helm_upgrade_cmd.append(f"--version={version}")
+    else:
+        helm_upgrade_cmd.append(f"--version={args.version}")
+
     if args.dry_run:
         helm_upgrade_cmd.append("--dry-run")
         print("Performing a dry-run helm upgrade")
     else:
         print("Upgrading helm chart")
-    subprocess.check_call(helm_upgrade_cmd)
+
+    check_call(helm_upgrade_cmd)
 
     # Print the pods
-    subprocess.check_call([
-        "kubectl", "get", "pods", "-n", args.hub_name
-    ])
+    check_call(["kubectl", "get", "pods", "-n", args.hub_name])
 
     # Fetching the Binder IP address
     kubectl_cmd = ["kubectl", "get", "svc", "binder", "-n", args.hub_name]
     awk_cmd = ["awk", "{ print $4}"]
     tail_cmd = ["tail", "-n", "1"]
 
-    p1 = subprocess.Popen(kubectl_cmd, stdout=subprocess.PIPE)
-    p2 = subprocess.Popen(awk_cmd, stdin=p1.stdout, stdout=subprocess.PIPE)
-    p1.stdout.close()
-    p3 = subprocess.Popen(tail_cmd, stdin=p2.stdout, stdout=subprocess.PIPE)
-    p2.stdout.close()
-
-    res = p3.communicate()
-    if p3.returncode == 0:
-        output = res[0].decode(encoding="utf-8")
-        print(f"Binder IP: {output}")
+    result = run_pipe_cmd([kubectl_cmd, awk_cmd, tail_cmd])
+    if result["returncode"] == 0:
+        print(f"Binder IP: {result['output']}")
     else:
-        err_msg = res[1].decode(encoding="utf-8")
-        raise Exception(err_msg)
+        raise Exception(result["err_msg"])
 
 if __name__ == "__main__":
     main()
