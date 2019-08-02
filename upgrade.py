@@ -89,12 +89,32 @@ def azure_setup(cluster_name, resource_group, identity=False):
         raise Exception(err_msg)
 
     logging.info(f"Setting kubectl context for: {cluster_name}")
-    subprocess.check_call([
-        "az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group
-    ])
+    proc = subprocess.Popen(
+        ["az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    res = proc.communicate()
+    if proc.returncode == 0:
+        logging.info(res[0].decode(encoding="utf-8"))
+    else:
+        err_msg = res[1].decode(encoding="utf-8")
+        logging.error(err_msg)
+        raise Exception(err_msg)
 
     logging.info("Initialising Helm")
-    output = subprocess.check_call(["helm", "init", "--client-only"])
+    proc = subprocess.Popen(
+        ["helm", "init", "--client-only"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    res = proc.communicate()
+    if proc.returncode == 0:
+        logging.info(res[0].decode(encoding="utf-8"))
+    else:
+        err_msg = res[1].decode(encoding="utf-8")
+        logging.error(err_msg)
+        raise Exception(err_msg)
 
 def main():
     args = parse_args()
@@ -108,7 +128,20 @@ def main():
     # Updating local chart
     logging.info(f"Updating local chart dependencies: {args.chart_name}")
     os.chdir(args.chart_name)
-    subprocess.check_call(["helm", "dependency", "update"])
+
+    proc = subprocess.Popen(
+        ["helm", "dependency", "update"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    res = proc.communicate()
+    if proc.returncode == 0:
+        logging.info(res[0].decode(encoding="utf-8"))
+    else:
+        err_msg = res[1].decode(encoding="utf-8")
+        logging.error(err_msg)
+        raise Exception(err_msg)
+
     os.chdir(os.pardir)
 
     # Helm Upgrade Command
@@ -123,13 +156,33 @@ def main():
         logging.info(f"Performing a dry-run helm upgrade for: {args.hub_name}")
     else:
         logging.info(f"Upgrading helm chart for: {args.hub_name}")
-    subprocess.check_call(helm_upgrade_cmd)
+    proc = subprocess.Popen(
+        helm_upgrade_cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    res = proc.communicate()
+    if proc.returncode == 0:
+        logging.info(res[0].decode(encoding="utf-8"))
+    else:
+        err_msg = res[1].decode(encoding="utf-8")
+        logging.error(err_msg)
+        raise Exception(err_msg)
 
     # Print the pods
     logging.info(f"Printing pod status for: {args.hub_name}")
-    subprocess.check_call([
-        "kubectl", "get", "pods", "-n", args.hub_name
-    ])
+    proc = subprocess.Popen(
+        ["kubectl", "get", "pods", "-n", args.hub_name],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    res = proc.communicate()
+    if proc.returncode == 0:
+        logging.info(res[0].decode(encoding="utf-8"))
+    else:
+        err_msg = res[1].decode(encoding="utf-8")
+        logging.error(err_msg)
+        raise Exception(err_msg)
 
     # Fetching the Binder IP address
     logging.info("Fetching IP addresses")
