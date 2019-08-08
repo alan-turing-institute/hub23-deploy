@@ -1,7 +1,16 @@
 import os
+import logging
 import argparse
 from run_command import *
-from subprocess import check_call
+
+# Setup log config
+logging.basicConfig(
+    level=logging.DEBUG,
+    filename="upgrade.log",
+    filemode="a",
+    format="[%(asctime)s %(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -54,8 +63,7 @@ def find_version():
 
     Returns
     -------
-    version
-        String.
+    version: string
     """
     from yaml import safe_load as load
 
@@ -70,40 +78,50 @@ def azure_setup(cluster_name, resource_group, identity=False):
 
     Parameters
     ----------
-    cluster_name
-        String.
-    resource_group
-        String.
-    identity
-        Boolean.
+    cluster_name: string
+    resource_group: string
+    identity: boolean
     """
     login_cmd = ["az", "login"]
 
     if identity:
         login_cmd.append("--identity")
-        print("Logging into Azure with a Managed System Identity")
+        logging.info("Logging into Azure with a Managed System Identity")
     else:
-        print("Logging into Azure")
+        logging.info("Logging into Azure")
 
     result = run_cmd(login_cmd)
     if result["returncode"] == 0:
-        print("Successfully logged into Azure")
+        logging.info("Successfully logged into Azure")
     else:
+        logging.error(result["err_msg"])
         raise Exception(result["err_msg"])
 
-    print(f"Setting kubectl context for: {cluster_name}")
-    check_call([
+    logging.info(f"Setting kubectl context for: {cluster_name}")
+    cmd = [
         "az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group
-    ])
+    ]
+    result = run_cmd(cmd)
+    if result["returncode"] == 0:
+        logging.info(result["output"])
+    else:
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
-    print("Initialising Helm")
-    check_call(["helm", "init", "--client-only"])
+    logging.info("Initialising Helm")
+    cmd = ["helm", "init", "--client-only"]
+    result = run_cmd(cmd)
+    if result["returncode"] == 0:
+        logging.info(result["output"])
+    else:
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
 def main():
     args = parse_args()
 
     if args.dry_run:
-        print("THIS IS A DRY-RUN. HELM CHART WILL NOT BE UPGRADED.")
+        logging.info("THIS IS A DRY-RUN. HELM CHART WILL NOT BE UPGRADED.")
 
     # Setup Azure
     azure_setup(args.cluster_name, args.resource_group, identity=args.identity)
@@ -113,11 +131,23 @@ def main():
         version = find_version()
 
     # Pulling/updating Helm Chart repo
-    print("Adding and updating JupyterHub/BinderHub Helm Chart")
-    check_call([
-        "helm", "repo", "add", "jupyter", "https://jupyterhub.github.io/helm-chart"
-    ])
-    check_call(["helm", "repo", "update"])
+    logging.info("Adding and updating JupyterHub/BinderHub Helm Chart")
+    cmd = [
+        "helm", "repo", "add", "jupyterhub", "https://jupyterhub.github.io/helm-chart"
+    ]
+    result = run_cmd(cmd)
+    if result["returncode"] == 0:
+        logging.info(result["output"])
+    else:
+        logging.error(result["err_msg"])
+
+    cmd = ["helm", "repo", "update"]
+    result = run_cmd(cmd)
+    if result["returncode"] == 0:
+        logging.info(result["output"])
+    else:
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
     # Helm Upgrade Command
     helm_upgrade_cmd = [
@@ -134,24 +164,38 @@ def main():
 
     if args.dry_run:
         helm_upgrade_cmd.append("--dry-run")
-        print("Performing a dry-run helm upgrade")
+        logging.info("Performing a dry-run helm upgrade")
     else:
-        print("Upgrading helm chart")
+        logging.info("Upgrading helm chart")
 
-    check_call(helm_upgrade_cmd)
+    result = run_cmd(helm_upgrade_cmd)
+    if result["returncode"] == 0:
+        logging.info(result["output"])
+    else:
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
     # Print the pods
-    check_call(["kubectl", "get", "pods", "-n", args.hub_name])
+    logging.info("Fetching the Kubernetes pods")
+    cmd = ["kubectl", "get", "pods", "-n", args.hub_name]
+    result = run_cmd(cmd)
+    if result["returncode"] == 0:
+        logging.info(result["output"])
+    else:
+        logging.error(result["err_msg"])
+        raise Exception(result["err_msg"])
 
     # Fetching the Binder IP address
+    logging.info("Fetching the Binder IP address")
     kubectl_cmd = ["kubectl", "get", "svc", "binder", "-n", args.hub_name]
     awk_cmd = ["awk", "{ print $4}"]
     tail_cmd = ["tail", "-n", "1"]
 
     result = run_pipe_cmd([kubectl_cmd, awk_cmd, tail_cmd])
     if result["returncode"] == 0:
-        print(f"Binder IP: {result['output']}")
+        logging.info(f"Binder IP: {result['output']}")
     else:
+        logging.error(result["err_msg"])
         raise Exception(result["err_msg"])
 
 if __name__ == "__main__":

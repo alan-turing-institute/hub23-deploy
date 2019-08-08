@@ -1,8 +1,18 @@
 import os
 import json
+import logging
 import argparse
 from run_command import run_cmd
 from subprocess import check_output
+
+# Setup log config
+logging.basicConfig(
+    level=logging.DEBUG,
+    filename="generate-configs.log",
+    filemode="a",
+    format="[%(asctime)s %(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -64,15 +74,12 @@ def get_secrets(vault_name, identity=False):
 
     Parameters
     ----------
-    vault_name
-        String.
-    identity
-        Boolean.
+    vault_name: string
+    identity: boolean
 
     Returns
     -------
-    secrets
-        Dictionary.
+    secrets: dictionary
     """
     secret_names = [
         "apiToken",
@@ -90,19 +97,20 @@ def get_secrets(vault_name, identity=False):
     login_cmd = ["az", "login"]
     if identity:
         login_cmd.append("--identity")
-        print("Logging into Azure with a Managed System Identity")
+        logging.info("Logging into Azure with a Managed System Identity")
     else:
-        print("Login to Azure")
+        logging.info("Login to Azure")
 
     result = run_cmd(login_cmd)
     if result["returncode"] == 0:
-        print("Successfully logged into Azure")
+        logging.info("Successfully logged into Azure")
     else:
+        logging.error(result["err_msg"])
         raise Exception(result["err_msg"])
 
     # Get secrets
     for secret in secret_names:
-        print(f"Pulling secret: {secret}")
+        logging.info(f"Pulling secret: {secret}")
         # Get secret information and convert to json
         json_out = check_output([
             "az", "keyvault", "secret", "show", "-n", secret,
@@ -121,17 +129,17 @@ def main():
     # Make a secrets folder
     secret_dir = ".secret"
     if not os.path.exists(secret_dir):
-        print(f"Creating directory: {secret_dir}")
+        logging.info(f"Creating directory: {secret_dir}")
         os.mkdir(secret_dir)
-        print(f"Created directory: {secret_dir}")
+        logging.info(f"Created directory: {secret_dir}")
     else:
-        print(f"Directory already exists: {secret_dir}")
+        logging.info(f"Directory already exists: {secret_dir}")
 
     secrets = get_secrets(args.vault_name, args.identity)
 
-    print("Generating configuration files")
+    logging.info("Generating configuration files")
     for filename in ["config", "secret"]:
-        print(f"Reading template file for: {filename}")
+        logging.info(f"Reading template file for: {filename}")
 
         with open(f"{filename}-template.yaml", "r") as f:
             template = f.read()
@@ -157,13 +165,14 @@ def main():
                 accessToken=secrets["binderhub-access-token"]
             )
         else:
+            logging.error(f"FileNotFoundError: Unknown file: {filename}")
             raise FileNotFoundError("Unknown file")
 
-        print(f"Writing YAML file for: {filename}")
+        logging.info(f"Writing YAML file for: {filename}")
         with open(os.path.join(secret_dir, f"{filename}.yaml"), "w") as f:
             f.write(template)
 
-    print(f"BinderHub files have been configured: {os.listdir(secret_dir)}")
+    logging.info(f"BinderHub files have been configured: {os.listdir(secret_dir)}")
 
 if __name__ == "__main__":
     main()
