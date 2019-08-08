@@ -97,16 +97,17 @@ def azure_setup(cluster_name, resource_group, identity=False):
         logging.error(result["err_msg"])
         raise Exception(result["err_msg"])
 
-    logging.info(f"Setting kubectl context for: {cluster_name}")
-    cmd = [
-        "az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group
-    ]
-    result = run_cmd(cmd)
-    if result["returncode"] == 0:
-        logging.info(result["output"])
-    else:
-        logging.error(result["err_msg"])
-        raise Exception(result["err_msg"])
+    if not identity:
+        logging.info(f"Setting kubectl context for: {cluster_name}")
+        cmd = [
+            "az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group
+        ]
+        result = run_cmd(cmd)
+        if result["returncode"] == 0:
+            logging.info(result["output"])
+        else:
+            logging.error(result["err_msg"])
+            raise Exception(result["err_msg"])
 
     logging.info("Initialising Helm")
     cmd = ["helm", "init", "--client-only"]
