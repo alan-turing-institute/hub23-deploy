@@ -115,9 +115,9 @@ class GenerateConfigFiles(object):
             # Get secret information and convert to json
             value = check_output([
                 "az", "keyvault", "secret", "show", "-n", secret,
-                "--vault-name", self.vault_name, "--query", "'value'", "-o",
+                "--vault-name", self.vault_name, "--query", "value", "-o",
                 "tsv"
-            ])
+            ]).decode(encoding="utf8").strip("\n")
 
             # Save secret to dictionary
             self.secrets[secret] = value
