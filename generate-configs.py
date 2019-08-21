@@ -69,92 +69,90 @@ def parse_args():
 
     return parser.parse_args()
 
-def get_secrets(vault_name, identity=False):
-    """Get secrets from Azure key vault
+class GenerateConfigFiles(object):
+    def __init__(self, argsDict):
+        self.vault_name = argsDict["vault_name"]
+        self.registry_name = argsDict["registry_name"]
+        self.image_prefix = argsDict["image_prefix"]
+        self.org_name = argsDict["org_name"]
+        self.jupyterhub_ip = argsDict["jupyterhub_ip"]
+        self.binder_ip = argsDict["binder_ip"]
+        self.identity = argsDict["identity"]
 
-    Parameters
-    ----------
-    vault_name
-        String.
-    identity
-        Boolean.
+        self.get_secrets()
 
-    Returns
-    -------
-    secrets
-        Dictionary.
-    """
-    secret_names = [
-        "apiToken",
-        "secretToken",
-        "SP-appID",
-        "SP-key"
-    ]
+    def login(self):
+        # Login to Azure
+        login_cmd = ["az", "login"]
+        if self.identity:
+            login_cmd.append("--identity")
+            logging.info("Logging into Azure with a Managed System Identity")
+        else:
+            logging.info("Login to Azure")
 
-    secrets = {}
+        result = run_cmd(login_cmd)
+        if result["returncode"] == 0:
+            logging.info("Successfully logged into Azure")
+        else:
+            logging.error(result["err_msg"])
+            raise Exception(result["err_msg"])
 
-    # Login to Azure
-    login_cmd = ["az", "login"]
-    if identity:
-        login_cmd.append("--identity")
-        logging.info("Logging into Azure with a Managed System Identity")
-    else:
-        logging.info("Login to Azure")
+    def get_secrets(self):
+        self.login()
 
-    result = run_cmd(login_cmd)
-    if result["returncode"] == 0:
-        logging.info("Successfully logged into Azure")
-    else:
-        logging.error(result["err_msg"])
-        raise Exception(result["err_msg"])
+        secret_names = [
+            "apiToken",
+            "secretToken",
+            "SP-appID",
+            "SP-key"
+        ]
 
-    # Get secrets
-    for secret in secret_names:
-        logging.info(f"Pulling secret: {secret}")
-        # Get secret information and convert to json
-        json_out = check_output([
-            "az", "keyvault", "secret", "show", "-n", secret,
-            "--vault-name", vault_name
-        ]).decode(encoding="utf-8")
-        secret_info = json.loads(json_out)
+        self.secrets = {}
 
-        # Save secret to dictionary
-        secrets[secret] = secret_info["value"]
+        # Get secrets
+        for secret in secret_names:
+            logging.info(f"Pulling secret: {secret}")
+            # Get secret information and convert to json
+            value = check_output([
+                "az", "keyvault", "secret", "show", "-n", secret,
+                "--vault-name", self.vault_name, "--query", "'value'", "-o",
+                "tsv"
+            ])
 
-    return secrets
+            # Save secret to dictionary
+            self.secrets[secret] = value
 
-def main():
-    args = parse_args()
+    def generate_config_files(self):
+        # Make a secrets folder
+        secret_dir = ".secret"
+        if not os.path.exists(secret_dir):
+            logging.info(f"Creating directory: {secret_dir}")
+            os.mkdir(secret_dir)
+            logging.info(f"Created directory: {secret_dir}")
+        else:
+            logging.info(f"Directory already exists: {secret_dir}")
 
-    # Make a secrets folder
-    secret_dir = ".secret"
-    if not os.path.exists(secret_dir):
-        logging.info(f"Creating directory: {secret_dir}")
-        os.mkdir(secret_dir)
-        logging.info(f"Created directory: {secret_dir}")
-    else:
-        logging.info(f"Directory already exists: {secret_dir}")
+        logging.info("Generating configuration files")
+        for filename in ["prod"]:
+            logging.info(f"Reading template file for: {filename}")
 
-    secrets = get_secrets(args.vault_name, args.identity)
+            with open(f"{filename}-template.yaml", "r") as f:
+                template = f.read()
 
-    for filename in ["prod"]:
-        logging.info(f"Reading template file for: {filename}")
+            template = template.format(
+                apiToken=secrets["apiToken"],
+                secretToken=secrets["secretToken"],
+                username=secrets["SP-appID"],
+                password=secrets["SP-key"],
+            )
 
-        with open(f"{filename}-template.yaml", "r") as f:
-            template = f.read()
+            logging.info(f"Writing YAML file for: {filename}")
+            with open(os.path.join(secret_dir, f"{filename}.yaml"), "w") as f:
+                f.write(template)
 
-        template = template.format(
-            apiToken=secrets["apiToken"],
-            secretToken=secrets["secretToken"],
-            username=secrets["SP-appID"],
-            password=secrets["SP-key"],
-        )
-
-        logging.info(f"Writing YAML file for: {filename}")
-        with open(os.path.join(secret_dir, f"{filename}.yaml"), "w") as f:
-            f.write(template)
-
-    logging.info(f"BinderHub files have been configured: {os.listdir(secret_dir)}")
+        logging.info(f"BinderHub files have been configured: {os.listdir(secret_dir)}")
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    bot = GenerateConfigFiles(vars(args))
+    bot.generate_config_files()
