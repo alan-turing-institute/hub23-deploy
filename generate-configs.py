@@ -140,10 +140,10 @@ class GenerateConfigFiles(object):
                 template = f.read()
 
             template = template.format(
-                apiToken=secrets["apiToken"],
-                secretToken=secrets["secretToken"],
-                username=secrets["SP-appID"],
-                password=secrets["SP-key"],
+                apiToken=self.secrets["apiToken"],
+                secretToken=self.secrets["secretToken"],
+                username=self.secrets["SP-appID"],
+                password=self.secrets["SP-key"],
             )
 
             logging.info(f"Writing YAML file for: {filename}")
