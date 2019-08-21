@@ -34,7 +34,6 @@ python generate-configs.py \
     --vault-name [-v] VAULT-NAME \
     --registry-name [-r] REGISTRY-NAME \
     --image-prefix [-p] IMAGE-PREFIX \
-    --org-name [-o] ORG-NAME \
     --jupyterhub-ip [-j] JUPYTERHUB-IP-ADDRESS \
     --binder-ip [-b] BINDER-IP-ADDRESS \
     --identity
@@ -44,21 +43,20 @@ where:
 * `VAULT-NAME` is the Azure Key Vault where secrets are kept;
 * `REGISTRY-NAME` is the Azure Container Registry to connect to the BinderHub;
 * `IMAGE-PREFIX` is an identifier to prepend to Docker images;
-* `ORG-NAME` is a GitHub organisation for authentication;
 * `JUPYTERHUB-IP-ADDRESS` is the JupyterHub IP address, or A record;
 * `BINDER-IP` is the Binder page IP address, or A record; and
 * `--identity` is a flag to tell the script to login to Azure using a Managed System Identity.
 
-`generate-configs.py` will populate `secret-template.yaml` and `config-template.yaml` with the appropriate information and save the output as `.secret/secret.yaml` and `.secret/config.yaml`.
+`generate-configs.py` will populate `deploy/prod-template.yaml` with the appropriate information and save the output as `.secret/prod.yaml`.
 
 `.secret/` is a git-ignored folder so that the secrets contained in `.secret/prod.yaml` cannot be pushed to GitHub.
 
 ## Maintaining or Upgrading Hub23
 
-If changes are made to `.secret/secret.yaml` and/or `.secret/config.yaml` during development, make sure that:
-* the new format is reflected in `secret-template.yaml` and/or `config-template.yaml` and any new secrets/tokens/passwords are redacted;
+If changes are made to `.secret/prod.yaml` during development, make sure that:
+* the new format is reflected in `deploy/prod-template.yaml` and any new secrets/tokens/passwords are redacted;
 * new secrets/tokens/passwords are added to the Azure Key Vault (see `docs/azure-keyvault.md`); and
-* `generate-configs.py` is updated in order to populate the templates with the appropriate information.
+* `generate-configs.py` is updated in order to populate the template with the appropriate information.
 
 This will ensure that a future developer (someone else or future-you!) can recreate the configuration files for Hub23.
 
@@ -66,7 +64,7 @@ To upgrade the BinderHub Helm Chart:
 ```
 python upgrade.py \
     --hub-name [-n] HUB-NAME \
-    --version COMMIT-HASH \
+    --chart-name [-z] CHART-NAME \
     --cluster-name [-c] CLUSTER-NAME \
     --resource-group [-g] RESOURCE-GROUP \
     --identity \
@@ -74,16 +72,13 @@ python upgrade.py \
 ```
 where:
 * `HUB-NAME` is the name of the deployed BinderHub (i.e. `hub23`);
-* `COMMIT-HASH` can be found [here](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub);
+* `CHART-NAME` is the name of the local Helm Chart;
 * `CLUSTER-NAME` is the name of the Azure Kubernetes cluster Hub23 is running on;
 * `RESOURCE-GROUP` is the Azure Resource Group;
 * `--identity` is a flag to tell the script to login to Azure using a Managed System Identity; and
 * ``--dry-run` will perform a dry-run of the upgrade.
 
-`upgrade.py` pulls the latest helm chart repository and upgrades the helm chart according to the version number supplied as a command line argument.
-If `--version` is not supplied, it will read the latest deployed version number from `changelog.txt`.
-
-Please try to keep track of the deployed `COMMIT-HASH` in the [changelog](changelog.txt).
+`upgrade.py` upgrades the deployment helm chart.
 
 ## Restarting the JupyterHub
 
