@@ -51,9 +51,7 @@ where:
 
 `generate-configs.py` will populate `secret-template.yaml` and `config-template.yaml` with the appropriate information and save the output as `.secret/secret.yaml` and `.secret/config.yaml`.
 
-`.secret/` is a git-ignored folder so that the `secret.yaml` and `config.yaml` files (and any secrets downloaded in the process of creating them) cannot be pushed to GitHub.
-
-Lastly, the script will print the Binder IP address.
+`.secret/` is a git-ignored folder so that the secrets contained in `.secret/prod.yaml` cannot be pushed to GitHub.
 
 ## Maintaining or Upgrading Hub23
 
@@ -128,8 +126,3 @@ To find out more info about a Pod:
 ```
 kubectl describe pod <POD-NAME> --namespace hub23
 ```
-
-## Changelog
-
-The [changelog](./changelog.txt) is a file tracking how up to date with the [BinderHub helm chart](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub) Hub23 is.
-Also if something breaks between chart updates, then the breaking changes between versions can be tracked.

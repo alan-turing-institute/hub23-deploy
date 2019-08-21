@@ -4,6 +4,15 @@
 # Ignore VSCode settings
 .vscode/
 
+# Ignore charts folder
+*/charts/*
+
+# Ignore requirements lock
+*/requirements.lock
+
+# Ignore packaged helm charts
+*.tgz
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

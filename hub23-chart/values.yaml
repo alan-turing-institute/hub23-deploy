@@ -1,0 +1,7 @@
+rbac:
+  enabled: true
+
+binderhub:
+  config:
+    BinderHub:
+      use_registry: true

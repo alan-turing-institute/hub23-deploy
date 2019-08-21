@@ -12,6 +12,15 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
+# Setup logging config
+logging.basicConfig(
+    level=logging.DEBUG,
+    filename="upgrade.log",
+    filemode="a",
+    format="[%(asctime)s %(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Script to upgrade a helm chart for a BinderHub deployment on Azure"
@@ -25,11 +34,11 @@ def parse_args():
         help="BinderHub name/Helm release name"
     )
     parser.add_argument(
-        "-v",
-        "--version",
+        "-z",
+        "--chart-name",
         type=str,
-        default=None,
-        help="Helm Chart version to upgrade to. Optional."
+        default="hub23-chart",
+        help="Local Helm Chart name"
     )
     parser.add_argument(
         "-c",
@@ -61,24 +70,11 @@ def parse_args():
 class Upgrade(object):
     def __init__(self, argsDict):
         self.hub_name = argsDict["hub_name"]
+        self.chart_name = argsDict["chart_name"]
         self.cluster_name = argsDict["cluster_name"]
         self.resource_group = argsDict["resource_group"]
         self.identity = argsDict["identity"]
         self.dry_run = argsDict["dry_run"]
-
-        if argsDict["version"] is None:
-            self.find_version()
-        else:
-            self.version = argsDict["version"]
-
-    def find_version(self):
-        from yaml import safe_load as load
-
-        with open("changelog.txt", "r") as f:
-            changelog = load(f)
-
-        keys = list(changelog.keys())
-        self.version = changelog[keys[-1]]
 
     def upgrade(self):
         if self.dry_run:
@@ -86,14 +82,13 @@ class Upgrade(object):
 
         # Setup Azure and Helm Chart
         self.azure_setup()
-        self.pull_helm_chart()
+        self.update_local_chart()
 
         # Helm Upgrade Command
         helm_upgrade_cmd = [
-            "helm", "upgrade", self.hub_name, "jupyterhub/binderhub",
-            f"--version={self.version}",
-            "-f", os.path.join(".secret", "secret.yaml"),
-            "-f", os.path.join(".secret", "config.yaml"),
+            "helm", "upgrade", self.hub_name, self.chart_name,
+            "-f", os.path.join("deploy", "prod.yaml"),
+            "-f", os.path.join(".secret", "prod.yaml"),
             "--wait"
         ]
 
@@ -150,26 +145,20 @@ class Upgrade(object):
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
-    def pull_helm_chart(self):
-        # Pulling/updating Helm Chart repo
-        logging.info("Adding and updating JupyterHub/BinderHub Helm Chart")
-        cmd = [
-            "helm", "repo", "add", "jupyterhub",
-            "https://jupyterhub.github.io/helm-chart"
-        ]
-        result = run_cmd(cmd)
-        if result["returncode"] == 0:
-            logging.info(result["output"])
-        else:
-            logging.error(result["err_msg"])
+    def update_local_chart(self):
+        # Updating local chart
+        logging.info(f"Updating local chart dependencies: {self.chart_name}")
+        os.chdir(self.chart_name)
 
-        cmd = ["helm", "repo", "update"]
-        result = run_cmd(cmd)
+        update_cmd = ["helm", "dependency", "update"]
+        result = run_cmd(update_cmd)
         if result["returncode"] == 0:
             logging.info(result["output"])
         else:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        os.chdir(os.pardir)
 
     def print_pods(self):
         # Print the pods

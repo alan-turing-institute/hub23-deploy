@@ -5,7 +5,7 @@ import argparse
 from run_command import run_cmd
 from subprocess import check_output
 
-# Setup log config
+# Setup logging config
 logging.basicConfig(
     level=logging.DEBUG,
     filename="generate-configs.log",
@@ -41,13 +41,6 @@ def parse_args():
         help="Image prefix to prepend to Docker images"
     )
     parser.add_argument(
-        "-o",
-        "--org-name",
-        type=str,
-        default="binderhub-test-org",
-        help="GitHub organisation name for authentication"
-    )
-    parser.add_argument(
         "-j",
         "--jupyterhub-ip",
         type=str,
@@ -74,7 +67,6 @@ class GenerateConfigFiles(object):
         self.vault_name = argsDict["vault_name"]
         self.registry_name = argsDict["registry_name"]
         self.image_prefix = argsDict["image_prefix"]
-        self.org_name = argsDict["org_name"]
         self.jupyterhub_ip = argsDict["jupyterhub_ip"]
         self.binder_ip = argsDict["binder_ip"]
         self.identity = argsDict["identity"]
@@ -103,7 +95,6 @@ class GenerateConfigFiles(object):
         secret_names = [
             "apiToken",
             "secretToken",
-            "binderhub-access-token",
             "github-client-id",
             "github-client-secret",
             "SP-appID",
@@ -118,15 +109,16 @@ class GenerateConfigFiles(object):
             # Get secret information and convert to json
             value = check_output([
                 "az", "keyvault", "secret", "show", "-n", secret,
-                "--vault-name", self.vault_name, "--query", "'value'", "-o",
+                "--vault-name", self.vault_name, "--query", "value", "-o",
                 "tsv"
-            ])
+            ]).decode(encoding="utf8").strip("\n")
 
             # Save secret to dictionary
             self.secrets[secret] = value
 
     def generate_config_files(self):
         # Make a secrets folder
+        deploy_dir = "deploy"
         secret_dir = ".secret"
         if not os.path.exists(secret_dir):
             logging.info(f"Creating directory: {secret_dir}")
@@ -136,35 +128,20 @@ class GenerateConfigFiles(object):
             logging.info(f"Directory already exists: {secret_dir}")
 
         logging.info("Generating configuration files")
-        for filename in ["config", "secret"]:
+        for filename in ["prod"]:
             logging.info(f"Reading template file for: {filename}")
 
-            with open(f"{filename}-template.yaml", "r") as f:
+            with open(f"{deploy_dir}/{filename}-template.yaml", "r") as f:
                 template = f.read()
 
-            if filename == "config":
-                template = template.format(
-                    registry_name=self.registry_name,
-                    image_prefix=self.image_prefix,
-                    jupyterhub_ip=self.jupyterhub_ip,
-                    binder_ip=self.binder_ip,
-                    github_client_id=self.secrets["github-client-id"],
-                    github_client_secret=self.secrets["github-client-secret"],
-                    org_name=self.org_name
-                )
-
-            elif filename == "secret":
-                template = template.format(
-                    apiToken=self.secrets["apiToken"],
-                    secretToken=self.secrets["secretToken"],
-                    registry_name=self.registry_name,
-                    username=self.secrets["SP-appID"],
-                    password=self.secrets["SP-key"],
-                    accessToken=self.secrets["binderhub-access-token"]
-                )
-            else:
-                logging.error(f"FileNotFoundError: Unknown file: {filename}")
-                raise FileNotFoundError("Unknown file")
+            template = template.format(
+                apiToken=self.secrets["apiToken"],
+                secretToken=self.secrets["secretToken"],
+                username=self.secrets["SP-appID"],
+                password=self.secrets["SP-key"],
+                github_client_id=self.secrets["github-client-id"],
+                github_client_secret=self.secrets["github-client-secret"]
+            )
 
             logging.info(f"Writing YAML file for: {filename}")
             with open(os.path.join(secret_dir, f"{filename}.yaml"), "w") as f:
