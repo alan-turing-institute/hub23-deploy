@@ -23,6 +23,14 @@ binderhub:
       timeout: 600
       maxAge: 21600  # maxAge is 6 hours: 6 * 3600 = 21600
 
+    singleuser:
+        memory:
+          limit: 1G
+          guarantee: 1G
+        cpu:
+          limit: .5
+          guarantee: .5
+
   initContainers:
     - name: git-clone-templates
       image: alpine/git
