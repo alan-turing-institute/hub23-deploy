@@ -69,110 +69,110 @@ def parse_args():
 
     return parser.parse_args()
 
-def get_secrets(vault_name, identity=False):
-    """Get secrets from Azure key vault
+class GenerateConfigFiles(object):
+    def __init__(self, argsDict):
+        self.vault_name = argsDict["vault_name"]
+        self.registry_name = argsDict["registry_name"]
+        self.image_prefix = argsDict["image_prefix"]
+        self.org_name = argsDict["org_name"]
+        self.jupyterhub_ip = argsDict["jupyterhub_ip"]
+        self.binder_ip = argsDict["binder_ip"]
+        self.identity = argsDict["identity"]
 
-    Parameters
-    ----------
-    vault_name: string
-    identity: boolean
+        self.get_secrets()
 
-    Returns
-    -------
-    secrets: dictionary
-    """
-    secret_names = [
-        "apiToken",
-        "secretToken",
-        "binderhub-access-token",
-        "github-client-id",
-        "github-client-secret",
-        "SP-appID",
-        "SP-key"
-    ]
-
-    secrets = {}
-
-    # Login to Azure
-    login_cmd = ["az", "login"]
-    if identity:
-        login_cmd.append("--identity")
-        logging.info("Logging into Azure with a Managed System Identity")
-    else:
-        logging.info("Login to Azure")
-
-    result = run_cmd(login_cmd)
-    if result["returncode"] == 0:
-        logging.info("Successfully logged into Azure")
-    else:
-        logging.error(result["err_msg"])
-        raise Exception(result["err_msg"])
-
-    # Get secrets
-    for secret in secret_names:
-        logging.info(f"Pulling secret: {secret}")
-        # Get secret information and convert to json
-        json_out = check_output([
-            "az", "keyvault", "secret", "show", "-n", secret,
-            "--vault-name", vault_name
-        ]).decode(encoding="utf-8")
-        secret_info = json.loads(json_out)
-
-        # Save secret to dictionary
-        secrets[secret] = secret_info["value"]
-
-    return secrets
-
-def main():
-    args = parse_args()
-
-    # Make a secrets folder
-    secret_dir = ".secret"
-    if not os.path.exists(secret_dir):
-        logging.info(f"Creating directory: {secret_dir}")
-        os.mkdir(secret_dir)
-        logging.info(f"Created directory: {secret_dir}")
-    else:
-        logging.info(f"Directory already exists: {secret_dir}")
-
-    secrets = get_secrets(args.vault_name, args.identity)
-
-    logging.info("Generating configuration files")
-    for filename in ["config", "secret"]:
-        logging.info(f"Reading template file for: {filename}")
-
-        with open(f"{filename}-template.yaml", "r") as f:
-            template = f.read()
-
-        if filename == "config":
-            template = template.format(
-                registry_name=args.registry_name,
-                image_prefix=args.image_prefix,
-                jupyterhub_ip=args.jupyterhub_ip,
-                binder_ip=args.binder_ip,
-                github_client_id=secrets["github-client-id"],
-                github_client_secret=secrets["github-client-secret"],
-                org_name=args.org_name
-            )
-
-        elif filename == "secret":
-            template = template.format(
-                apiToken=secrets["apiToken"],
-                secretToken=secrets["secretToken"],
-                registry_name=args.registry_name,
-                username=secrets["SP-appID"],
-                password=secrets["SP-key"],
-                accessToken=secrets["binderhub-access-token"]
-            )
+    def login(self):
+        # Login to Azure
+        login_cmd = ["az", "login"]
+        if self.identity:
+            login_cmd.append("--identity")
+            logging.info("Logging into Azure with a Managed System Identity")
         else:
-            logging.error(f"FileNotFoundError: Unknown file: {filename}")
-            raise FileNotFoundError("Unknown file")
+            logging.info("Login to Azure")
 
-        logging.info(f"Writing YAML file for: {filename}")
-        with open(os.path.join(secret_dir, f"{filename}.yaml"), "w") as f:
-            f.write(template)
+        result = run_cmd(login_cmd)
+        if result["returncode"] == 0:
+            logging.info("Successfully logged into Azure")
+        else:
+            logging.error(result["err_msg"])
+            raise Exception(result["err_msg"])
 
-    logging.info(f"BinderHub files have been configured: {os.listdir(secret_dir)}")
+    def get_secrets(self):
+        self.login()
+
+        secret_names = [
+            "apiToken",
+            "secretToken",
+            "binderhub-access-token",
+            "github-client-id",
+            "github-client-secret",
+            "SP-appID",
+            "SP-key"
+        ]
+
+        self.secrets = {}
+
+        # Get secrets
+        for secret in secret_names:
+            logging.info(f"Pulling secret: {secret}")
+            # Get secret information and convert to json
+            value = check_output([
+                "az", "keyvault", "secret", "show", "-n", secret,
+                "--vault-name", self.vault_name, "--query", "'value'", "-o",
+                "tsv"
+            ])
+
+            # Save secret to dictionary
+            self.secrets[secret] = value
+
+    def generate_config_files(self):
+        # Make a secrets folder
+        secret_dir = ".secret"
+        if not os.path.exists(secret_dir):
+            logging.info(f"Creating directory: {secret_dir}")
+            os.mkdir(secret_dir)
+            logging.info(f"Created directory: {secret_dir}")
+        else:
+            logging.info(f"Directory already exists: {secret_dir}")
+
+        logging.info("Generating configuration files")
+        for filename in ["config", "secret"]:
+            logging.info(f"Reading template file for: {filename}")
+
+            with open(f"{filename}-template.yaml", "r") as f:
+                template = f.read()
+
+            if filename == "config":
+                template = template.format(
+                    registry_name=self.registry_name,
+                    image_prefix=self.image_prefix,
+                    jupyterhub_ip=self.jupyterhub_ip,
+                    binder_ip=self.binder_ip,
+                    github_client_id=self.secrets["github-client-id"],
+                    github_client_secret=self.secrets["github-client-secret"],
+                    org_name=self.org_name
+                )
+
+            elif filename == "secret":
+                template = template.format(
+                    apiToken=self.secrets["apiToken"],
+                    secretToken=self.secrets["secretToken"],
+                    registry_name=self.registry_name,
+                    username=self.secrets["SP-appID"],
+                    password=self.secrets["SP-key"],
+                    accessToken=self.secrets["binderhub-access-token"]
+                )
+            else:
+                logging.error(f"FileNotFoundError: Unknown file: {filename}")
+                raise FileNotFoundError("Unknown file")
+
+            logging.info(f"Writing YAML file for: {filename}")
+            with open(os.path.join(secret_dir, f"{filename}.yaml"), "w") as f:
+                f.write(template)
+
+        logging.info(f"BinderHub files have been configured: {os.listdir(secret_dir)}")
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    bot = GenerateConfigFiles(vars(args))
+    bot.generate_config_files()
