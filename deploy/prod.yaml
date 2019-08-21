@@ -10,21 +10,3 @@ binderhub:
 
   registry:
     url: https://hub23registry.azurecr.io
-
-  ingress:
-    hosts:
-      - binder.hub23.turing.ac.uk
-
-  jupyterhub:
-    ingress:
-      hosts:
-        - hub.hub23.turing.ac.uk
-      tls:
-        - secretName: kubelego-tls-jupyterhub-hub23
-          hosts:
-            - hub.hub23.turing.ac.uk
-
-nginx-ingress:
-  controller:
-    service:
-      loadBalancerIP: 52.174.199.172
