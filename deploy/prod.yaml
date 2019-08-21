@@ -31,6 +31,10 @@ binderhub:
           limit: .5
           guarantee: .5
 
+    prePuller:
+        continuous:
+          enabled: true
+
   initContainers:
     - name: git-clone-templates
       image: alpine/git
