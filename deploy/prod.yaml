@@ -17,6 +17,12 @@ binderhub:
   registry:
     url: https://hub23registry.azurecr.io
 
+  jupyterhub:
+    cull:
+      every: 660
+      timeout: 600
+      maxAge: 21600  # maxAge is 6 hours: 6 * 3600 = 21600
+
   initContainers:
     - name: git-clone-templates
       image: alpine/git
