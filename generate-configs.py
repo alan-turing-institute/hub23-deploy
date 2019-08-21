@@ -124,6 +124,7 @@ class GenerateConfigFiles(object):
 
     def generate_config_files(self):
         # Make a secrets folder
+        deploy_dir = "deploy"
         secret_dir = ".secret"
         if not os.path.exists(secret_dir):
             logging.info(f"Creating directory: {secret_dir}")
@@ -136,7 +137,7 @@ class GenerateConfigFiles(object):
         for filename in ["prod"]:
             logging.info(f"Reading template file for: {filename}")
 
-            with open(f"{filename}-template.yaml", "r") as f:
+            with open(f"{deploy_dir}/{filename}-template.yaml", "r") as f:
                 template = f.read()
 
             template = template.format(
