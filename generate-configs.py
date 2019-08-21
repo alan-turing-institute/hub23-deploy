@@ -41,13 +41,6 @@ def parse_args():
         help="Image prefix to prepend to Docker images"
     )
     parser.add_argument(
-        "-o",
-        "--org-name",
-        type=str,
-        default="binderhub-test-org",
-        help="GitHub organisation name for authentication"
-    )
-    parser.add_argument(
         "-j",
         "--jupyterhub-ip",
         type=str,
@@ -74,7 +67,6 @@ class GenerateConfigFiles(object):
         self.vault_name = argsDict["vault_name"]
         self.registry_name = argsDict["registry_name"]
         self.image_prefix = argsDict["image_prefix"]
-        self.org_name = argsDict["org_name"]
         self.jupyterhub_ip = argsDict["jupyterhub_ip"]
         self.binder_ip = argsDict["binder_ip"]
         self.identity = argsDict["identity"]
@@ -103,6 +95,8 @@ class GenerateConfigFiles(object):
         secret_names = [
             "apiToken",
             "secretToken",
+            "github-client-id",
+            "github-client-secret",
             "SP-appID",
             "SP-key"
         ]
@@ -145,6 +139,8 @@ class GenerateConfigFiles(object):
                 secretToken=self.secrets["secretToken"],
                 username=self.secrets["SP-appID"],
                 password=self.secrets["SP-key"],
+                github_client_id=self.secrets["github-client-id"],
+                github_client_secret=self.secrets["github-client-secret"]
             )
 
             logging.info(f"Writing YAML file for: {filename}")
