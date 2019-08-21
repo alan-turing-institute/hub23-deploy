@@ -3,15 +3,6 @@ import logging
 import argparse
 from run_command import *
 
-# Setup log config
-logging.basicConfig(
-    level=logging.DEBUG,
-    filename="upgrade.log",
-    filemode="a",
-    format="[%(asctime)s %(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
-
 # Setup logging config
 logging.basicConfig(
     level=logging.DEBUG,
