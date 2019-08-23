@@ -1,4 +1,4 @@
-from run_command import *
+from .run_command import *
 
 class Hub(object):
     def __init__(self, argsDict):
@@ -10,17 +10,20 @@ class Hub(object):
     def login(self):
         login_cmd = ["az", "login"]
 
-        if identity:
+        if self.identity:
             login_cmd.append("--identity")
 
         result = run_cmd(login_cmd)
         if result["returncode"] != 0:
             raise Exception(result["err_msg"])
 
-        creds_cmd
-        subprocess.check_call([
-            "az", "aks", "get-credentials", "-n", cluster_name, "-g", resource_group
-        ])
+        cred_cmd = [
+            "az", "aks", "get-credentials", "-n", self.cluster_name, "-g",
+            self.resource_group
+        ]
+        result = run_cmd(cred_cmd)
+        if result["returncode"] != 0:
+            raise Exception(result["err_msg"])
 
     def get_info(self):
         self.login()
@@ -43,7 +46,7 @@ class Hub(object):
     def get_logs(self):
         self.login()
 
-        kubectl_cmd = ["kubectl", "get", "pods", "-n", seldf.hub_name,
+        kubectl_cmd = ["kubectl", "get", "pods", "-n", self.hub_name,
                    "-o=jsonpath='{.items[*].metadata.name}'"]
         tr_cmd = ["tr", "' '", "'\n'"]
         grep_cmd = ["grep", "^hub-"]
