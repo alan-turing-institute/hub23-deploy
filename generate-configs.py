@@ -2,8 +2,8 @@ import os
 import json
 import logging
 import argparse
-from run_command import run_cmd
 from subprocess import check_output
+from HubClass.run_command import run_cmd
 
 # Setup logging config
 logging.basicConfig(

@@ -1,7 +1,7 @@
 import os
 import logging
 import argparse
-from run_command import *
+from HubClass.run_command import *
 
 # Setup logging config
 logging.basicConfig(
@@ -72,7 +72,7 @@ class Upgrade(object):
             logging.info("THIS IS A DRY-RUN. HELM CHART WILL NOT BE UPGRADED.")
 
         # Setup Azure and Helm Chart
-        self.azure_setup()
+        self.login()
         self.update_local_chart()
 
         # Helm Upgrade Command
@@ -99,7 +99,7 @@ class Upgrade(object):
         self.print_pods()
         self.find_ip_addresses()
 
-    def azure_setup(self):
+    def login(self):
         login_cmd = ["az", "login"]
 
         if self.identity:
