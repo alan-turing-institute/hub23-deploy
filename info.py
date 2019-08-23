@@ -1,5 +1,6 @@
 import argparse
 import subprocess
+from run_command import *
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -35,73 +36,50 @@ def parse_args():
 
     return parser.parse_args()
 
-def azure_setup(cluster_name, resource_group, identity=False):
-    """Login to Azure and connect to Kubernetes cluster
+class HubInfo(object):
+    def __init__(self, argsDict):
+        self.hub_name = argsDict["hub_name"]
+        self.cluster_name = argsDict["cluster_name"]
+        self.resource_group = argsDict["resource_group"]
+        self.identity = argsDict["identity"]
 
-    Parameters
-    ----------
-    cluster_name
-        String.
-    resource_group
-        String.
-    identity
-        Boolean
-    """
-    login_cmd = ["az", "login"]
+    def get_info(self):
+        self.login()
 
-    if identity:
-        login_cmd.append("--identity")
+        ip_addresses = {}
+        kubectl_cmd = ["kubectl", "-n", self.hub_name, "get", "svc"]
+        awk_cmd = ["awk", "{ print $4}"]
+        tail_cmd = ["tail", "-n", "1"]
 
-    print("Login to Azure")
-    proc = subprocess.Popen(
-        login_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    res = proc.communicate()
-    if proc.returncode == 0:
-        print("Successfully logged in to Azure")
-    else:
-        err_msg = res[1].decode(encoding="utf-8")
-        raise Exception(err_msg)
+        for svc in ["proxy-public", "binder"]:
+            new_cmd = kubectl_cmd + [svc]
+            result = run_pipe_cmd([new_cmd, awk_cmd, tail_cmd])
+            if result["returncode"] == 0:
+                ip_addresses[svc] = result["output"].strip("\n")
+            else:
+                raise Exception(result["err_msg"])
 
-    print(f"Merging kubectl context for cluster: {cluster_name}")
-    subprocess.check_call(
-        ["az", "aks", "get-credentials", "-n", cluster_name, "-g",
-         resource_group],
-    )
+        print(f"JupyterHub IP: {ip_addresses['proxy-public']}\nBinder IP: {ip_addresses['binder']}")
 
-def main():
-    args = parse_args()
+    def login(self):
+        login_cmd = ["az", "login"]
 
-    azure_setup(args.cluster_name, args.resource_group, identity=args.identity)
+        if self.identity:
+            login_cmd.append("--identity")
 
-    ip_addresses = {}
-    kubectl_cmd = ["kubectl", "-n", args.hub_name, "get", "svc"]
-    awk_cmd = ["awk", "{ print $4}"]
-    tail_cmd = ["tail", "-n", "1"]
+        result = run_cmd(login_cmd)
+        if result["returncode"] != 0:
+            raise Exception(result["err_msg"])
 
-    for svc in ["proxy-public", "binder"]:
-        print(f"Fetching IP address for: {svc}")
-
-        new_cmd = kubectl_cmd + [svc]
-
-        p1 = subprocess.Popen(new_cmd, stdout=subprocess.PIPE)
-        p2 = subprocess.Popen(awk_cmd, stdin=p1.stdout, stdout=subprocess.PIPE)
-        p1.stdout.close()
-        p3 = subprocess.Popen(tail_cmd, stdin=p2.stdout, stdout=subprocess.PIPE)
-        p2.stdout.close()
-
-        res = p3.communicate()
-        if p3.returncode == 0:
-            ip = res[0].decode(encoding="utf-8")
-            ip_addresses[svc] = ip
-        else:
-            err_msg = res[1].decode(encoding="utf-8")
-            raise Exception(err_msg)
-
-    print(f"""
-    JupyterHub IP: {ip_addresses['proxy-public']}
-    Binder IP: {ip_addresses['binder']}
-    """)
+        cred_cmd = [
+            "az", "aks", "get-credentials", "-n", self.cluster_name, "-g",
+            self.resource_group
+        ]
+        result = run_cmd(cred_cmd)
+        if result["returncode"] != 0:
+            raise Exception(result["err_msg"])
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    bot = HubInfo(vars(args))
+    bot.get_info()
