@@ -1,5 +1,4 @@
 import argparse
-import subprocess
 from run_command import *
 
 def parse_args():
