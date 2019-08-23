@@ -1,7 +1,7 @@
 import os
 import logging
 import argparse
-from run_command import *
+from HubClass.run_command import *
 
 # Setup logging config
 logging.basicConfig(
