@@ -46,6 +46,13 @@ def parse_args():
         help="Azure Resource Group"
     )
     parser.add_argument(
+        "-s",
+        "--subscription",
+        typ=str,
+        default="Turing-BinderHub",
+        help="Azure subscription for resources"
+    )
+    parser.add_argument(
         "--identity",
         action="store_true",
         help="Login to Azure using a Managed System Identity"
@@ -64,6 +71,7 @@ class Upgrade(object):
         self.chart_name = argsDict["chart_name"]
         self.cluster_name = argsDict["cluster_name"]
         self.resource_group = argsDict["resource_group"]
+        self.subscription = argsDict["subscription"]
         self.identity = argsDict["identity"]
         self.dry_run = argsDict["dry_run"]
 
@@ -111,6 +119,17 @@ class Upgrade(object):
         result = run_cmd(login_cmd)
         if result["returncode"] == 0:
             logging.info("Successfully logged into Azure")
+        else:
+            logging.error(result["err_msg"])
+            raise Exception(result["err_msg"])
+
+        logging.info(f"Setting Azure subscription: {self.subscription}")
+        sub_cmd = ["az", "account", "set", "-s", self.subscription]
+        result = run_cmd(sub_cmd)
+        if result["returncode"] == 0:
+            logging.info(
+                f"Successfully set Azure subscription: {self.subscription}"
+            )
         else:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
