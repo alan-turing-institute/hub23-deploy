@@ -16,6 +16,6 @@ binderhub:
         clientId: "{github_client_id}"
         clientSecret: "{github_client_secret}"
 
-nginx-ingress: {{}}
+# nginx-ingress: {{}}
 
-cert-manager: {{}}
+# cert-manager: {{}}
