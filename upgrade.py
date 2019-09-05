@@ -48,7 +48,7 @@ def parse_args():
     parser.add_argument(
         "-s",
         "--subscription",
-        typ=str,
+        type=str,
         default="Turing-BinderHub",
         help="Azure subscription for resources"
     )
