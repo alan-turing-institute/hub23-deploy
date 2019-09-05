@@ -124,7 +124,15 @@ class Upgrade(object):
             raise Exception(result["err_msg"])
 
         logging.info(f"Setting Azure subscription: {self.subscription}")
-        sub_cmd = ["az", "account", "set", "-s", self.subscription]
+        sub_cmd = ["az", "account", "set", "-s"]
+
+        # Catch subscription names that may have whitespace and wrap them in
+        # double quotes
+        if " " in self.subscription:
+            sub_cmd.append(f'"{self.subscription}"')
+        else:
+            sub_cmd.append(self.subscription)
+
         result = run_cmd(sub_cmd)
         if result["returncode"] == 0:
             logging.info(
