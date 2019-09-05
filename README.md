@@ -67,6 +67,7 @@ python upgrade.py \
     --chart-name [-z] CHART-NAME \
     --cluster-name [-c] CLUSTER-NAME \
     --resource-group [-g] RESOURCE-GROUP \
+    --subscription [-s] SUBSCRIPTION \
     --identity \
     --dry-run
 ```
@@ -75,6 +76,7 @@ where:
 * `CHART-NAME` is the name of the local Helm Chart;
 * `CLUSTER-NAME` is the name of the Azure Kubernetes cluster Hub23 is running on;
 * `RESOURCE-GROUP` is the Azure Resource Group;
+* `SUBSCRIPTION` is the Azure subscription name;
 * `--identity` is a flag to tell the script to login to Azure using a Managed System Identity; and
 * ``--dry-run` will perform a dry-run of the upgrade.
 
