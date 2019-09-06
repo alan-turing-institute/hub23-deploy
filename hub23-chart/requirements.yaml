@@ -7,10 +7,10 @@ dependencies:
 
   # # https://github.com/helm/charts/tree/master/stable/nginx-ingress
   # - name: nginx-ingress
-  #   version: "0.31.0"
+  #   version: "1.19.0"
   #   repository: "https://kubernetes-charts.storage.googleapis.com"
 
   # # https://github.com/helm/charts/tree/master/stable/cert-manager
   # - name: cert-manager
-  #   version: "v0.5.2"
+  #   version: "v0.6.7"
   #   repository: "https://kubernetes-charts.storage.googleapis.com"
