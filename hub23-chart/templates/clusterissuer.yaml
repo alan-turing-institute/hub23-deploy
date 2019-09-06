@@ -1,0 +1,19 @@
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: ClusterIssuer
+metadata:
+  name: hub23-chart
+  labels:
+    helm.sh/chart: {{ include "hub23-chart.chart" . }}
+    app.kubernetes.io/name: {{ include "hub23-chart.name" . }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    # production: https://acme-v02.api.letsencrypt.org/directory
+    # staging:    https://acme-staging-v02.api.letsencrypt.org/directory
+    email: {{ .Values.letsencrypt.contactEmail }}
+    privateKeySecretRef:
+      name: hub23-acme-key
+    http01: {}
