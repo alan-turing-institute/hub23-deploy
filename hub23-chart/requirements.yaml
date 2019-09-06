@@ -12,5 +12,5 @@ dependencies:
 
   # https://github.com/helm/charts/tree/master/stable/cert-manager
   - name: cert-manager
-    version: "v0.6.7"
-    repository: "https://kubernetes-charts.storage.googleapis.com"
+    version: "v0.10.0"
+    repository: "https://charts.jetstack.io"
