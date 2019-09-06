@@ -4,7 +4,7 @@ binderhub:
   config:
     BinderHub:
       image_prefix: hub23registry.azurecr.io/hub23/binder-dev-
-      hub_url: http://hub.hub23.turing.ac.uk
+      hub_url: https://hub.hub23.turing.ac.uk
 
     DockerRegistry:
       token_url: "https://hub23registry.azurecr.io/oauth2/token?service=hub23registry.azurecr.io"
@@ -21,7 +21,7 @@ binderhub:
     hub:
         services:
           binder:
-            oauth_redirect_uri: "http://binder.hub23.turing.ac.uk/oauth_callback"
+            oauth_redirect_uri: "https://binder.hub23.turing.ac.uk/oauth_callback"
             oauth_client_id: "binder-oauth-client-test"
         extraConfig:
           hub_extra: |
@@ -60,7 +60,7 @@ binderhub:
     auth:
       type: github
       github:
-        callbackUrl: "http://hub.hub23.turing.ac.uk/hub/oauth_callback"
+        callbackUrl: "https://hub.hub23.turing.ac.uk/hub/oauth_callback"
         orgWhitelist:
           - "binderhub-test-org"
       scopes:
