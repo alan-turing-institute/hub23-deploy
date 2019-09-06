@@ -62,6 +62,11 @@ def parse_args():
         action="store_true",
         help="Performs a dry-run upgrade of the Helm Chart"
     )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Adds debugging output to helm upgrade command"
+    )
 
     return parser.parse_args()
 
@@ -74,6 +79,7 @@ class Upgrade(object):
         self.subscription = argsDict["subscription"]
         self.identity = argsDict["identity"]
         self.dry_run = argsDict["dry_run"]
+        self.debug = argsDict["debug"]
 
     def upgrade(self):
         if self.dry_run:
@@ -91,9 +97,15 @@ class Upgrade(object):
             "--wait"
         ]
 
-        if self.dry_run:
+        if self.dry_run and self.debug:
+            helm_upgrade_cmd.extend(["--dry-run", "--debug"])
+            logging.info("Performing a dry-run helm upgrade with debugging output")
+        elif self.dry_run and (not self.debug):
             helm_upgrade_cmd.append("--dry-run")
             logging.info("Performing a dry-run helm upgrade")
+        elif (not self.dry_run) and self.debug:
+            helm_upgrade_cmd.append("--debug")
+            logging.info("Performing a helm upgrade with debugging output")
         else:
             logging.info("Upgrading helm chart")
 
