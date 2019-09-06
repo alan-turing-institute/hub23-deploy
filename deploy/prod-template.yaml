@@ -16,6 +16,8 @@ binderhub:
         clientId: "{github_client_id}"
         clientSecret: "{github_client_secret}"
 
+# If in the future secrets are required for nginx or cert-manager,
+# place them below
 nginx-ingress: {{}}
 
 cert-manager: {{}}
