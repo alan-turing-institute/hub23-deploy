@@ -1,4 +1,9 @@
 apiVersion: v1
-description: A meta-chart for the BinderHub deployment on Hub23
 name: hub23-chart
 version: 0.0.1
+description: A meta-chart for the BinderHub deployment on Hub23
+sources:
+  - https://github.com/alan-turing-institute/hub23-deploy
+maintainers:
+  - name: sgibson91
+    email: sgibson@turing.ac.uk
