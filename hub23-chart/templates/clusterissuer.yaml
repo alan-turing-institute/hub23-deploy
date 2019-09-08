@@ -4,8 +4,8 @@ kind: ClusterIssuer
 metadata:
   name: hub23-prod
   labels:
-    helm.sh/chart: {{ include "hub23-prod.chart" . }}
-    app.kubernetes.io/name: {{ include "hub23-prod.name" . }}
+    helm.sh/chart: {{ include "hub23-chart.chart" . }}
+    app.kubernetes.io/name: {{ include "hub23-chart.name" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
