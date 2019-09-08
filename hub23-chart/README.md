@@ -2,6 +2,13 @@
 
 See the [developing helm chart docs](https://helm.sh/docs/developing_charts/) for more info on the contents of this folder.
 
+## Links for Chart Dependencies
+
+* https://github.com/jupyterhub/binderhub
+* https://jupyterhub.github.io/helm-chart/
+* https://github.com/helm/charts/tree/master/stable/nginx-ingress
+* https://github.com/helm/charts/tree/master/stable/cert-manager
+
 ## Installing the Chart
 
 To install the chart:
