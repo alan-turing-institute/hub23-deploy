@@ -115,7 +115,7 @@ class GenerateConfigFiles(object):
         elif self.sp_login:
             tenant_id = check_output([
                 "az", "account", "show", "-s", self.subscription, "--query",
-                "tenantId", "-o", "tsv"
+                "'tenantId'", "-o", "tsv"
             ]).decode(encoding="utf8").strip("\n")
 
             login_cmd.extend([
