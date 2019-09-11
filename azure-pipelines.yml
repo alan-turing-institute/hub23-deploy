@@ -26,7 +26,7 @@ jobs:
     inputs:
       azureSubscription:
       keyVaultName: hub23-keyvault
-      secretsFilter: ['SP-appID', 'SP-key']
+      secretsFilter: 'SP-appID', 'SP-key'
 
   - script: python generate-configs.py --sp-login --sp-app-id $(SP-appID) --sp-key $(SP-key)
     displayName: 'Generate config files for Hub23'
