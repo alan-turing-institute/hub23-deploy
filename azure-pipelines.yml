@@ -1,0 +1,35 @@
+trigger:
+- master
+
+jobs:
+- job:
+  pool:
+    vmImage: 'ubuntu-latest'
+  strategy:
+    matrix:
+      Python 37:
+        python.version: '3.7'
+
+  steps:
+  - task: UsePythonVersion@0
+    displayName: 'Use Python $(python.version)'
+    inputs:
+      versionSpec: '$(python.version)'
+
+  - script: |
+      python -m pip install --upgrade pip
+      python -m pip install -r requirements.txt
+    displayName: 'Installing dependencies'
+
+  - task: AzureKeyVault@1
+    displayName: 'Pulling secrets from Key Vault'
+    inputs:
+      azureSubscription:
+      keyVaultName: hub23-keyvault
+      secretsFilter: ['SP-appID', 'SP-key']
+
+  - script: python generate-configs.py --sp-login --sp-app-id $(SP-appID) --sp-key $(SP-key)
+    displayName: 'Generate config files for Hub23'
+
+  - script: python upgrade.py --sp-login --sp-app-id $(SP-appID) --sp-key $(SP-key)
+    displayName: 'Upgrading Hub23 helm chart'
