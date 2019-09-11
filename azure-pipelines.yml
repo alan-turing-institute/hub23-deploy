@@ -16,17 +16,22 @@ jobs:
     inputs:
       versionSpec: '$(python.version)'
 
-  - script: brew upgrade
-    displayName: 'Updating Homebrew'
+  - script: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    displayName: 'Installing Azure CLI'
 
-  - script: brew install azure-cli
-    displayName: 'Brew installing Azure CLI'
+  - script: |
+      sudo apt-get update && sudo apt-get install -y apt-transport-https
+      curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+      echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+      sudo apt-get update
+      sudo apt-get install -y kubectl
+    displayName: 'Installing kubectl'
 
-  - script: brew install kubernetes-cli
-    displayName: 'Brew installing kubectl'
-
-  - script: brew install kubernetes-helm
-    displayName: 'Brew installing helm'
+  - script: |
+      curl -LO https://git.io/get_helm.sh
+      chmod 700 get_helm.sh
+      ./get_helm.sh
+    displayName: 'Installing helm'
 
   - script: |
       python -m pip install --upgrade pip
