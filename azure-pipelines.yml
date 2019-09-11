@@ -38,8 +38,8 @@ jobs:
       python -m pip install -r requirements.txt
     displayName: 'Installing dependencies'
 
-  - script: python generate-configs.py --sp-login --sp-app-id $(SP-appID) --sp-key $(SP-key)
+  - script: python generate-configs.py --sp-login --sp-app-id $(appId) --sp-key $(appKey)
     displayName: 'Generate config files for Hub23'
 
-  - script: python upgrade.py --sp-login --sp-app-id $(SP-appID) --sp-key $(SP-key)
+  - script: python upgrade.py --sp-login --sp-app-id $(appId) --sp-key $(appKey)
     displayName: 'Upgrading Hub23 helm chart'
