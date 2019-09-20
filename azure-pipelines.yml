@@ -75,3 +75,18 @@ jobs:
             cd hub23-chart
             helm dependency update
             cd ..
+
+      - task: HelmDeploy@0
+        inputs:
+          connectionType: 'Azure Resource Manager'
+          azureSubscription: 'hub23-deploy-scn'
+          azureResourceGroup: 'Hub23'
+          kubernetesCluster: 'hub23cluster'
+          namespace: 'hub23'
+          command: 'upgrade'
+          chartType: 'FilePath'
+          chartPath: './hub23-chart/'
+          releaseName: 'hub23'
+          overrideValues: './deploy/prod.yaml, ./.secret/prod.yaml'
+          valueFile: './hub23-chart/values.yaml'
+          arguments: '--dry-run'
