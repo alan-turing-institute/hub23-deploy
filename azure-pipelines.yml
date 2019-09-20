@@ -7,9 +7,8 @@ jobs:
       vmImage: 'ubuntu-latest'
     
     steps:
-      - task: AzureCLI@1
+      - task: AzureKeyVault@1
         inputs:
-          scriptLocation: 'inlineScript'
-          inlineScript: ''
-          addSpnToEnvironment: true
-          connectedServiceNameARM: hub23-deploy-scn
+          azureSubscription: 'hub23-deploy-scn'
+          KeyVaultName: 'hub23-keyvault'
+          SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key'
