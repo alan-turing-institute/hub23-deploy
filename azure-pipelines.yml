@@ -8,12 +8,14 @@ jobs:
 
     steps:
       - task: AzureKeyVault@1
+        displayName: 'Pull Key Vault Secrets'
         inputs:
           azureSubscription: 'hub23-deploy-scn'
           KeyVaultName: 'hub23-keyvault'
           SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key'
 
       - task: Bash@3
+        displayName: 'Make .secret folder'
         inputs:
           targetType: 'inline'
           script: 'mkdir -p .secret'
