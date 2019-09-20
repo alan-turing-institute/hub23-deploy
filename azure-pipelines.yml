@@ -79,6 +79,7 @@ jobs:
             cd ..
 
       - task: HelmDeploy@0
+        displayName: 'Perform helm upgrade'
         inputs:
           connectionType: 'Azure Resource Manager'
           azureSubscription: 'hub23-deploy-scn'
