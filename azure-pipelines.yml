@@ -39,3 +39,20 @@ jobs:
           azureSubscription: 'hub23-deploy-scn'
           scriptLocation: 'inlineScript'
           inlineScript: 'az aks get-credentials -n $(cluster.name) -g $(resource.group)'
+
+      - task: HelmInstaller@1
+        displayName: 'Install Helm'
+        inputs:
+          helmVersionToInstall: 'latest'
+
+      - task: HelmDeploy@0
+        displayName: 'Initialise Helm'
+        inputs:
+          connectionType: 'Azure Resource Manager'
+          azureSubscription: 'hub23-deploy-scn'
+          azureResourceGroup: 'Hub23'
+          kubernetesCluster: 'hub23cluster'
+          namespace: 'hub23'
+          command: 'init'
+          arguments: '--client-only'
+          tillerNamespace: 'kube-system'
