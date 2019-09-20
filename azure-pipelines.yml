@@ -56,3 +56,12 @@ jobs:
           command: 'init'
           arguments: '--client-only'
           tillerNamespace: 'kube-system'
+
+      - task: Bash@3
+        displayName: 'Updating local chart'
+        inputs:
+          targetType: 'inline'
+          script: |
+            cd hub23-chart
+            helm dependency update
+            cd ..
