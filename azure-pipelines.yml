@@ -10,6 +10,6 @@ jobs:
       - task: AzureCLI@1
         inputs:
           scriptLocation: 'inlineScript'
-          inlineScript: 'az login'
+          inlineScript: ''
           addSpnToEnvironment: true
           connectedServiceNameARM: hub23-deploy-scn
