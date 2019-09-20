@@ -85,8 +85,6 @@ binderhub:
 
 nginx-ingress:
   controller:
-    service:
-      loadBalancerIP: "52.166.147.89"
     config:
       proxy-body-size: 64m
 
