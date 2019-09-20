@@ -78,12 +78,16 @@ jobs:
             helm dependency update
             cd ..
 
-      - task: Bash@3
-        displayName: 'Upgrade Helm Chart'
+      - task: HelmDeploy@0
+        displayName: 'Perform helm upgrade'
         inputs:
-          targetType: 'inline'
-          script: |
-            helm upgrade hub23 hub23-chart \
-            -f deploy/prod.yaml \
-            -f .secret/prod.yaml \
-            --wait
+          connectionType: 'Azure Resource Manager'
+          azureSubscription: 'hub23-deploy-scn'
+          azureResourceGroup: 'Hub23'
+          kubernetesCluster: 'hub23cluster'
+          command: 'upgrade'
+          chartType: 'Name'
+          chartName: 'hub23-chart'
+          releaseName: 'hub23'
+          waitForExecution: false
+          arguments: '-f deploy/prod.yaml -f .secret/prod.yaml'
