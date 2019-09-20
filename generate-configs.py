@@ -67,25 +67,6 @@ def parse_args():
         action="store_true",
         help="Login to Azure using a Managed System Identity"
     )
-    parser.add_argument(
-        "--sp-login",
-        action="store_true",
-        help="Login in to Azure using a Service Principal"
-    )
-    parser.add_argument(
-        "--sp-app-id",
-        type=str,
-        default="",
-        required="--sp-login" in sys.argv,
-        help="App ID of an Azure Service Principal"
-    )
-    parser.add_argument(
-        "--sp-key",
-        type=str,
-        default="",
-        required="--sp-login" in sys.argv,
-        help="Key of an Azure Service Principal"
-    )
 
     return parser.parse_args()
 
@@ -98,9 +79,6 @@ class GenerateConfigFiles(object):
         self.jupyterhub_ip = argsDict["jupyterhub_ip"]
         self.binder_ip = argsDict["binder_ip"]
         self.identity = argsDict["identity"]
-        self.sp_login = argsDict["sp_login"]
-        self.sp_app_id = argsDict["sp_app_id"]
-        self.sp_key = argsDict["sp_key"]
 
         self.get_secrets()
 
@@ -111,19 +89,6 @@ class GenerateConfigFiles(object):
         if self.identity:
             login_cmd.append("--identity")
             logging.info("Logging into Azure with a Managed System Identity")
-
-        elif self.sp_login:
-            tenant_id = check_output([
-                "az", "account", "show", "-s", self.subscription, "--query",
-                "tenantId", "-o", "tsv"
-            ]).decode(encoding="utf8").strip("\n")
-
-            login_cmd.extend([
-                "--service-principal", "-u", self.sp_app_id, "-p", self.sp_key,
-                "--tenant", tenant_id
-            ])
-            logging.info("Logging into Azure with Service Principal")
-
         else:
             logging.info("Login to Azure")
 
@@ -196,9 +161,5 @@ class GenerateConfigFiles(object):
 
 if __name__ == "__main__":
     args = parse_args()
-
-    if args.identity and args.sp_login:
-        raise Exception("Please provide EITHER --identity OR --sp-login flag")
-
     bot = GenerateConfigFiles(vars(args))
     bot.generate_config_files()
