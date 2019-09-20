@@ -94,4 +94,4 @@ jobs:
           kubernetesCluster: 'hub23cluster'
           namespace: 'hub23'
           command: 'get'
-          arguments: 'pods'
+          arguments: 'pods -o name'
