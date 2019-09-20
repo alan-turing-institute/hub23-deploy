@@ -32,4 +32,3 @@ jobs:
             -e "s/{github_client_id}/$(github-client-id)/" \
             -e "s/{github_client_secret}/$(github-client-secret)/" \
             deploy/prod-template.yaml > .secret/prod.yaml
-            cat .secret/prod.yaml
