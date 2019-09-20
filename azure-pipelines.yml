@@ -12,3 +12,4 @@ jobs:
           scriptLocation: 'inlineScript'
           inlineScript: 'az login'
           addSpnToEnvironment: true
+          connectedServiceNameARM: hub23-deploy-scn
