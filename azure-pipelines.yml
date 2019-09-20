@@ -89,5 +89,5 @@ jobs:
           chartType: 'Name'
           chartName: 'hub23-chart'
           releaseName: 'hub23'
-          waitForExecution: True
+          waitForExecution: false
           arguments: '-f deploy/prod.yaml -f .secret/prod.yaml'
