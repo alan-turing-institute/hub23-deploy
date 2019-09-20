@@ -19,3 +19,11 @@ jobs:
         inputs:
           targetType: 'inline'
           script: 'mkdir -p .secret'
+
+      - task: Bash@3
+        displayName: "Generate .secret/prod.yaml"
+        inputs:
+          targetType: 'inline'
+          script: |
+            sed -e "s/{username}/$(SP-appID)/" deploy/prod-template.yaml > .secret/prod.yaml
+            cat .secret/prod.yaml
