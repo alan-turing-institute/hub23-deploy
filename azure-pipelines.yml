@@ -28,7 +28,7 @@ jobs:
             sed -e "s/{username}/$(SP-appID)/" \
             -e "s/{password}/$(SP-key)/" \
             -e "s/{apiToken}/$(apiToken)/" \
-            -e "s/{secretToken}//$(secretToken)" \
+            -e "s/{secretToken}/$(secretToken)/" \
             -e "s/{github-client-id}/$(github-client-id)/" \
             -e "s/{github-client-secret}/$(github-client-secret)/" \
             deploy/prod-template.yaml > .secret/prod.yaml
