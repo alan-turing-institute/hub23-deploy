@@ -1,0 +1,89 @@
+trigger:
+  - master
+
+pr: none
+
+jobs:
+  - job:
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    steps:
+      - task: AzureKeyVault@1
+        displayName: 'Pull Key Vault Secrets'
+        inputs:
+          azureSubscription: 'hub23-deploy-scn'
+          KeyVaultName: 'hub23-keyvault'
+          SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key'
+
+      - task: Bash@3
+        displayName: 'Make .secret folder'
+        inputs:
+          targetType: 'inline'
+          script: 'mkdir -p .secret'
+
+      - task: Bash@3
+        displayName: "Generate .secret/prod.yaml"
+        inputs:
+          targetType: 'inline'
+          script: |
+            sed -e "s/{username}/$(SP-appID)/" \
+            -e "s/{password}/$(SP-key)/" \
+            -e "s/{apiToken}/$(apiToken)/" \
+            -e "s/{secretToken}/$(secretToken)/" \
+            -e "s/{github_client_id}/$(github-client-id)/" \
+            -e "s/{github_client_secret}/$(github-client-secret)/" \
+            deploy/prod-template.yaml > .secret/prod.yaml
+
+      - task: AzureCLI@1
+        displayName: 'Merging kubectl config'
+        inputs:
+          azureSubscription: 'hub23-deploy-scn'
+          scriptLocation: 'inlineScript'
+          inlineScript: 'az aks get-credentials -n $(cluster.name) -g $(resource.group)'
+
+      - task: HelmInstaller@1
+        displayName: 'Install Helm'
+        inputs:
+          helmVersionToInstall: 'latest'
+
+      - task: HelmDeploy@0
+        displayName: 'Initialise Helm'
+        inputs:
+          connectionType: 'Azure Resource Manager'
+          azureSubscription: 'hub23-deploy-scn'
+          azureResourceGroup: 'Hub23'
+          kubernetesCluster: 'hub23cluster'
+          namespace: 'hub23'
+          command: 'init'
+          arguments: '--client-only'
+          tillerNamespace: 'kube-system'
+
+      - task: Bash@3
+        displayName: 'Add helm chart repos'
+        inputs:
+          targetType: 'inline'
+          script: |
+            helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
+            helm repo add jetstack https://charts.jetstack.io
+            helm repo update
+            kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.10/deploy/manifests/00-crds.yaml
+
+      - task: Bash@3
+        displayName: 'Updating local chart'
+        inputs:
+          targetType: 'inline'
+          script: |
+            cd hub23-chart
+            helm dependency update
+            cd ..
+
+      - task: Bash@3
+        displayName: 'Upgrade Helm Chart'
+        inputs:
+          targetType: 'inline'
+          script: |
+            helm upgrade hub23 hub23-chart \
+            -f deploy/prod.yaml \
+            -f .secret/prod.yaml \
+            --wait
