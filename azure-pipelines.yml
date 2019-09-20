@@ -84,4 +84,4 @@ jobs:
             helm upgrade hub23 hub23-chart \
             -f deploy/prod.yaml \
             -f .secret/prod.yaml \
-            --wait --dry-run
+            --wait
