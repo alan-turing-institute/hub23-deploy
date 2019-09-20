@@ -32,3 +32,10 @@ jobs:
             -e "s/{github_client_id}/$(github-client-id)/" \
             -e "s/{github_client_secret}/$(github-client-secret)/" \
             deploy/prod-template.yaml > .secret/prod.yaml
+
+      - task: AzureCLI@1
+        displayName: 'Merging kubectl config'
+        inputs:
+          azureSubscription: 'hub23-deploy-scn'
+          scriptLocation: 'inlineScript'
+          inlineScript: 'az aks get-credentials -n $(cluster.name) -g $(resource.group)'
