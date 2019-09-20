@@ -1,0 +1,12 @@
+trigger:
+  - master
+
+jobs:
+  - job: 
+    pool:
+      vmImage: 'ubuntu-latest'
+    
+    steps:
+      - task: AzureCLI@1
+        inputs:
+          azureSubscription: 
