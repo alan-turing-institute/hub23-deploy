@@ -29,7 +29,7 @@ jobs:
             -e "s/{password}/$(SP-key)/" \
             -e "s/{apiToken}/$(apiToken)/" \
             -e "s/{secretToken}/$(secretToken)/" \
-            -e "s/{github-client-id}/$(github-client-id)/" \
-            -e "s/{github-client-secret}/$(github-client-secret)/" \
+            -e "s/{github_client_id}/$(github-client-id)/" \
+            -e "s/{github_client_secret}/$(github-client-secret)/" \
             deploy/prod-template.yaml > .secret/prod.yaml
             cat .secret/prod.yaml
