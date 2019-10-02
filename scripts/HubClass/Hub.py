@@ -1,14 +1,18 @@
 from .run_command import run_cmd, run_pipe_cmd
 
 
-class Hub(object):
+class Hub:
+    """Functions for interacting with BinderHub"""
+
     def __init__(self, argsDict):
+        """Set arguments as variables"""
         self.hub_name = argsDict["hub_name"]
         self.cluster_name = argsDict["cluster_name"]
         self.resource_group = argsDict["resource_group"]
         self.identity = argsDict["identity"]
 
     def login(self):
+        """Login to Azure"""
         login_cmd = ["az", "login"]
 
         if self.identity:
@@ -31,27 +35,8 @@ class Hub(object):
         if result["returncode"] != 0:
             raise Exception(result["err_msg"])
 
-    def get_info(self):
-        self.login()
-
-        ip_addresses = {}
-        kubectl_cmd = ["kubectl", "-n", self.hub_name, "get", "svc"]
-        awk_cmd = ["awk", "{ print $4}"]
-        tail_cmd = ["tail", "-n", "1"]
-
-        for svc in ["proxy-public", "binder"]:
-            new_cmd = kubectl_cmd + [svc]
-            result = run_pipe_cmd([new_cmd, awk_cmd, tail_cmd])
-            if result["returncode"] == 0:
-                ip_addresses[svc] = result["output"].strip("\n")
-            else:
-                raise Exception(result["err_msg"])
-
-        print(
-            f"JupyterHub IP: {ip_addresses['proxy-public']}\nBinder IP: {ip_addresses['binder']}"
-        )
-
     def get_logs(self):
+        """Return the logs of the JupyterHub Pod"""
         self.login()
 
         kubectl_cmd = [
