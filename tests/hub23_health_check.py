@@ -1,3 +1,6 @@
+"""
+Script to perform health check of Hub23
+"""
 import os
 import sys
 import json
@@ -14,15 +17,21 @@ from tornado.ioloop import IOLoop
 from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPClientError
 
+# API key for email client
 API_KEY = os.getenv("API_KEY", None)
 if API_KEY is None:
     print("Set the API_KEY environment variable.")
     sys.exit(1)
 
+
 def timedelta(delta):
+    """Return a time delta instance in seconds"""
     return datetime.timedelta(seconds=delta)
 
+
 class IsUp:
+    """Class to test if Hub23 is functional"""
+
     def __init__(self, url, reporters, every=60):
         self.reporters = reporters
         self.url = url
@@ -33,6 +42,7 @@ class IsUp:
         self.client = AsyncHTTPClient()
 
     async def check(self):
+        """Check if Hub23 is up"""
         logging.info(f"Is {self.url} up?")
 
         r = await self.client.fetch(
@@ -55,10 +65,16 @@ class IsUp:
         else:
             self.done.set()
 
+
 class BinderBuilds:
+    """Class to test Binder builds"""
+
     def __init__(
-        self, repo_spec, reporters, every=600,
-        host="http://binder.hub23.turing.ac.uk"
+        self,
+        repo_spec,
+        reporters,
+        every=600,
+        host="https://binder.hub23.turing.ac.uk",
     ):
         self.every = every
         self.reporters = reporters
@@ -94,6 +110,7 @@ class BinderBuilds:
             idx = self._body.find(b"\n\n")
 
     async def check(self):
+        """Check if a Binder launches"""
         logging.info("Does %s launch?" % self.url)
         try:
             r = await self.client.fetch(
@@ -129,7 +146,10 @@ class BinderBuilds:
         else:
             self.done.set()
 
+
 class Email:
+    """Class to send email notifications"""
+
     def __init__(self, to, at_most_every=600):
         self.to = to
         self.at_most_every = timedelta(at_most_every)
@@ -138,6 +158,7 @@ class Email:
         self.client = AsyncHTTPClient()
 
     async def report(self, url, message):
+        """Create the email report"""
         now = datetime.datetime.utcnow()
         if now - self._last_time >= self.at_most_every:
             self._last_time = now
@@ -159,7 +180,10 @@ class Email:
                 body=urllib.parse.urlencode(data),
             )
 
+
 class LogIt:
+    """Logging class"""
+
     def __init__(self):
         self.url = None
 
@@ -167,6 +191,7 @@ class LogIt:
         self.at = datetime.datetime.utcnow()
         self.url = url
         self.message = message
+
 
 async def main(once=False):
     if once:
@@ -176,23 +201,17 @@ async def main(once=False):
 
     checks = [
         IsUp(
-            "http://binder.hub23.turing.ac.uk",
-            [
-                Email("sgibson@turing.ac.uk")
-            ]
+            "https://binder.hub23.turing.ac.uk",
+            [Email("sgibson@turing.ac.uk")],
         ),
         IsUp(
             "https://hub.hub23.turing.ac.uk/hub/api",
-            [
-                Email("sgibson@turing.ac.uk")
-            ]
+            [Email("sgibson@turing.ac.uk")],
         ),
         BinderBuilds(
             "gh/binder-examples/requirements/master",
-            [
-                Email("sgibson@turing.ac.uk")
-            ]
-        )
+            [Email("sgibson@turing.ac.uk")],
+        ),
     ]
 
     signals = []
@@ -204,12 +223,14 @@ async def main(once=False):
 
 
 if __name__ == "__main__":
+    # Set logging config
     logging.basicConfig(
         level=logging.DEBUG,
         datefmt="%X %Z",
         format="%(asctime)s %(levelname)-8s %(message)s",
     )
 
+    # Parse command line arguments
     parser = argparse.ArgumentParser(description="Is the hub up?")
     parser.add_argument(
         "--once", action="store_true", help="Check once and exit"
