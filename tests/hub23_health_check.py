@@ -1,14 +1,11 @@
-"""
-Script to perform health check of Hub23
-"""
+import argparse
+import asyncio
+import datetime
+import json
+import logging
 import os
 import sys
-import json
 import urllib
-import asyncio
-import logging
-import argparse
-import datetime
 
 from functools import partial
 
@@ -17,7 +14,7 @@ from tornado.ioloop import IOLoop
 from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPClientError
 
-# API key for email client
+
 API_KEY = os.getenv("API_KEY", None)
 if API_KEY is None:
     print("Set the API_KEY environment variable.")
@@ -25,13 +22,10 @@ if API_KEY is None:
 
 
 def timedelta(delta):
-    """Return a time delta instance in seconds"""
     return datetime.timedelta(seconds=delta)
 
 
 class IsUp:
-    """Class to test if Hub23 is functional"""
-
     def __init__(self, url, reporters, every=60):
         self.reporters = reporters
         self.url = url
@@ -42,7 +36,6 @@ class IsUp:
         self.client = AsyncHTTPClient()
 
     async def check(self):
-        """Check if Hub23 is up"""
         logging.info(f"Is {self.url} up?")
 
         r = await self.client.fetch(
@@ -67,8 +60,6 @@ class IsUp:
 
 
 class BinderBuilds:
-    """Class to test Binder builds"""
-
     def __init__(
         self,
         repo_spec,
@@ -110,7 +101,6 @@ class BinderBuilds:
             idx = self._body.find(b"\n\n")
 
     async def check(self):
-        """Check if a Binder launches"""
         logging.info("Does %s launch?" % self.url)
         try:
             r = await self.client.fetch(
@@ -148,8 +138,6 @@ class BinderBuilds:
 
 
 class Email:
-    """Class to send email notifications"""
-
     def __init__(self, to, at_most_every=600):
         self.to = to
         self.at_most_every = timedelta(at_most_every)
@@ -158,14 +146,13 @@ class Email:
         self.client = AsyncHTTPClient()
 
     async def report(self, url, message):
-        """Create the email report"""
         now = datetime.datetime.utcnow()
         if now - self._last_time >= self.at_most_every:
             self._last_time = now
 
             data = {
-                "from": "Is Hub23 Up <>",
-                "sender": "Is Hub23 Up <>",
+                "from": "Is the Hub Up <ishubup@mg.wildtreetech.com>",
+                "sender": "Is the Hub Up <ishubup@mg.wildtreetech.com>",
                 "to": self.to,
                 "subject": "%s is down" % url,
                 "text": "%s\n\n%s"
@@ -173,7 +160,7 @@ class Email:
             }
 
             await self.client.fetch(
-                "",
+                "https://api.mailgun.net/v3/mg.wildtreetech.com/messages",
                 method="POST",
                 auth_username="api",
                 auth_password=API_KEY,
@@ -182,8 +169,6 @@ class Email:
 
 
 class LogIt:
-    """Logging class"""
-
     def __init__(self):
         self.url = None
 
@@ -223,14 +208,12 @@ async def main(once=False):
 
 
 if __name__ == "__main__":
-    # Set logging config
     logging.basicConfig(
         level=logging.DEBUG,
         datefmt="%X %Z",
         format="%(asctime)s %(levelname)-8s %(message)s",
     )
 
-    # Parse command line arguments
     parser = argparse.ArgumentParser(description="Is the hub up?")
     parser.add_argument(
         "--once", action="store_true", help="Check once and exit"
