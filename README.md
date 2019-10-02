@@ -2,16 +2,29 @@
 
 A repo to manage the private Turing BinderHub instance, Hub23.
 
-- [Requirements](#Requirements)
-- [Usage](#Usage)
-- [Maintaining or Upgrading Hub23](#Maintaining-or-Upgrading-Hub23)
-- [Restarting the JupyterHub](#Restarting-the-JupyterHub)
-- [Useful commands](#Useful-commands)
-- [Changelog](#Changelog)
+- [Hub23 Helm Chart](#hub23-helm-chart)
+- [Developing Hub23](#developing-hub23)
+  - [Requirements](#requirements)
+  - [Changing `hub23-chart`](#changing-hub23-chart)
+- [Scripts](#scripts)
+  - [Pre-Commit Hook](#pre-commit-hook)
+- [Things of Use](#things-of-use)
+  - [Useful commands](#Useful-commands)
+  - [Restarting the JupyterHub](#Restarting-the-JupyterHub)
 
 ---
 
-## Requirements
+## Hub23 Helm Chart
+
+This repo contains the local Helm Chart that configures the Hub23 BinderHub deployment: [`hub23-chart`](hub23-chart).
+
+The [HelmUpgradeBot](https://github.com/HelmUpgradeBot/hub23-deploy-upgrades) automatically opens Pull Requests to this repository that update the dependencies of the Helm Chart in [`hub23-chart/requirements.yaml`](hub23-chart/requirements.yaml).
+
+Upon merging the PR, the [Azure Pipelines configuration](azure-pipelines.yml) automatically applies the updated Helm Chart to the Kubernetes cluster running Hub23.
+
+## Developing Hub23
+
+### Requirements
 
 Three command line interfaces are used to manage Hub23:
 
@@ -19,13 +32,25 @@ Three command line interfaces are used to manage Hub23:
 - [Kubernetes CLI (`kubectl`)](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl) - to manage the Kubernetes cluster
 - [Helm CLI](https://helm.sh/docs/using_helm/#installing-helm) - to manage the BinderHub application running on the Kubernetes cluster
 
-The scripts in this repo require Python version 3.7 and the `pyyaml` package which can be installed by running:
+### Changing `hub23-chart`
+
+If changes are made to `.secret/prod.yaml` during development, make sure that:
+
+- the new format is reflected in `deploy/prod-template.yaml` and any new secrets/tokens/passwords are redacted;
+- new secrets/tokens/passwords are added to the Azure Key Vault (see `docs/azure-keyvault.md`); and
+- `azure-pipelines.yml` and `scripts/generate_configs.py` are updated in order to populate the template with the appropriate information.
+
+This will ensure that the Hub23 deployment is kept up-to-date with the repo, and a future developer (someone else or future-you!) can recreate the configuration files for Hub23.
+
+## Scripts
+
+The `scripts` folder contains some Python files that make interacting with Hub23 slightly easier.
+
+These scripts require Python version 3.7 and the `pyyaml` package which can be installed by running:
 
 ```bash
 pip install -r requirements.txt
 ```
-
-## Usage
 
 `generate-configs.py` is a Python script to automatically recreate the configuration files in order to maintain or upgrade Hub23.
 
@@ -52,17 +77,7 @@ where:
 
 `.secret/` is a git-ignored folder so that the secrets contained in `.secret/prod.yaml` cannot be pushed to GitHub.
 
-## Maintaining or Upgrading Hub23
-
-If changes are made to `.secret/prod.yaml` during development, make sure that:
-
-- the new format is reflected in `deploy/prod-template.yaml` and any new secrets/tokens/passwords are redacted;
-- new secrets/tokens/passwords are added to the Azure Key Vault (see `docs/azure-keyvault.md`); and
-- `generate-configs.py` is updated in order to populate the template with the appropriate information.
-
-This will ensure that a future developer (someone else or future-you!) can recreate the configuration files for Hub23.
-
-To upgrade the BinderHub Helm Chart:
+`upgrade.py` is a script to apply the updated Helm Chart to Hub23's Kubernetes cluster.
 
 ```bash
 python upgrade.py \
@@ -87,28 +102,22 @@ where:
 - ``--dry-run` will perform a dry-run of the upgrade; and
 - `--debug` will provide debugging output from the `helm upgrade` command.
 
-`upgrade.py` upgrades the deployment helm chart.
+### Pre-Commit Hook
 
-## Restarting the JupyterHub
+If modifying the Python scripts, you can install a git pre-commit hook to ensure the files conform to PEP8 standards.
 
-If the Hub is being problematic, for example, throwing "Internal Server Error" messages or not spinning up user nodes, it can be restarted with the following commands.
-
-Scale down the Hub:
+To install the pre-commit hook, do the following.
 
 ```bash
-kubectl scale deployment hub --replicas=0 --namespace hub23
+pip install -r requirements-dev.txt
+pre-commit install
 ```
 
-Wait until the `hub-` pod has been terminated.
-Use `kubectl get pods --namespace hub23` to check it's status.
+[Black](https://github.com/psf/black) and [Flake8](http://flake8.pycqa.org/en/latest/) will then be applied to every commit effecting Python files.
 
-Scale the Hub back up:
+## Things of Use
 
-```bash
-kubectl scale deployment hub --replicas=1 --namespace hub23
-```
-
-## Useful commands
+### Useful commands
 
 To print the pods and IP addresses of the Binder page and JupyterHub:
 
@@ -134,4 +143,23 @@ To find out more info about a Pod:
 
 ```bash
 kubectl describe pod <POD-NAME> --namespace hub23
+```
+
+### Restarting the JupyterHub
+
+If the Hub is being problematic, for example, throwing "Internal Server Error" messages or not spinning up user nodes, it can be restarted with the following commands.
+
+Scale down the Hub:
+
+```bash
+kubectl scale deployment hub --replicas=0 --namespace hub23
+```
+
+Wait until the `hub-` pod has been terminated.
+Use `kubectl get pods --namespace hub23` to check it's status.
+
+Scale the Hub back up:
+
+```bash
+kubectl scale deployment hub --replicas=1 --namespace hub23
 ```
