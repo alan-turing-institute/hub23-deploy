@@ -1,3 +1,6 @@
+"""
+Script to upgrade Helm Chart on a Kubernetes cluster running BinderHub
+"""
 import os
 import sys
 import logging
@@ -16,6 +19,7 @@ logging.basicConfig(
 
 
 def parse_args():
+    """Parse command line arguments and return them"""
     parser = argparse.ArgumentParser(
         description="Script to upgrade a helm chart for a BinderHub deployment on Azure"
     )
@@ -74,8 +78,11 @@ def parse_args():
     return parser.parse_args()
 
 
-class Upgrade(object):
+class Upgrade:
+    """Upgrade BinderHub Helm Chart"""
+
     def __init__(self, argsDict):
+        """Set arguments as variables"""
         self.hub_name = argsDict["hub_name"]
         self.chart_name = argsDict["chart_name"]
         self.cluster_name = argsDict["cluster_name"]
@@ -86,10 +93,11 @@ class Upgrade(object):
         self.debug = argsDict["debug"]
 
     def upgrade(self):
+        """Upgrade the Kubernetes cluster"""
         if self.dry_run:
             logging.info("THIS IS A DRY-RUN. HELM CHART WILL NOT BE UPGRADED.")
 
-        # Setup Azure and Helm Chart
+        # Login to Azure and update Helm Chart
         self.login()
         self.update_local_chart()
 
@@ -107,14 +115,17 @@ class Upgrade(object):
         ]
 
         if self.dry_run and self.debug:
+            # Run as dry-run with debug output
             helm_upgrade_cmd.extend(["--dry-run", "--debug"])
             logging.info(
                 "Performing a dry-run helm upgrade with debugging output"
             )
         elif self.dry_run and (not self.debug):
+            # Run as dry-run
             helm_upgrade_cmd.append("--dry-run")
             logging.info("Performing a dry-run helm upgrade")
         elif (not self.dry_run) and self.debug:
+            # Run with debug output
             helm_upgrade_cmd.append("--debug")
             logging.info("Performing a helm upgrade with debugging output")
         else:
@@ -128,9 +139,9 @@ class Upgrade(object):
             raise Exception(result["err_msg"])
 
         self.print_pods()
-        self.find_ip_addresses()
 
     def login(self):
+        """Login to Azure"""
         login_cmd = ["az", "login"]
 
         if self.identity:
@@ -146,6 +157,7 @@ class Upgrade(object):
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
+        # Set Azure subscription
         logging.info(f"Setting Azure subscription: {self.subscription}")
         sub_cmd = ["az", "account", "set", "-s"]
 
@@ -165,6 +177,7 @@ class Upgrade(object):
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
+        # Set kubectl context
         logging.info(f"Setting kubectl context for: {self.cluster_name}")
         cmd = [
             "az",
@@ -182,6 +195,7 @@ class Upgrade(object):
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
+        # Initialise Helm
         logging.info("Initialising Helm")
         cmd = ["helm", "init", "--client-only"]
         result = run_cmd(cmd)
@@ -192,7 +206,7 @@ class Upgrade(object):
             raise Exception(result["err_msg"])
 
     def update_local_chart(self):
-        # Updating local chart
+        """Updating local chart"""
         logging.info(f"Updating local chart dependencies: {self.chart_name}")
         os.chdir(self.chart_name)
 
@@ -207,26 +221,12 @@ class Upgrade(object):
         os.chdir(os.pardir)
 
     def print_pods(self):
-        # Print the pods
+        """Print the pods"""
         logging.info("Fetching the Kubernetes pods")
         cmd = ["kubectl", "get", "pods", "-n", self.hub_name]
         result = run_cmd(cmd)
         if result["returncode"] == 0:
             logging.info(result["output"])
-        else:
-            logging.error(result["err_msg"])
-            raise Exception(result["err_msg"])
-
-    def find_ip_addresses(self):
-        # Fetching the Binder IP address
-        logging.info("Fetching the Binder IP address")
-        kubectl_cmd = ["kubectl", "get", "svc", "binder", "-n", self.hub_name]
-        awk_cmd = ["awk", "{ print $4}"]
-        tail_cmd = ["tail", "-n", "1"]
-
-        result = run_pipe_cmd([kubectl_cmd, awk_cmd, tail_cmd])
-        if result["returncode"] == 0:
-            logging.info(f"Binder IP: {result['output']}")
         else:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
