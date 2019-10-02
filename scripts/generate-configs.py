@@ -6,14 +6,18 @@ import argparse
 from subprocess import check_output
 from HubClass.run_command import run_cmd
 
-# Setup logging config
-logging.basicConfig(
-    level=logging.DEBUG,
-    filename="generate-configs.log",
-    filemode="a",
-    format="[%(asctime)s %(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
+
+def find_dir():
+    """Find the current working directory"""
+
+    cwd = os.getcwd()
+
+    if cwd.endswith("scripts"):
+        tmp = cwd.split("/")
+        del tmp[-1]
+        cwd = "/".join(tmp)
+
+    return cwd
 
 
 def parse_args():
@@ -72,8 +76,8 @@ def parse_args():
     return parser.parse_args()
 
 
-class GenerateConfigFiles(object):
-    def __init__(self, argsDict):
+class GenerateConfigFiles:
+    def __init__(self, argsDict, folder):
         self.subscription = argsDict["subscription"]
         self.vault_name = argsDict["vault_name"]
         self.registry_name = argsDict["registry_name"]
@@ -81,6 +85,7 @@ class GenerateConfigFiles(object):
         self.jupyterhub_ip = argsDict["jupyterhub_ip"]
         self.binder_ip = argsDict["binder_ip"]
         self.identity = argsDict["identity"]
+        self.folder = folder
 
         self.get_secrets()
 
@@ -145,8 +150,8 @@ class GenerateConfigFiles(object):
 
     def generate_config_files(self):
         # Make a secrets folder
-        deploy_dir = "deploy"
-        secret_dir = ".secret"
+        deploy_dir = os.path.join(self.folder, "deploy")
+        secret_dir = os.path.join(self.folder, ".secret")
         if not os.path.exists(secret_dir):
             logging.info(f"Creating directory: {secret_dir}")
             os.mkdir(secret_dir)
@@ -179,7 +184,23 @@ class GenerateConfigFiles(object):
         )
 
 
-if __name__ == "__main__":
+def main():
+    """Main function"""
+    folder = find_dir()
+
+    # Setup logging config
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename=os.path.join(folder, "generate-configs.log"),
+        filemode="a",
+        format="[%(asctime)s %(levelname)s] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
     args = parse_args()
-    bot = GenerateConfigFiles(vars(args))
+    bot = GenerateConfigFiles(vars(args), folder)
     bot.generate_config_files()
+
+
+if __name__ == "__main__":
+    main()
