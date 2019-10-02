@@ -1,3 +1,6 @@
+"""
+Script to generate BinderHub config files
+"""
 import os
 import sys
 import json
@@ -6,17 +9,22 @@ import argparse
 from subprocess import check_output
 from HubClass.run_command import run_cmd
 
-# Setup logging config
-logging.basicConfig(
-    level=logging.DEBUG,
-    filename="generate-configs.log",
-    filemode="a",
-    format="[%(asctime)s %(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
+
+def find_dir():
+    """Find the current working directory"""
+
+    cwd = os.getcwd()
+
+    if cwd.endswith("scripts"):
+        tmp = cwd.split("/")
+        del tmp[-1]
+        cwd = "/".join(tmp)
+
+    return cwd
 
 
 def parse_args():
+    """Parse command line arguments and return them"""
     parser = argparse.ArgumentParser(
         description="Script to generate configuration files for a BinderHub deployment"
     )
@@ -72,8 +80,13 @@ def parse_args():
     return parser.parse_args()
 
 
-class GenerateConfigFiles(object):
-    def __init__(self, argsDict):
+class GenerateConfigFiles:
+    """Generate BinderHub config files"""
+
+    def __init__(self, argsDict, folder):
+        self.folder = folder
+
+        # Set arguments as variables
         self.subscription = argsDict["subscription"]
         self.vault_name = argsDict["vault_name"]
         self.registry_name = argsDict["registry_name"]
@@ -82,10 +95,11 @@ class GenerateConfigFiles(object):
         self.binder_ip = argsDict["binder_ip"]
         self.identity = argsDict["identity"]
 
+        # Initialise secrets
         self.get_secrets()
 
     def login(self):
-        # Login to Azure
+        """Login to Azure"""
         login_cmd = ["az", "login"]
 
         if self.identity:
@@ -95,15 +109,17 @@ class GenerateConfigFiles(object):
             logging.info("Login to Azure")
 
         result = run_cmd(login_cmd)
-        if result["returncode"] == 0:
-            logging.info("Successfully logged into Azure")
-        else:
+        if result["returncode"] != 0:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
+        logging.info("Successfully logged into Azure")
+
     def get_secrets(self):
+        """Pull secrets from Azure Key Vault"""
         self.login()
 
+        # Secrets to be pulled
         secret_names = [
             "apiToken",
             "secretToken",
@@ -144,9 +160,10 @@ class GenerateConfigFiles(object):
             self.secrets[secret] = value
 
     def generate_config_files(self):
+        """Generate the BinderHub configuration files"""
         # Make a secrets folder
-        deploy_dir = "deploy"
-        secret_dir = ".secret"
+        deploy_dir = os.path.join(self.folder, "deploy")
+        secret_dir = os.path.join(self.folder, ".secret")
         if not os.path.exists(secret_dir):
             logging.info(f"Creating directory: {secret_dir}")
             os.mkdir(secret_dir)
@@ -154,6 +171,7 @@ class GenerateConfigFiles(object):
         else:
             logging.info(f"Directory already exists: {secret_dir}")
 
+        # Generate config files
         logging.info("Generating configuration files")
         for filename in ["prod"]:
             logging.info(f"Reading template file for: {filename}")
@@ -179,7 +197,23 @@ class GenerateConfigFiles(object):
         )
 
 
-if __name__ == "__main__":
+def main():
+    """Main function"""
+    folder = find_dir()
+
+    # Setup logging config
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename=os.path.join(folder, "generate-configs.log"),
+        filemode="a",
+        format="[%(asctime)s %(levelname)s] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
     args = parse_args()
-    bot = GenerateConfigFiles(vars(args))
+    bot = GenerateConfigFiles(vars(args), folder)
     bot.generate_config_files()
+
+
+if __name__ == "__main__":
+    main()
