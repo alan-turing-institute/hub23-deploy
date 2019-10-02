@@ -1,8 +1,12 @@
+"""
+Script to pull the logs of the JupyterHub
+"""
 import argparse
 from HubClass.Hub import Hub
 
 
 def parse_args():
+    """Parse command line arguments and return them"""
     parser = argparse.ArgumentParser(
         description="Script to print the JupyterHub logs to the terminal"
     )
