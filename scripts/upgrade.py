@@ -8,14 +8,17 @@ import argparse
 from subprocess import check_output
 from HubClass.run_command import run_cmd, run_pipe_cmd
 
-# Setup logging config
-logging.basicConfig(
-    level=logging.DEBUG,
-    filename="upgrade.log",
-    filemode="a",
-    format="[%(asctime)s %(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
+
+def find_dir():
+    """Find the current working directory"""
+    cwd = os.getcwd()
+
+    if cwd.endswith("scripts"):
+        tmp = cwd.split("/")
+        del tmp[-1]
+        cwd = "/".join(tmp)
+
+    return cwd
 
 
 def parse_args():
@@ -81,7 +84,7 @@ def parse_args():
 class Upgrade:
     """Upgrade BinderHub Helm Chart"""
 
-    def __init__(self, argsDict):
+    def __init__(self, argsDict, folder):
         """Set arguments as variables"""
         self.hub_name = argsDict["hub_name"]
         self.chart_name = argsDict["chart_name"]
@@ -91,6 +94,7 @@ class Upgrade:
         self.identity = argsDict["identity"]
         self.dry_run = argsDict["dry_run"]
         self.debug = argsDict["debug"]
+        self.folder = folder
 
     def upgrade(self):
         """Upgrade the Kubernetes cluster"""
@@ -108,9 +112,9 @@ class Upgrade:
             self.hub_name,
             self.chart_name,
             "-f",
-            os.path.join("deploy", "prod.yaml"),
+            os.path.join(self.folder, "/".join(["deploy", "prod.yaml"])),
             "-f",
-            os.path.join(".secret", "prod.yaml"),
+            os.path.join(self.folder, "/".join([".secret", "prod.yaml"])),
             "--wait",
         ]
 
@@ -208,7 +212,7 @@ class Upgrade:
     def update_local_chart(self):
         """Updating local chart"""
         logging.info(f"Updating local chart dependencies: {self.chart_name}")
-        os.chdir(self.chart_name)
+        os.chdir(os.path.join(self.folder, self.chart_name))
 
         update_cmd = ["helm", "dependency", "update"]
         result = run_cmd(update_cmd)
@@ -232,7 +236,23 @@ class Upgrade:
             raise Exception(result["err_msg"])
 
 
-if __name__ == "__main__":
+def main():
+    """Main function"""
+    folder = find_dir()
+
+    # Setup logging config
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename=os.path.join(folder, "upgrade.log"),
+        filemode="a",
+        format="[%(asctime)s %(levelname)s] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
     args = parse_args()
-    bot = Upgrade(vars(args))
+    bot = Upgrade(vars(args), folder)
     bot.upgrade()
+
+
+if __name__ == "__main__":
+    main()
