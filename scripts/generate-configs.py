@@ -1,3 +1,6 @@
+"""
+Script to generate BinderHub config files
+"""
 import os
 import sys
 import json
@@ -106,11 +109,11 @@ class GenerateConfigFiles:
             logging.info("Login to Azure")
 
         result = run_cmd(login_cmd)
-        if result["returncode"] == 0:
-            logging.info("Successfully logged into Azure")
-        else:
+        if result["returncode"] != 0:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        logging.info("Successfully logged into Azure")
 
     def get_secrets(self):
         """Pull secrets from Azure Key Vault"""
