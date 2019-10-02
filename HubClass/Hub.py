@@ -1,4 +1,5 @@
-from .run_command import *
+from .run_command import run_cmd, run_pipe_cmd
+
 
 class Hub(object):
     def __init__(self, argsDict):
@@ -18,8 +19,13 @@ class Hub(object):
             raise Exception(result["err_msg"])
 
         cred_cmd = [
-            "az", "aks", "get-credentials", "-n", self.cluster_name, "-g",
-            self.resource_group
+            "az",
+            "aks",
+            "get-credentials",
+            "-n",
+            self.cluster_name,
+            "-g",
+            self.resource_group,
         ]
         result = run_cmd(cred_cmd)
         if result["returncode"] != 0:
@@ -41,13 +47,21 @@ class Hub(object):
             else:
                 raise Exception(result["err_msg"])
 
-        print(f"JupyterHub IP: {ip_addresses['proxy-public']}\nBinder IP: {ip_addresses['binder']}")
+        print(
+            f"JupyterHub IP: {ip_addresses['proxy-public']}\nBinder IP: {ip_addresses['binder']}"
+        )
 
     def get_logs(self):
         self.login()
 
-        kubectl_cmd = ["kubectl", "get", "pods", "-n", self.hub_name,
-                   "-o=jsonpath='{.items[*].metadata.name}'"]
+        kubectl_cmd = [
+            "kubectl",
+            "get",
+            "pods",
+            "-n",
+            self.hub_name,
+            "-o=jsonpath='{.items[*].metadata.name}'",
+        ]
         tr_cmd = ["tr", "' '", "'\n'"]
         grep_cmd = ["grep", "^hub-"]
 

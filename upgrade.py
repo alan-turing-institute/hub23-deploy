@@ -2,8 +2,8 @@ import os
 import sys
 import logging
 import argparse
-from HubClass.run_command import *
 from subprocess import check_output
+from HubClass.run_command import run_cmd, run_pipe_cmd
 
 # Setup logging config
 logging.basicConfig(
@@ -11,8 +11,9 @@ logging.basicConfig(
     filename="upgrade.log",
     filemode="a",
     format="[%(asctime)s %(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -24,53 +25,54 @@ def parse_args():
         "--hub-name",
         type=str,
         default="hub23",
-        help="BinderHub name/Helm release name"
+        help="BinderHub name/Helm release name",
     )
     parser.add_argument(
         "-z",
         "--chart-name",
         type=str,
         default="hub23-chart",
-        help="Local Helm Chart name"
+        help="Local Helm Chart name",
     )
     parser.add_argument(
         "-c",
         "--cluster-name",
         type=str,
         default="hub23cluster",
-        help="Name of Azure Kubernetes Service"
+        help="Name of Azure Kubernetes Service",
     )
     parser.add_argument(
         "-g",
         "--resource-group",
         type=str,
         default="Hub23",
-        help="Azure Resource Group"
+        help="Azure Resource Group",
     )
     parser.add_argument(
         "-s",
         "--subscription",
         type=str,
         default="Turing-BinderHub",
-        help="Azure subscription for resources"
+        help="Azure subscription for resources",
     )
     parser.add_argument(
         "--identity",
         action="store_true",
-        help="Login to Azure using a Managed System Identity"
+        help="Login to Azure using a Managed System Identity",
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Performs a dry-run upgrade of the Helm Chart"
+        help="Performs a dry-run upgrade of the Helm Chart",
     )
     parser.add_argument(
         "--debug",
         action="store_true",
-        help="Adds debugging output to helm upgrade command"
+        help="Adds debugging output to helm upgrade command",
     )
 
     return parser.parse_args()
+
 
 class Upgrade(object):
     def __init__(self, argsDict):
@@ -93,15 +95,22 @@ class Upgrade(object):
 
         # Helm Upgrade Command
         helm_upgrade_cmd = [
-            "helm", "upgrade", self.hub_name, self.chart_name,
-            "-f", os.path.join("deploy", "prod.yaml"),
-            "-f", os.path.join(".secret", "prod.yaml"),
-            "--wait"
+            "helm",
+            "upgrade",
+            self.hub_name,
+            self.chart_name,
+            "-f",
+            os.path.join("deploy", "prod.yaml"),
+            "-f",
+            os.path.join(".secret", "prod.yaml"),
+            "--wait",
         ]
 
         if self.dry_run and self.debug:
             helm_upgrade_cmd.extend(["--dry-run", "--debug"])
-            logging.info("Performing a dry-run helm upgrade with debugging output")
+            logging.info(
+                "Performing a dry-run helm upgrade with debugging output"
+            )
         elif self.dry_run and (not self.debug):
             helm_upgrade_cmd.append("--dry-run")
             logging.info("Performing a dry-run helm upgrade")
@@ -158,8 +167,13 @@ class Upgrade(object):
 
         logging.info(f"Setting kubectl context for: {self.cluster_name}")
         cmd = [
-            "az", "aks", "get-credentials", "-n", self.cluster_name, "-g",
-            self.resource_group
+            "az",
+            "aks",
+            "get-credentials",
+            "-n",
+            self.cluster_name,
+            "-g",
+            self.resource_group,
         ]
         result = run_cmd(cmd)
         if result["returncode"] == 0:
@@ -216,6 +230,7 @@ class Upgrade(object):
         else:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
 
 if __name__ == "__main__":
     args = parse_args()

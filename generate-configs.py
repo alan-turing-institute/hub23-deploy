@@ -12,8 +12,9 @@ logging.basicConfig(
     filename="generate-configs.log",
     filemode="a",
     format="[%(asctime)s %(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -25,50 +26,51 @@ def parse_args():
         "--subscription",
         type=str,
         default="Turing-BinderHub",
-        help="Azure Subscription where Key Vault is located"
+        help="Azure Subscription where Key Vault is located",
     )
     parser.add_argument(
         "-v",
         "--vault-name",
         type=str,
         default="hub23-keyvault",
-        help="Name of the Azure Key Vault where secrets are stored"
+        help="Name of the Azure Key Vault where secrets are stored",
     )
     parser.add_argument(
         "-r",
         "--registry-name",
         type=str,
         default="hub23registry",
-        help="Name of the Azure Container Service to connect to the BinderHub"
+        help="Name of the Azure Container Service to connect to the BinderHub",
     )
     parser.add_argument(
         "-p",
         "--image-prefix",
         type=str,
         default="hub23/binder-dev",
-        help="Image prefix to prepend to Docker images"
+        help="Image prefix to prepend to Docker images",
     )
     parser.add_argument(
         "-j",
         "--jupyterhub-ip",
         type=str,
         default="hub.hub23.turing.ac.uk",
-        help="IP address of the JupyterHub"
+        help="IP address of the JupyterHub",
     )
     parser.add_argument(
         "-b",
         "--binder-ip",
         type=str,
         default="binder.hub23.turing.ac.uk",
-        help="IP address of the Binder page"
+        help="IP address of the Binder page",
     )
     parser.add_argument(
         "--identity",
         action="store_true",
-        help="Login to Azure using a Managed System Identity"
+        help="Login to Azure using a Managed System Identity",
     )
 
     return parser.parse_args()
+
 
 class GenerateConfigFiles(object):
     def __init__(self, argsDict):
@@ -108,7 +110,7 @@ class GenerateConfigFiles(object):
             "github-client-id",
             "github-client-secret",
             "SP-appID",
-            "SP-key"
+            "SP-key",
         ]
 
         self.secrets = {}
@@ -117,11 +119,26 @@ class GenerateConfigFiles(object):
         for secret in secret_names:
             logging.info(f"Pulling secret: {secret}")
             # Get secret information and convert to json
-            value = check_output([
-                "az", "keyvault", "secret", "show", "-n", secret,
-                "--vault-name", self.vault_name, "--query", "value", "-o",
-                "tsv"
-            ]).decode(encoding="utf8").strip("\n")
+            value = (
+                check_output(
+                    [
+                        "az",
+                        "keyvault",
+                        "secret",
+                        "show",
+                        "-n",
+                        secret,
+                        "--vault-name",
+                        self.vault_name,
+                        "--query",
+                        "value",
+                        "-o",
+                        "tsv",
+                    ]
+                )
+                .decode(encoding="utf8")
+                .strip("\n")
+            )
 
             # Save secret to dictionary
             self.secrets[secret] = value
@@ -150,14 +167,17 @@ class GenerateConfigFiles(object):
                 username=self.secrets["SP-appID"],
                 password=self.secrets["SP-key"],
                 github_client_id=self.secrets["github-client-id"],
-                github_client_secret=self.secrets["github-client-secret"]
+                github_client_secret=self.secrets["github-client-secret"],
             )
 
             logging.info(f"Writing YAML file for: {filename}")
             with open(os.path.join(secret_dir, f"{filename}.yaml"), "w") as f:
                 f.write(template)
 
-        logging.info(f"BinderHub files have been configured: {os.listdir(secret_dir)}")
+        logging.info(
+            f"BinderHub files have been configured: {os.listdir(secret_dir)}"
+        )
+
 
 if __name__ == "__main__":
     args = parse_args()
