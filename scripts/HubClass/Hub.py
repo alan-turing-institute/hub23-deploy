@@ -51,14 +51,14 @@ class Hub:
         grep_cmd = ["grep", "^hub-"]
 
         result = run_pipe_cmd([kubectl_cmd, tr_cmd, grep_cmd])
-        if result["returncode"] == 0:
-            hub_pod = result["output"].strip("\n")
-        else:
+        if result["returncode"] != 0:
             raise Exception(result["err_msg"])
+
+        hub_pod = result["output"].strip("\n")
 
         log_cmd = ["kubectl", "logs", hub_pod, "-n", self.hub_name]
         result = run_cmd(log_cmd)
-        if result["returncode"] == 0:
-            print(result["output"])
-        else:
+        if result["returncode"] != 0:
             raise Exception(result["err_msg"])
+
+        print(result["output"])
