@@ -136,11 +136,11 @@ class Upgrade:
             logging.info("Upgrading helm chart")
 
         result = run_cmd(helm_upgrade_cmd)
-        if result["returncode"] == 0:
-            logging.info(result["output"])
-        else:
+        if result["returncode"] != 0:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        logging.info(result["output"])
 
         self.print_pods()
 
@@ -155,11 +155,11 @@ class Upgrade:
             logging.info("Logging into Azure")
 
         result = run_cmd(login_cmd)
-        if result["returncode"] == 0:
-            logging.info("Successfully logged into Azure")
-        else:
+        if result["returncode"] != 0:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        logging.info("Successfully logged into Azure")
 
         # Set Azure subscription
         logging.info("Setting Azure subscription: %s" % self.subscription)
@@ -173,13 +173,13 @@ class Upgrade:
             sub_cmd.append(self.subscription)
 
         result = run_cmd(sub_cmd)
-        if result["returncode"] == 0:
-            logging.info(
-                "Successfully set Azure subscription: %s" % self.subscription
-            )
-        else:
+        if result["returncode"] != 0:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        logging.info(
+            "Successfully set Azure subscription: %s" % self.subscription
+        )
 
         # Set kubectl context
         logging.info("Setting kubectl context for: %s" % self.cluster_name)
@@ -193,21 +193,21 @@ class Upgrade:
             self.resource_group,
         ]
         result = run_cmd(cmd)
-        if result["returncode"] == 0:
-            logging.info(result["output"])
-        else:
+        if result["returncode"] != 0:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        logging.info(result["output"])
 
         # Initialise Helm
         logging.info("Initialising Helm")
         cmd = ["helm", "init", "--client-only"]
         result = run_cmd(cmd)
-        if result["returncode"] == 0:
-            logging.info(result["output"])
-        else:
+        if result["returncode"] != 0:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        logging.info(result["output"])
 
     def update_local_chart(self):
         """Updating local chart"""
@@ -216,11 +216,11 @@ class Upgrade:
 
         update_cmd = ["helm", "dependency", "update"]
         result = run_cmd(update_cmd)
-        if result["returncode"] == 0:
-            logging.info(result["output"])
-        else:
+        if result["returncode"] != 0:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        logging.info(result["output"])
 
         os.chdir(os.pardir)
 
@@ -229,11 +229,11 @@ class Upgrade:
         logging.info("Fetching the Kubernetes pods")
         cmd = ["kubectl", "get", "pods", "-n", self.hub_name]
         result = run_cmd(cmd)
-        if result["returncode"] == 0:
-            logging.info(result["output"])
-        else:
+        if result["returncode"] != 0:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        logging.info(result["output"])
 
 
 def main():
