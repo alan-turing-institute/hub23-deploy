@@ -162,7 +162,7 @@ class Upgrade:
             raise Exception(result["err_msg"])
 
         # Set Azure subscription
-        logging.info(f"Setting Azure subscription: {self.subscription}")
+        logging.info("Setting Azure subscription: %s" % self.subscription)
         sub_cmd = ["az", "account", "set", "-s"]
 
         # Catch subscription names that may have whitespace and wrap them in
@@ -175,14 +175,14 @@ class Upgrade:
         result = run_cmd(sub_cmd)
         if result["returncode"] == 0:
             logging.info(
-                f"Successfully set Azure subscription: {self.subscription}"
+                "Successfully set Azure subscription: %s" % self.subscription
             )
         else:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
         # Set kubectl context
-        logging.info(f"Setting kubectl context for: {self.cluster_name}")
+        logging.info("Setting kubectl context for: %s" % self.cluster_name)
         cmd = [
             "az",
             "aks",
@@ -211,7 +211,7 @@ class Upgrade:
 
     def update_local_chart(self):
         """Updating local chart"""
-        logging.info(f"Updating local chart dependencies: {self.chart_name}")
+        logging.info("Updating local chart dependencies: %s" % self.chart_name)
         os.chdir(os.path.join(self.folder, self.chart_name))
 
         update_cmd = ["helm", "dependency", "update"]
