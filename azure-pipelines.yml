@@ -14,7 +14,7 @@ jobs:
         inputs:
           azureSubscription: 'hub23-deploy-scn'
           KeyVaultName: 'hub23-keyvault'
-          SecretsFilter: 'apiToken, secretToken, binderhub-access-token, github-client-id, github-client-secret, SP-appID, SP-key'
+          SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key'
 
       - task: Bash@3
         displayName: 'Make .secret folder'
@@ -31,7 +31,6 @@ jobs:
             -e "s/{password}/$(SP-key)/" \
             -e "s/{apiToken}/$(apiToken)/" \
             -e "s/{secretToken}/$(secretToken)/" \
-            -e "s/{binderhub_access_token}/$(binderhub-access-token)/" \
             -e "s/{github_client_id}/$(github-client-id)/" \
             -e "s/{github_client_secret}/$(github-client-secret)/" \
             deploy/prod-template.yaml > .secret/prod.yaml
