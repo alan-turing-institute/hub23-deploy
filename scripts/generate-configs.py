@@ -123,6 +123,7 @@ class GenerateConfigFiles:
         secret_names = [
             "apiToken",
             "secretToken",
+            "binderhub-access-token",
             "github-client-id",
             "github-client-secret",
             "SP-appID",
@@ -184,6 +185,7 @@ class GenerateConfigFiles:
                 secretToken=self.secrets["secretToken"],
                 username=self.secrets["SP-appID"],
                 password=self.secrets["SP-key"],
+                binderhub_access_token=self.secrets["binderhub-access-token"],
                 github_client_id=self.secrets["github-client-id"],
                 github_client_secret=self.secrets["github-client-secret"],
             )

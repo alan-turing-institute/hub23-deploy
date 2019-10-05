@@ -11,6 +11,10 @@ binderhub:
     proxy:
       secretToken: "{secretToken}"
 
+  config:
+    GitHubRepoProvider:
+      access_token: {binderhub_access_token}
+
     auth:
       github:
         clientId: "{github_client_id}"
