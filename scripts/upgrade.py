@@ -77,6 +77,11 @@ def parse_args():
         action="store_true",
         help="Adds debugging output to helm upgrade command",
     )
+    parser.add_argument(
+        "--install",
+        action="store_true",
+        help="Install the helm chart if not already installed",
+    )
 
     return parser.parse_args()
 
@@ -86,14 +91,9 @@ class Upgrade:
 
     def __init__(self, argsDict, folder):
         """Set arguments as variables"""
-        self.hub_name = argsDict["hub_name"]
-        self.chart_name = argsDict["chart_name"]
-        self.cluster_name = argsDict["cluster_name"]
-        self.resource_group = argsDict["resource_group"]
-        self.subscription = argsDict["subscription"]
-        self.identity = argsDict["identity"]
-        self.dry_run = argsDict["dry_run"]
-        self.debug = argsDict["debug"]
+        for k, v in argsDict.items():
+            setattr(self, k, v)
+
         self.folder = folder
 
     def upgrade(self):
@@ -117,6 +117,10 @@ class Upgrade:
             os.path.join(self.folder, "/".join([".secret", "prod.yaml"])),
             "--wait",
         ]
+
+        if self.install:
+            helm_upgrade_cmd.append("--install")
+            logging.info("Installing Helm Chart")
 
         if self.dry_run and self.debug:
             # Run as dry-run with debug output
