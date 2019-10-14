@@ -11,7 +11,7 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    # email: {{ .Values.letsencrypt.contactEmail }}
+    email: {{ .Values.letsencrypt.contactEmail }}
     privateKeySecretRef:
       name: prod-acme-key
     http01: {}
@@ -28,7 +28,7 @@ metadata:
 spec:
   acme:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    # email: {{ .Values.letsencrypt.contactEmail }}
+    email: {{ .Values.letsencrypt.contactEmail }}
     privateKeySecretRef:
       name: staging-acme-key
     http01: {}
