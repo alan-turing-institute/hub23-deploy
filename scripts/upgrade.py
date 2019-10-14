@@ -59,7 +59,7 @@ def parse_args():
         "-s",
         "--subscription",
         type=str,
-        default="Turing-BinderHub",
+        default="ecaf0411-6ab5-4b62-8357-113228d6a259",
         help="Azure subscription for resources",
     )
     parser.add_argument(
@@ -119,7 +119,15 @@ class Upgrade:
         ]
 
         if self.install:
-            helm_upgrade_cmd.append("--install")
+            helm_upgrade_cmd.extend(
+                [
+                    "--install",
+                    "--name",
+                    self.hub_name,
+                    "--namespace",
+                    self.hub_name,
+                ]
+            )
             logging.info("Installing Helm Chart")
 
         if self.dry_run and self.debug:
