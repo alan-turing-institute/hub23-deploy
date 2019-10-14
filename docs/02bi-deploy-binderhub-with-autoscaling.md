@@ -441,7 +441,7 @@ Use the following command to get the names of the 3 core nodes.
 kubectl get nodes
 ```
 
-Label each node with a `node-purpose=system` label as follows.
+Label each node with a `node-purpose=core` label as follows.
 
 ```
 kubectl label nodes <node-name> hub.jupyter.org/node-purpose=core
