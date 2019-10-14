@@ -77,11 +77,11 @@ They should be downloaded to files in the `.secret` folder so that they are git-
 Download the Service Principal:
 
 ```
-az keyvault secret download --vault-name hub23-keyvault --name SP-appID --file .secret/appID.txt
+SP_APP_ID=$(az keyvault secret show --vault-name hub23-keyvault --name SP-appID --query value --output tsv)
 ```
 
 ```
-az keyvault secret download --vault-name hub23-keyvault --name SP-key --file .secret/key.txt
+SP_APP_KEY=$(az keyvault secret show --vault-name hub23-keyvault --name SP-key --query value --output tsv)
 ```
 
 Download the public SSH key:
@@ -149,8 +149,8 @@ az aks create \
     --min-count 3 \
     --max-count 6 \
     --ssh-key-value .secret/ssh-key-hub23cluster.pub \
-    --service-principal $(cat .secret/appID.txt) \
-    --client-secret $(cat .secret/key.txt) \
+    --service-principal $SP_APP_ID \
+    --client-secret $SP_APP_KEY \
     --output table
 ```
 
@@ -165,8 +165,6 @@ Once the Kubernetes cluster is deployed, you should delete the local copy of the
 
 ```
 rm .secret/ssh-key-hub23cluster.pub
-rm .secret/appID.txt
-rm .secret/key.txt
 ```
 
 #### 2. Get credentials for `kubectl`
