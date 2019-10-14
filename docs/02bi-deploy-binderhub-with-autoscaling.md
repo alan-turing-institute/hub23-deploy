@@ -142,7 +142,8 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 az aks create \
     --resource-group Hub23 \
     --name hub23cluster \
-    --kubernetes-version 1.12.7 \
+    --kubernetes-version <FIND-THE-MOST-RECENT-VERSION> \
+    --node-vm-size Standard_D2s_v3 \
     --node-count 3 \
     --enable-vmss \
     --enable-cluster-autoscaler \
