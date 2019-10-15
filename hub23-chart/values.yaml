@@ -15,6 +15,11 @@ binderhub:
       template_variables:
         EXTRA_STATIC_URL_PREFIX: "/extra_static/"
 
+  service:
+    nodePorts:
+      http: false
+    type: ClusterIP
+
   ingress:
     enabled: true
     annotations:
@@ -32,6 +37,12 @@ binderhub:
           - binder.hub23.turing.ac.uk
 
   jupyterhub:
+    proxy:
+      service:
+        nodePorts:
+          http: false
+        type: ClusterIP
+
     ingress:
       enabled: true
       annotations:
