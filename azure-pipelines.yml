@@ -14,7 +14,7 @@ jobs:
         inputs:
           azureSubscription: 'hub23-deploy-scn'
           KeyVaultName: 'hub23-keyvault'
-          SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key'
+          SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key, binderhub-access-token'
 
       - task: Bash@3
         displayName: 'Make .secret folder'
@@ -27,14 +27,14 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            sed -e "s/{username}/$(SP-appID)/" \
+            sed -e "s/{binderhub_access_token}/$(binderhub-access-token)/" \
+            -e "s/{username}/$(SP-appID)/" \
             -e "s/{password}/$(SP-key)/" \
             -e "s/{apiToken}/$(apiToken)/" \
             -e "s/{secretToken}/$(secretToken)/" \
             -e "s/{github_client_id}/$(github-client-id)/" \
             -e "s/{github_client_secret}/$(github-client-secret)/" \
             deploy/prod-template.yaml > .secret/prod.yaml
-
       - task: AzureCLI@1
         displayName: 'Merging kubectl config'
         inputs:
@@ -56,7 +56,7 @@ jobs:
           kubernetesCluster: 'hub23cluster'
           namespace: 'hub23'
           command: 'init'
-          arguments: '--client-only'
+          arguments: '--client-only --upgrade'
           tillerNamespace: 'kube-system'
 
       - task: Bash@3
@@ -68,7 +68,6 @@ jobs:
             helm repo add jetstack https://charts.jetstack.io
             helm repo update
             kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.10/deploy/manifests/00-crds.yaml
-
       - task: Bash@3
         displayName: 'Updating local chart'
         inputs:
@@ -77,7 +76,6 @@ jobs:
             cd hub23-chart
             helm dependency update
             cd ..
-
       - task: HelmDeploy@0
         displayName: 'Perform helm upgrade'
         inputs:
@@ -85,9 +83,10 @@ jobs:
           azureSubscription: 'hub23-deploy-scn'
           azureResourceGroup: 'Hub23'
           kubernetesCluster: 'hub23cluster'
+          namespace: 'hub23'
           command: 'upgrade'
-          chartType: 'Name'
-          chartName: 'hub23-chart'
+          chartType: 'FilePath'
+          chartPath: './hub23-chart'
           releaseName: 'hub23'
-          waitForExecution: false
+          waitForExecution: true
           arguments: '-f deploy/prod.yaml -f .secret/prod.yaml'
