@@ -4,6 +4,7 @@ binderhub:
   config:
     BinderHub:
       image_prefix: hub23registry.azurecr.io/hub23/binder-dev-
+      hub_url: http://hub.hub23.turing.ac.uk
 
     DockerRegistry:
       token_url: "https://hub23registry.azurecr.io/oauth2/token?service=hub23registry.azurecr.io"
@@ -36,3 +37,9 @@ binderhub:
         replicas: 3
       userScheduler:
         enabled: true
+      corePods:
+        nodeAffinity:
+          matchNodePurpose: require
+      userPods:
+        nodeAffinity:
+          matchNodePurpose: prefer

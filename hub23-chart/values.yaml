@@ -1,9 +1,6 @@
 rbac:
   enabled: true
 
-letsencrypt:
-    contactEmail: sgibson@turing.ac.uk
-
 binderhub:
   config:
     BinderHub:
