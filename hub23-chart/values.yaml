@@ -8,6 +8,7 @@ binderhub:
   config:
     BinderHub:
       use_registry: true
+      auth_enabled: true
 
       template_path: /etc/binderhub/custom/templates
       extra_static_path: /etc/binderhub/custom/static
@@ -37,6 +38,12 @@ binderhub:
           - binder.hub23.turing.ac.uk
 
   jupyterhub:
+    auth:
+      admin:
+        access: true
+        users:
+          - "sgibson91"
+
     proxy:
       service:
         # nodePorts:
