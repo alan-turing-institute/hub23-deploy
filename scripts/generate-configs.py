@@ -87,13 +87,8 @@ class GenerateConfigFiles:
         self.folder = folder
 
         # Set arguments as variables
-        self.subscription = argsDict["subscription"]
-        self.vault_name = argsDict["vault_name"]
-        self.registry_name = argsDict["registry_name"]
-        self.image_prefix = argsDict["image_prefix"]
-        self.jupyterhub_ip = argsDict["jupyterhub_ip"]
-        self.binder_ip = argsDict["binder_ip"]
-        self.identity = argsDict["identity"]
+        for k, v in argsDict.items():
+            setattr(self, k, v)
 
         # Initialise secrets
         self.get_secrets()
@@ -127,6 +122,7 @@ class GenerateConfigFiles:
             "github-client-secret",
             "SP-appID",
             "SP-key",
+            "binderhub-access-token",
         ]
 
         self.secrets = {}
@@ -180,10 +176,11 @@ class GenerateConfigFiles:
                 template = f.read()
 
             template = template.format(
-                apiToken=self.secrets["apiToken"],
-                secretToken=self.secrets["secretToken"],
+                binderhub_access_token=self.secrets["binderhub-access-token"],
                 username=self.secrets["SP-appID"],
                 password=self.secrets["SP-key"],
+                apiToken=self.secrets["apiToken"],
+                secretToken=self.secrets["secretToken"],
                 github_client_id=self.secrets["github-client-id"],
                 github_client_secret=self.secrets["github-client-secret"],
             )
