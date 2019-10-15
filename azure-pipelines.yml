@@ -40,7 +40,7 @@ jobs:
         inputs:
           azureSubscription: 'hub23-deploy-scn'
           scriptLocation: 'inlineScript'
-          inlineScript: 'az aks get-credentials -n $(cluster.name) -g $(resource.group)'
+          inlineScript: 'az aks get-credentials -n hub23cluster -g Hub23'
 
       - task: HelmInstaller@1
         displayName: 'Install Helm'
