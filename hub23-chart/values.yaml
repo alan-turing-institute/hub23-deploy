@@ -17,6 +17,8 @@ binderhub:
         EXTRA_STATIC_URL_PREFIX: "/extra_static/"
 
   service:
+    # nodePorts:
+    #   http: false
     type: ClusterIP
 
   ingress:
@@ -31,7 +33,7 @@ binderhub:
     hosts:
       - binder.hub23.turing.ac.uk
     tls:
-      - secretName: binder-hub23-tls
+      - secretName: hub23-binder-tls
         hosts:
           - binder.hub23.turing.ac.uk
 
@@ -56,7 +58,7 @@ binderhub:
       hosts:
         - hub.hub23.turing.ac.uk
       tls:
-        - secretName: hub-hub23-tls
+        - secretName: hub23-hub-tls
           hosts:
             - hub.hub23.turing.ac.uk
 
@@ -90,6 +92,6 @@ nginx-ingress:
 
 cert-manager:
   ingressShim:
-    defaultIssuerName: "hub23-prod"
+    defaultIssuerName: "staging"
     defaultIssuerKind: "ClusterIssuer"
     defaultACMEChallengeType: "http01"
