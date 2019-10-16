@@ -3,9 +3,16 @@
 Certain customisations can be made to the JupyterHub supporting Hub23 to provide a more tailored user experience.
 
 See the following docs:
-* https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html
-* https://zero-to-jupyterhub.readthedocs.io/en/latest/user-resources.html
-* https://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html
+
+- <https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html>
+- <https://zero-to-jupyterhub.readthedocs.io/en/latest/user-resources.html>
+- <https://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html>
+
+Table of Contents:
+
+- [Customising User Resources](#customising-user-resources)
+
+---
 
 ## Customising User Resources
 
@@ -14,9 +21,9 @@ This affects what kind of computations can be run in an active Binder instance a
 
 We can _guarantee_ each user pod a certain amount of resources and _limit_ them to another value (that is, they could use slightly more than allocated if need be).
 
-We can set the CPU and RAM memory guarantees and limits with the following code snippet in `.secret/config.yaml`.
+We can set the CPU and RAM memory guarantees and limits with the following code snippet in `deploy/config.yaml`.
 
-```
+```yaml
 # EXAMPLE VALUES
 jupyterhub:
   singleuser:
