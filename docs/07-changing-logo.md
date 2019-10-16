@@ -1,9 +1,12 @@
 # Changing the logo on the Binder page
 
 See these docs:
-* https://binderhub.readthedocs.io/en/latest/customizing.html#template-customization
+
+- https://binderhub.readthedocs.io/en/latest/customizing.html#template-customization
 
 The html content must be publicly hosted so the repo must remain public.
+
+---
 
 #### 1. Add the logo image file to the `static` folder
 
@@ -15,15 +18,15 @@ In `templates/page.html`, change the name of the image to match that of your cho
 
 The line should look as follows.
 
-```
+```html
 <img id="logo" src={% block logo_image %}"/extra_static/<image-name>"{% endblock logo_image %} width="390px" />
 ```
 
-####3. Update `config.yaml`
+#### 3. Update `deploy/config.yaml`
 
-Add the following to `.secret/config.yaml`.
+Add the following to `deploy/config.yaml`.
 
-```
+```yaml
 config:
   BinderHub:
     template_path: /etc/binderhub/custom/templates
@@ -63,12 +66,15 @@ extraVolumeMounts:
 Upgrade the Chart with the following command.
 The most recent commit-hash used should be logged in the Changelog section of the root README.
 
-```
-./upgrade.sh <commit-hash>
+```bash
+helm upgrade hub23 jupyterhub/binderhub \
+    --version=0.2.0-<commit=hash> \
+    -f .secret/secret.yaml \
+    -f deploy/config.yaml
 ```
 
 Get the IP address of the Binder page with the following command.
 
-```
-./info.sh
+```bash
+kubectl get svc binder --namespace hub23
 ```

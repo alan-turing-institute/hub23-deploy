@@ -1,16 +1,22 @@
 # Enabling Authentication
 
 See the following docs:
-* https://binderhub.readthedocs.io/en/latest/authentication.html
-* https://zero-to-jupyterhub.readthedocs.io/en/stable/authentication.html
+
+- <https://binderhub.readthedocs.io/en/latest/authentication.html>
+- <https://zero-to-jupyterhub.readthedocs.io/en/stable/authentication.html>
+
+Table of Contents:
+
+- [Enabling Authentication using JupyterHub as an OAuth provider](#enabling-authentication-using-jupyterhub-as-an-oauth-provider)
+- [OAuth with GitHub](#oauth-with-github)
+
+---
 
 ## Enabling Authentication using JupyterHub as an OAuth provider
 
-#### Update `config.yaml` with the following config
+#### Update `deploy/config.yaml` with the following configuration
 
-* Also modify `config-template.yaml` and `make-config-files.sh`
-
-```
+```yaml
 config:
   BinderHub:
     auth_enabled: true
@@ -51,17 +57,23 @@ This will set up the redirection to the JupyterHub for login and spin up user se
 
 ## OAuth with GitHub
 
-#### Modify the `auth:` section of `config.yaml` to include the following
+#### Modify the `auth:` section of `deploy/config.yaml` to include the following
 
-* Also modify `config-template.yaml` and `make-config-files.sh`
-
-```
+```yaml
 auth:
   type: github
   github:
-    clientId: "<your-github-client-id>"
-    clientSecret: "<another-long-secret-string>"
+
     callbackUrl: "http://<jupyter-ip>/hub/oauth_callback"
+```
+
+#### Modify `deploy/secret-template.yaml` with the following
+
+```yaml
+auth:
+  github:
+    clientId: "{github-client-id}"
+    clientSecret: "{github-client-secret}"
 ```
 
 Don't worry about `clientId` and `clientSecret` yet as we will generate these on GitHub.
@@ -72,21 +84,20 @@ Go to the `binderhub-test-org` organisation on `github.com`.
 Under Settings -> Developer Settings -> OAuth Apps, click New OAuth App.
 Fill in the form as per the image below and click Register Application:
 
-<html><img src="figures/github_oauth_setup.png" alt="github_oauth_setup" height=567 width=561></html>
+![github_oauth_setup](figures/github_oauth_setup.png)
 
 This will create an OAuth app owned by `binderhub-test-org` that will allow anyone with a valid GitHub account to login to Hub23.
 
 The `clientId` and `clientSecret` values will be generated.
-Add these to `config.yaml`.
-Also add these values to the key vault (see `azure-keyvault.md`) and update `make-config-files.sh` to pull these from the keyvault and populate `config-template.yaml`.
+Add these values to the key vault (see [`01-azure-keyvault.md`](01-azure-keyvault.md)) and create a `sed` command to populate `deploy/secret-template.yaml`.
 
 #### Giving access to GitHub organisations
 
 :construction: :construction: This section of the docs is a work in progress and needs improvement :construction: :construction:
 
-Update `config.yaml` to include the following under `auth`:
+Update `deploy/config.yaml` to include the following under `auth`:
 
-```
+```yaml
 auth:
   type: github
   github:
@@ -96,8 +107,6 @@ auth:
   scopes:
     - "read:user"
 ```
-
-* Also update `config-template.yaml`
 
 The `read:user` scope will read a user's organisation/team memberships and look for `binderhub-test-org`.
 If the membership is not found, they will be forbidden from accessing Hub23.
