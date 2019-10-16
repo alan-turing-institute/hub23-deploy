@@ -86,7 +86,7 @@ Some system pods end up on the new nodes with user pods.
 At night, when the _culler_ has removed many inactive pods, the nodes are now free from user pods but cannot be removing since there is a single system pod remaining.
 
 We setup a node affinity for core pods to remain on the 3 nodes that were deployed.
-See [docs/02iia-deploy-binderhub-with-autoscaling.md](02iia-deploy-binderhub-with-autoscaling.md)
+See [docs/02ii-deploy-autoscaling-k8s-cluster.md](02ii-deploy-autoscaling-k8s-cluster.md)
 
 #### Labelling nodes for core purpose
 

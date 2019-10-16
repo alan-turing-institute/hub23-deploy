@@ -145,7 +145,7 @@ As in the above step, you could use `sed` to input these variables.
 
 #### 1b. Connecting with an Azure Container Registry (ACR)
 
-See [`docs/03-create-azure-container-registry.md`](03-create-azure-container-registry.md).
+See [`docs/04-create-azure-container-registry.md`](04-create-azure-container-registry.md).
 
 #### 2. Create a `config.yaml` file
 
