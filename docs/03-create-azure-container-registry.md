@@ -4,10 +4,12 @@ This document walks through the creation of an Azure Container Registry for the 
 
 It assumes you have the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) installed.
 
+---
+
 #### 1. Login to Azure
 
-```
-az login --output none
+```bash
+az login --username YOUR_TURING_EMAIL --output none
 ```
 
 Login with your Turing account.
@@ -16,19 +18,19 @@ Login with your Turing account.
 
 To see a list of your subscriptions, run the following command.
 
-```
+```bash
 az account list --refresh --output table
 ```
 
 Activate the BinderHub subscription with the following command.
 
-```
-az account set -s Turing-BinderHub
+```bash
+az account set --subscription Turing-BinderHub
 ```
 
 #### 3. Create Resource Group
 
-```
+```bash
 az group create --name Hub23 --location westeurope
 ```
 
@@ -39,25 +41,25 @@ az group create --name Hub23 --location westeurope
 The ACR name must be globally unique and consist of only lowercase alphanumeric characters, between 5 and 50 characters long.
 This can be checked using: `az acr check-name --name <ACR-NAME>`.
 
-```
+```bash
 az acr create --name hub23registry --resource-group Hub23 --sku Standard
 ```
 
 #### 5. Login to the ACR
 
-```
+```bash
 az acr login --name hub23registry
 ```
 
 #### 6. Save the login server to a variable
 
-```
+```bash
 LOGIN_SERVER=$(az acr show --name hub23-registry --query loginServer --output tsv)
 ```
 
 #### 7. Save the registry ID to a variable
 
-```
+```bash
 ACR_ID=$(az acr show --name hub23-registry --query is --output tsv)
 ```
 
@@ -69,7 +71,7 @@ Without this, BinderHub won't be able to store the images it generates.
 **NOTE:** You will only have permission to perform this step if you are an owner on the Turing-BinderHub Azure subscription.
 Otherwise, you should add IT to assign this role to the Service Principal.
 
-```
+```bash
 # First download the Service Principal Client ID
 az key-vault secret download --vault-name hub23-keyvault --name SP-appID --file .secret/sp-appID.txt
 
@@ -81,26 +83,29 @@ az role assignment create --assignee $(cat .secret/sp-appID.txt) --scope $ACR_ID
 
 Now we provide the BinderHub with the Service Principal so that it can login to the ACR.
 
-```
-az key-vault secret download --vault-name hub23-keyvault --name SP-key --file .secret/sp-key.txt
+```bash
+az key-vault secret download \
+    --vault-name hub23-keyvault \
+    --name SP-key \
+    --file .secret/sp-key.txt
 ```
 
-Update `.secret/secret.yaml` with the following:
+Update `deploy/config.yaml` with the following:
 
-```
+```yaml
 registry:
     url: https://hub23-registry.azurecr.io
-    username: $(cat .secret/sp-appID.txt)
-    password: $(cat .secret/key.txt)
 ```
+
+In `deploy/secret-template.yaml`, `{username}` and `{password}` will be replaced with the Service Prinicipal app ID and key, respectively.
 
 **NOTE:** Don't forget to delete the local copies of the Service Principal once you're finished with them.
 
 #### 10. Update `config.yaml`
 
-Add the following to `.secret/config.yaml`:
+Add the following to `deploy/config.yaml`:
 
-```
+```yaml
 config:
   BinderHub:
     use_registry: true
@@ -111,8 +116,13 @@ config:
 
 #### 11. Upgrade the BinderHub deployment
 
+```bash
+helm upgrade hub23 jupyterhub/binderhub \
+    --version=<commit-hash> \
+    -f .secret/secret.yaml \
+    -f deploy/config.yaml
 ```
-helm upgrade hub23 jupyterhub/binderhub --version=<commit-hash> -f .secret/secret.yaml -f .secret/config.yaml
-```
+
+Replaceing `<commit-hash>` with the most recent helm chart version release.
 
 Test out the ACR by building a Binder instance.
