@@ -8,15 +8,15 @@ This folder contains documentation around deploying, maintaining and customising
 
 2. Methods of deploying BinderHub
 
-   a. [Deploy a BinderHub on the Turing's Azure subscription](./02a-deploy-binderhub.md)
+   1. [Deploy a BinderHub on the Turing's Azure subscription](./02a-deploy-binderhub.md)
 
-   b. Autoscaling:
+   2. Autoscaling:
 
-      i. [Deploy an Autoscaling BinderHub on the Turing's Azure subscription](./02bi-deploy-binderhub-with-autoscaling.md)
+      1. [Deploy an Autoscaling BinderHub on the Turing's Azure subscription](./02bi-deploy-binderhub-with-autoscaling.md)
 
-      ii. [Optimizing the JupyterHub for Autoscaling](./02bii-optimising-autoscaling.md)
+      2. [Optimizing the JupyterHub for Autoscaling](./02bii-optimising-autoscaling.md)
 
-   c. [Deploy a BinderHub with Multiple Nodepools](./02c-deploy-binderhub-with-multiple-nodepools.md)
+   3. [Deploy a BinderHub with Multiple Nodepools](./02c-deploy-binderhub-with-multiple-nodepools.md)
 
 3. [Creating an Azure Container Registry and connecting to the Kubernetes Cluster](./03-create-azure-container-registry.md)
 
