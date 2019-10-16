@@ -14,7 +14,11 @@ This folder contains documentation around deploying, maintaining and customising
 
    3. [Deploy a Kubernetes Cluster with Multiple Nodepools](./02iii-deploy-k8s-cluster-multiple-nodepools.md)
 
-3. [Installing BinderHub](./03-installing-binderhub.md)
+3. Methods of Installing BinderHub
+
+    1. [Installing BinderHub](./03i-installing-binderhub.md)
+
+    2. [Installing BinderHub with a Local Helm Chart](./03ii-installing-binderhub-local-helm-chart.md)
 
 4. [Creating an Azure Container Registry and connecting to the Kubernetes Cluster](./04-create-azure-container-registry.md)
 
