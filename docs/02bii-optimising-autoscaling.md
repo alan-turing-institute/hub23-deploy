@@ -1,12 +1,25 @@
 # Optimizing the JupyterHub for Autoscaling
 
 See the following docs:
-* https://zero-to-jupyterhub.readthedocs.io/en/latest/user-management.html#culling-user-pods
-* https://zero-to-jupyterhub.readthedocs.io/en/latest/optimization.html
-* https://discourse.jupyter.org/t/planning-placeholders-with-jupyterhub-helm-chart-0-8-tested-on-mybinder-org/213
-* https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html
 
-All config code snippets should be added to `.secret/config.yaml` (and `config-template.yaml`/`make-config-files.sh` updated accordingly).
+- <https://zero-to-jupyterhub.readthedocs.io/en/latest/user-management.html#culling-user-pods>
+- <https://zero-to-jupyterhub.readthedocs.io/en/latest/optimization.html>
+- <https://discourse.jupyter.org/t/planning-placeholders-with-jupyterhub-helm-chart-0-8-tested-on-mybinder-org/213>
+- <https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html>
+
+All config code snippets should be added to `deploy/config.yaml`.
+
+Table of Contents:
+
+- [Culling user pods](#culling-user-pods)
+- [Efficient Cluster Autoscaling](#efficient-cluster-autoscaling)
+  - [Scaling up in time (user placeholders)](#scaling-up-in-time-user-placeholders)
+  - [Scaling down efficiently](#scaling-down-efficiently)
+    - [Labelling nodes for core purpose](#labelling-nodes-for-core-purpose)
+- [Using available nodes efficiently (user scheduler)](#using-available-nodes-efficiently-user-scheduler)
+- [Pre-Pulling images](#pre-pulling-images)
+
+---
 
 ## Culling user pods
 
@@ -21,7 +34,7 @@ By default, JupyterHub will run the culling process every ten minutes and will c
 You can configure this behavior in your `config.yaml` file with the following code snippet.
 The culler can also be configured to cull pods that have existed for over a given length of time via the `maxAge` argument.
 
-```
+```yaml
 cull:
   timeout: <max-idle-seconds-before-user-pod-is-deleted>
   every: <number-of-seconds-this-check-is-done>
@@ -50,7 +63,7 @@ Therefore, if you have 3 user placeholders running, real users will only need to
 
 Add the following code snippet to use 3 user-placeholders.
 
-```
+```yaml
 config:
   jupyterhub:
   scheduling:
@@ -72,27 +85,28 @@ Many users arrive to the JupyterHub during the day causing new nodes to be added
 Some system pods end up on the new nodes with user pods.
 At night, when the _culler_ has removed many inactive pods, the nodes are now free from user pods but cannot be removing since there is a single system pod remaining.
 
-The JupyterHub documentation recommends using a _dedicated node pool_ for users here.
-However, multiple node pools per Kubernetes cluster are not currently supported (though see [Azure/AKS#287](https://github.com/Azure/AKS/issues/287)).
-Instead we setup a node affinity for core pods to remain on the 3 nodes that were deployed.
+We setup a node affinity for core pods to remain on the 3 nodes that were deployed.
+See [docs/02bi-deploy-binderhub-with-autoscaling.md](02bi-deploy-binderhub-with-autoscaling.md)
 
 #### Labelling nodes for core purpose
 
-Add a label to all the nodes in the node pool.
+Add a `core` label to all the nodes in the node pool.
 
 1. Setup a node pool (with autoscaling; `docs/deploy-binderhub-with-autoscaling.md`) and a certain label.
 
-  * The label: `hub.jupyter.org/node-purpose=core`
-    ```
-    kubectl label nodes <node-name> hub.jupyter.org/node-prupose=core
-    ```
-    Use `kubectl get nodes` to ascertain `<node-name>`.
+   1. The label: `hub.jupyter.org/node-purpose=core`
+
+      ```bash
+      kubectl label nodes <node-name> hub.jupyter.org/node-purpose=core
+      ```
+
+      Use `kubectl get nodes` to ascertain `<node-name>`.
 
 2. Make core pods require to be scheduled on the node pool setup above.
 
    The default setting is to make core pods _prefer_ to be scheduled on nodes with the `hub.jupyter.org/node-purpose=core` label, but we can make it a _requirement_ by using the code snippet below.
 
-   ```
+   ```yaml
    config:
      jupyterhub:
        scheduling:
@@ -104,6 +118,8 @@ Add a label to all the nodes in the node pool.
              # - require
              matchNodePurpose: require
    ```
+
+This process can be repeated for a `user` label.
 
 ## Using available nodes efficiently (user scheduler)
 
@@ -119,7 +135,7 @@ Only activate the user scheduler if you have an autoscaling node pool.
 
 Enable the user scheduler with the following code snippet:
 
-```
+```yaml
 config:
   jupyterhub:
     scheduling:
@@ -137,7 +153,7 @@ This uses a daemonset to force Kubernetes to pull the user image on all nodes as
 
 The continuous-image-puller is disabled by default and the following snippet is added to `config.yaml` to enable it.
 
-```
+```yaml
 config:
   jupyterhub:
     hub:
