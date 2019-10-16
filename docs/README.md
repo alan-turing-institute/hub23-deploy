@@ -16,6 +16,8 @@ This folder contains documentation around deploying, maintaining and customising
 
       ii. [Optimizing the JupyterHub for Autoscaling](./02bii-optimising-autoscaling.md)
 
+   c. [Deploy a BinderHub with Multiple Nodepools](./02c-deploy-binderhub-with-multiple-nodepools.md)
+
 3. [Creating an Azure Container Registry and connecting to the Kubernetes Cluster](./03-create-azure-container-registry.md)
 
 4. [Customising the JupyterHub](./04-customise-jupyterhub.md)
