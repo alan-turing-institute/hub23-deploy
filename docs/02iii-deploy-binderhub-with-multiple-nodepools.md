@@ -169,7 +169,7 @@ az provider register --namespace Microsoft.ContainerService
 
 ## Create the Kubernetes cluster
 
-**NOTE:** These commands can also be used in conjunction with those in [`docs/02bi-deploy-binderhub-with-autoscaling.md`](02bi-deploy-binderhub-with-autoscaling.md) to create autoscaling nodepools.
+**NOTE:** These commands can also be used in conjunction with those in [`docs/02iia-deploy-binderhub-with-autoscaling.md`](02iia-deploy-binderhub-with-autoscaling.md) to create autoscaling nodepools.
 
 #### 1. Create the AKS cluster
 
@@ -227,7 +227,7 @@ I would recommend a `--node-count 2`.
 
 #### Scaling the `default` nodepool back
 
-I would recommend scaling the `default` nodepool down to 1 node as we will most likely use node affinities to preferentially assign core pods to the core pool and user pods to the user pool (see [`docs/02bii-optimising-autoscaling.md`](02bii-optimising-autoscaling.md)).
+I would recommend scaling the `default` nodepool down to 1 node as we will most likely use node affinities to preferentially assign core pods to the core pool and user pods to the user pool (see [`docs/02iib-optimising-autoscaling.md`](02iib-optimising-autoscaling.md)).
 
 ```bash
 az aks nodepool scale \
