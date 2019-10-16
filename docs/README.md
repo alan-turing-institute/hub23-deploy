@@ -31,3 +31,5 @@ This folder contains documentation around deploying, maintaining and customising
 8. [Enabling Page Redirection](./08-enabling-page-redirection.md)
 
 9. [Optimizing the JupyterHub for Autoscaling](./09-optimising-autoscaling.md)
+
+10. [Enabling HTTPS](./10-enabling-https.md)
