@@ -2,7 +2,7 @@
 
 This folder contains documentation around deploying, maintaining and customising the Hub23 BinderHub instance.
 
-## Recommended Reading Order:
+## Recommended Reading Order
 
 1. [Creating an Azure Key Vault for Hub23](./01-azure-keyvault.md)
 
@@ -23,3 +23,5 @@ This folder contains documentation around deploying, maintaining and customising
 5. [Enabling Authentication](./05-enabling-authentication.md)
 
 6. [Changing the logo on the Binder page](./06-changing-logo.md)
+
+7. [Enabling Page Redirection](./07-enabling-page-redirection.md)
