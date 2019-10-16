@@ -2,20 +2,29 @@
 
 These docs will walk through how to create a DNS at which the Binder page and JupyterHub are found.
 
+Table of Contents:
+
+- [Creating a new DNS Zone](#creating-a-new-dns-zone)
+- [Creating A records](#creating-a-records)
+
+---
+
 ## Creating a new DNS Zone
 
 First we must create a DNS zone to handle the redirection of the pages.
 We will create a subdomain in the Turing domain.
 
 1. On the Azure Portal:
-   * Click "+ Create a resource"
-   * Search for "DNS zone"
-   * Click "Create"
+
+   - Click "+ Create a resource"
+   - Search for "DNS zone"
+   - Click "Create"
 
 2. Set the subscription to "Turing-BinderHub" and select the "Hub23" resource group.
    (Or use a different/new subscription and resource group.)
    Set the **Name** field to the desired URL, in our case: `hub23.turing.ac.uk`.
-   * If you created a new resource group, you will have to set its location.
+
+   - If you created a new resource group, you will have to set its location.
 
 3. Click "Review + create".
 
@@ -36,12 +45,12 @@ We will now set A records that point to the IP addresses of the JupyterHub and B
 
 4. Make sure the subscription is set to "Turing-BinderHub".
    Under **Azure resource** select one of the two items under **Public IP Address**.
-   If you view these resources (under the resource group beginning `MC_`), you will be able to see the IP addresses they refer to. Compare these with the output of `info.sh` in order to ascertain which one is Binder and which is JupyterHub.
+   If you view these resources (under the resource group beginning `MC_`), you will be able to see the IP addresses they refer to. Compare these with the output of `kubectl get svc --namespace hub23` in order to ascertain which one is Binder and which is JupyterHub.
 
 5. Click "OK" and repeat the process for the second IP address.
 
-## Update `make-config-files.sh`
+## Update `deploy/config.yaml`
 
-Make sure to update `make-config-files.sh` to parse the new DNS names to the appropriate parts of `config.yaml`, instead of the raw IP address.
+Make sure to update `deploy/config.yaml` to include the new DNS's, instead of the raw IP addresses.
 If you have GitHub OAuth enabled, the DNS names will have to be inserted instead of the IP addresses in the OAuth app as well.
 This shouldn't generate a new Client ID or Secret.
