@@ -18,12 +18,14 @@ This folder contains documentation around deploying, maintaining and customising
 
    3. [Deploy a BinderHub with Multiple Nodepools](./02c-deploy-binderhub-with-multiple-nodepools.md)
 
-3. [Creating an Azure Container Registry and connecting to the Kubernetes Cluster](./03-create-azure-container-registry.md)
+3. [Installing BinderHub](./03-installing-binderhub.md)
 
-4. [Customising the JupyterHub](./04-customise-jupyterhub.md)
+4. [Creating an Azure Container Registry and connecting to the Kubernetes Cluster](./04-create-azure-container-registry.md)
 
-5. [Enabling Authentication](./05-enabling-authentication.md)
+5. [Customising the JupyterHub](./05-customise-jupyterhub.md)
 
-6. [Changing the logo on the Binder page](./06-changing-logo.md)
+6. [Enabling Authentication](./06-enabling-authentication.md)
 
-7. [Enabling Page Redirection](./07-enabling-page-redirection.md)
+7. [Changing the logo on the Binder page](./07-changing-logo.md)
+
+8. [Enabling Page Redirection](./08-enabling-page-redirection.md)
