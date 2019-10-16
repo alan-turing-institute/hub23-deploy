@@ -4,12 +4,16 @@ This document walks through the creation of a key vault for the Turing BinderHub
 
 It assumes you have the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) installed.
 
+Table of Contents:
+
 - [Setup and Create the Key Vault](#setup-and-create-the-key-vault)
 - [Adding secrets to the Key Vault](#adding-secrets-to-the-key-vault)
 - [Downloading the secrets](#downloading-the-secrets)
   - [Saving secrets to files](#saving-secrets-to-files)
   - [Saving secrets to bash variables](#saving-secrets-to-bash-variables)
 - [Service Principal](#service-principal)
+
+---
 
 ## Setup and Create the Key Vault
 
@@ -49,10 +53,10 @@ We need to create one for Hub23.
 az group create --name Hub23 --location westeurope --output table
 ```
 
-* `--name` is what we'll use to identify resources relating to the BinderHub and should be short and descriptive.
+- `--name` is what we'll use to identify resources relating to the BinderHub and should be short and descriptive.
   Hence we've given it the same name as our hub.
-* `--location` sets the [region of data centres](https://azure.microsoft.com/en-gb/global-infrastructure/locations/) that will host the resources.
-* `--output table` prints the info in a human-readable format.
+- `--location` sets the [region of data centres](https://azure.microsoft.com/en-gb/global-infrastructure/locations/) that will host the resources.
+- `--output table` prints the info in a human-readable format.
 
 **NOTE:** If the resource group already exists, this step can be skipped.
 Test if the resource group exists by running the following.
@@ -74,8 +78,8 @@ az keyvault create --name hub23-keyvault --resource-group Hub23
 
 Hub23 requires some secrets, passwords, tokens etc. for functionality.
 
-* SSH keys for accessing the Kubernetes cluster
-* API and secret token
+- SSH keys for accessing the Kubernetes cluster
+- API and secret token
 
 #### 1. Create a secrets folder
 
