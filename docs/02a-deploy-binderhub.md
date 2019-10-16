@@ -3,16 +3,28 @@
 This document walks through the steps required to deploy Hub23 (the Turing hosted BinderHub) onto the Turing's Azure subscription.
 
 We assume you have the following CLI's installed:
-* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
-* [Kubernetes CLI (`kubectl`)](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl)
-* [Helm CLI](https://helm.sh/docs/using_helm/#installing-helm)
+
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+- [Kubernetes CLI (`kubectl`)](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl)
+- [Helm CLI](https://helm.sh/docs/using_helm/#installing-helm)
+
+Table of Contents:
+
+- [Setup](#setup)
+- [Download the required secrets](#download-the-required-secrets)
+- [Create the Kubernetes cluster](#create-the-kubernetes-cluster)
+- [Setting up Helm](#setting-up-helm)
+- [Installing a BinderHub](#installing-a-binderhub)
+- [Increasing GitHub API limit](#increasing-github-api-limit)
+
+---
 
 ## Setup
 
 #### 1. Login to Azure
 
-```
-az login --output none
+```bash
+az login --username YOUR_TURING_EMAIL --output none
 ```
 
 Login with your Turing account.
@@ -20,10 +32,9 @@ Login with your Turing account.
 #### 2. Activate the Subscription
 
 Hub23 has its own subscription and so we have to activate that.
-
 To check which subscriptions you have access to, run the following:
 
-```
+```bash
 az account list --refresh --output table
 ```
 
@@ -32,8 +43,8 @@ If not, request access by opening a TopDesk ticket.
 
 To activate the subscription, run the following:
 
-```
-az account set -s Turing-BinderHub
+```bash
+az account set --subscription Turing-BinderHub
 ```
 
 #### 3. Create a Resource Group
@@ -41,14 +52,14 @@ az account set -s Turing-BinderHub
 Azure groups related resources together by assigning them a Resource Group.
 We need to create one for Hub23.
 
-```
+```bash
 az group create --name Hub23 --location westeurope --output table
 ```
 
-* `--name` is what we'll use to identify resources relating to the BinderHub and should be short and descriptive.
+- `--name` is what we'll use to identify resources relating to the BinderHub and should be short and descriptive.
   Hence we've given it the same name as our hub.
-* `--location` sets the [data centre](https://azure.microsoft.com/en-gb/global-infrastructure/locations/) that will host the resources.
-* `--output table` prints the info in a human-readable format.
+- `--location` sets the [region of data centres](https://azure.microsoft.com/en-gb/global-infrastructure/locations/) that will host the resources.
+- `--output table` prints the info in a human-readable format.
 
 **N.B.:** If you have already followed the docs on creating a key vault, then this resource group should already exist and this step can be skipped.
 
@@ -61,43 +72,59 @@ We will require some info from the key vault in order to deploy the Kubernetes c
 Create a folder in which to download the secrets so.
 This will be git-ignored.
 
-```
+```bash
 mkdir .secret
 ```
 
 #### 2. Download the secrets
 
 We will require the following secrets:
-* Service Principal app ID and key
-* public SSH key
-* API and secret tokens
+
+- Service Principal app ID and key
+- public SSH key
+- API and secret tokens
 
 They should be downloaded to files in the `.secret` folder so that they are git-ignored.
 
 Download the Service Principal:
 
-```
-az keyvault secret download --vault-name hub23-keyvault --name SP-appID --file .secret/appID.txt
+```bash
+az keyvault secret download \
+    --vault-name hub23-keyvault \
+    --name SP-appID \
+    --file .secret/appID.txt
 ```
 
-```
-az keyvault secret download --vault-name hub23-keyvault --name SP-key --file .secret/key.txt
+```bash
+az keyvault secret download \
+    --vault-name hub23-keyvault \
+    --name SP-key \
+    --file .secret/key.txt
 ```
 
 Download the public SSH key:
 
-```
-az keyvault secret download --vault-name hub23-keyvault --name ssh-key-Hub23cluster-public --file .secret/ssh-key-hub23cluster.pub
+```bash
+az keyvault secret download \
+    --vault-name hub23-keyvault \
+    --name ssh-key-Hub23cluster-public \
+    --file .secret/ssh-key-hub23cluster.pub
 ```
 
 Download the API and secret tokens:
 
-```
-az keyvault secret download --vault-name hub23-keyvault --name apiToken --file .secret/apiToken.txt
+```bash
+az keyvault secret download \
+    --vault-name hub23-keyvault \
+    --name apiToken \
+    --file .secret/apiToken.txt
 ```
 
-```
-az keyvault secret download --vault-name hub23-keyvault --name secretToken --file .secret/secretToken.txt
+```bash
+az keyvault secret download \
+    --vault-name hub23-keyvault \
+    --name secretToken \
+    --file .secret/secretToken.txt
 ```
 
 ## Create the Kubernetes cluster
@@ -107,7 +134,7 @@ az keyvault secret download --vault-name hub23-keyvault --name secretToken --fil
 The following command will deploy a Kubernetes cluster into the Hub23 resource group.
 This command has been known to take between 7 and 30 minutes to execute depending on resource availability in the location we set when creating the resource group.
 
-```
+```bash
 az aks create --name hub23cluster \
     --resource-group Hub23 \
     --ssh-key-value .secret/ssh-key-hub23cluster.pub \
@@ -118,14 +145,14 @@ az aks create --name hub23cluster \
     --output table
 ```
 
-* `--node-count` is the number of nodes to be deployed. 3 is recommended for a stable, scalable cluster.
-* `--node-vm-size` denotes the type of virtual machine to be deployed. A list of Linux types can be found [here](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/).
+- `--node-count` is the number of nodes to be deployed. 3 is recommended for a stable, scalable cluster.
+- `--node-vm-size` denotes the type of virtual machine to be deployed. A list of Linux types can be found [here](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/).
 
 #### Delete local copies of the secret files
 
 Once the Kubernetes cluster is deployed, you should delete the local copy of the Service Principal and public SSH key.
 
-```
+```bash
 rm .secret/ssh-key-hub23cluster.pub
 rm .secret/appID.txt
 rm .secret/key.txt
@@ -135,8 +162,11 @@ rm .secret/key.txt
 
 We need to configure the local installation of the Kubernetes CLI to work with the version deployed onto the cluster, and do so with the following command.
 
-```
-az aks get-credentials --name hub23cluster --resource-group Hub23 --output table
+```bash
+az aks get-credentials \
+    --name hub23cluster \
+    --resource-group Hub23 \
+    --output table
 ```
 
 This command would need to be repeated when trying to manage the cluster from another computer or if you have been working with a different cluster.
@@ -145,7 +175,7 @@ This command would need to be repeated when trying to manage the cluster from an
 
 Output the status of the nodes.
 
-```
+```bash
 kubectl get node
 ```
 
@@ -166,7 +196,7 @@ When you (a human) accesses your Kubernetes cluster, you are authenticated as a 
 Processes in containers running in pods are authenticated as a particular Service Account.
 More details [here](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/).
 
-```
+```bash
 kubectl --namespace kube-system create serviceaccount tiller
 ```
 
@@ -177,8 +207,10 @@ If RBAC is disabled, all pods are given root equivalent permission on all the Ku
 This can leave the cluster vulnerable to attacks.
 See [Project Jupyter's docs](https://zero-to-jupyterhub.readthedocs.io/en/latest/security.html#use-role-based-access-control-rbac) for more details.
 
-```
-kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+```bash
+kubectl create clusterrolebinding tiller \
+    --clusterrole cluster-admin \
+    --serviceaccount=kube-system:tiller
 ```
 
 #### 3. Initialise `helm` and `tiller`
@@ -186,13 +218,13 @@ kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceac
 This step will create a `tiller` deployment in the kube-system namespace and set-up your local `helm` client.
 This is the command that connects your remote Kubernetes cluster to the commands you execute in your local terminal and only needs to be run once per Kubernetes cluster.
 
-```
+```bash
 helm init --service-account tiller --wait
 ```
 
 If you install `helm` on another computer to access the same cluster, you will not need to run this step again, instead run the following.
 
-```
+```bash
 helm init --client-only
 ```
 
@@ -203,7 +235,7 @@ This step forces `tiller` to listen to commands from localhost (i.e. `helm`) _on
 For example, this could give other pods arbitrary, elevated privileges to exploit.
 More details [here](https://engineering.bitnami.com/articles/helm-security.html).
 
-```
+```bash
 kubectl patch deployment tiller-deploy \
     --namespace=kube-system \
     --type=json \
@@ -218,57 +250,74 @@ kubectl patch deployment tiller-deploy \
 
 To verify the correct versions have been installed properly, run the following command.
 
-```
+```bash
 helm version
 ```
 
 You must have at least version 2.11.0 and the client (`helm`) and server (`tiller`) versions must match.
 The server may take a little while to appear.
 
+If the version do not match, run the following commands and check the versions again.
+
+```bash
+helm init --upgrade
+```
+
 ## Installing a BinderHub
 
 #### 1. Create a `secret.yaml` file
 
-In the `.secret/` folder so that it will be git-ignored, create a `secret.yaml` file with the following layout.
+In the `deploy/` folder, create a `secret-template.yaml` file with the following layout.
 
-```
+```yaml
 jupyterhub:
   hub:
     services:
       binder:
-        apiToken: "<apiToken>"
+        apiToken: "{apiToken}"
   proxy:
-    secretToken: "<secretToken>"
+    secretToken: "{secretToken}"
 ```
 
 We can then use [`sed`](http://www.grymoire.com/Unix/Sed.html) to insert the API and secret tokens.
 
-```
-sed -e "s/<apiToken>/$(cat .secret/apiToken.txt)/" -e "s/<secretToken>/$(cat .secret/secretToken.txt)/" -i .secret/secret.yaml
+```bash
+sed -e "s/{apiToken}/$(cat .secret/apiToken.txt)/" \
+    -e "s/{secretToken}/$(cat .secret/secretToken.txt)/" \
+    deploy/secret-template.yaml > .secret/secret-template.yaml
 ```
 
-#### a. Connecting with DockerHub
+#### Deleting local copies of the secret files
 
-Add the following to `.secret/secret.yaml`, where `<docker-id>` if your ID (not the associated e-mail address).
+Once you have constructed `.secret/secret.yaml`, you should delete the local copies of the API and secret tokens.
+
+```bash
+rm .secret/apiToken.txt
+rm .secret/secretToken.txt
+```
+
+#### 1a. Connecting with DockerHub
+
+Add the following to `.secret/secret.yaml`, where `{docker-id}` if your ID (not the associated e-mail address).
 This account **must** be a member of the `binderhubtest` DockerHub organisation.
 
-```
+```bash
 registry:
-  username: <docker-id>
-  password: <password>
+  username: {docker-id}
+  password: {password}
 ```
 
 As in the above step, you could use `sed` to input these variables.
 
-#### b. Connecting with an Azure Container Registry (ACR)
+#### 1b. Connecting with an Azure Container Registry (ACR)
 
-See `docs/create-azure-container-registry.md`.
+See [`docs/create-azure-container-registry.md`](03-create-azure-container-registry.md).
 
 #### 2. Create a `config.yaml` file
 
-Again in the `.secret/` folder, create a `config.yaml` file with the following format.
+Again in the `deploy` folder, create a `config.yaml` file with the following format.
 
-```
+```yaml
 config:
   BinderHub:
     use_registry: true
@@ -281,29 +330,25 @@ config:
 
 This command will add the repository of JupyterHub/BinderHub Helm Charts to your package manager.
 
-```
+```bash
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 helm repo update
 ```
 
-#### Deleting local copies of the secret files
-
-Once you have constructed `.secret/secret.yaml` and `.secret/config.yaml`, you should delete the local copies of the API and secret tokens.
-
-```
-rm .secret/apiToken.txt
-rm .secret/secretToken.txt
-```
-
 #### 4. Install the latest release of the BinderHub Chart
 
-As of 2019-03-20, the most recent BinderHub Helm chart was `0.2.0-3b53fce`.
+As of 2019-10-16, the most recent BinderHub Helm chart was `0.2.0-a2079a5`.
 Find the most recent version [here](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub).
 Install the Chart with the following command.
 This will install both a JupyterHub and a BinderHub.
 
-```
-helm install jupyterhub/binderhub --version=0.2.0-3b53fce --name=hub23 --namespace=hub23 -f .secret/secret.yaml -f .secret/config.yaml
+```bash
+helm install jupyterhub/binderhub \
+    --version=0.2.0-a2079a5 \
+    --name hub23 \
+    --namespace hub23 \
+    -f .secret/secret.yaml \
+    -f deploy/config.yaml
 ```
 
 `--name` and `--namespace` don't strictly have to match, but it makes it easier to remember if they do.
@@ -314,13 +359,13 @@ They should also only contain lowercase alphanumerical characters or hyphens (`-
 Get the External IP of the JupyterHub by running the following command.
 It may take some time to update, so keep running the command until `<pending>` disappears.
 
-```
-kubectl --namespace=hub23 get svc proxy-public
+```bash
+kubectl get svc proxy-public --namespace hub23
 ```
 
-Once you have the External IP address, update `.secret/config.yaml` to look like the following.
+Once you have the External IP address, update `deploy/config.yaml` to look like the following.
 
-```
+```yaml
 config:
   BinderHub:
     use_registry: true
@@ -330,19 +375,22 @@ config:
 
 Upgrade the Helm Chart to deploy the change.
 
-```
-helm upgrade hub23 jupyterhub/binderhub --version=0.2.0-3b53fce -f .secret/secret.yaml -f .secret/config.yaml
+```bash
+helm upgrade hub23 jupyterhub/binderhub \
+    --version=0.2.0-a2079a5 \
+    -f .secret/secret.yaml \
+    -f deploy/config.yaml
 ```
 
 #### 6. Finally, get the IP address for the Binder page
 
 The External IP address from this command will be the IP address of the Binder page.
 
-```
-kubectl --namespace=hub23 get svc binder
+```bash
+kubectl get svc binder --namespace hub23
 ```
 
-Check the deployment is working by launching a repo, e.g.: https://github.com/binder-examples/requirements
+Check the deployment is working by launching a repo, e.g.: <https://github.com/binder-examples/requirements>
 
 ## Increasing GitHub API limit
 
@@ -360,49 +408,59 @@ Immediately copy the token as you will not be able to see it again!
 
 #### 2. Add the token to the Azure Keyvault
 
-Save the token to the Azure Keyvault so it can be recovered.
+Save the token to the Azure key vault.
 
-```
+```bash
 az keyvault secret set \
   --vault-name hub23-keyvault \
   --name binderhub-access-token \
   --value <PASTE-TOKEN-HERE>
 ```
 
+Download the secret like so:
+
+```bash
+az keyvault secret download \
+    --vault-name hub23-keyvault \
+    --name binderhub-access-token \
+    --file .secret/accessToken.txt
+```
+
 #### 3. Update `secret-template.yaml`
 
-Update `secret-template.yaml` with the following.
+Update `deploy/secret-template.yaml` with the following.
 
-```
+```yaml
 jupyterhub:
   config:
     GitHubRepoProvider:
-      access_token: <accessToken>
+      access_token: {accessToken}
 ```
 
-#### 4. Update `make-config-files.sh`
+Again, we can use `sed` to populate this secret:
 
-Update `make-config-files.sh` to pull the access token from the keyvault and insert it into `.secret.secret.yaml`.
-
+```bash
+sed -e "s/{accessToken}/$(cat .secret/accessToken.txt)/" \
+    deploy/secret-template.yaml > .secret/secret.yaml
 ```
-# Download the access token
-az keyvault secret download \
-  --vault-name hub23-keyvault \
-  --name binderhub-access-token \
-  --file .secret/accessToken.txt
 
-# Populate secret.yaml file
-sed -e "s/<accessToken>/$(cat .secret/accessToken.txt)/" \
-  secret-template.yaml > .secret/secret.yaml
+#### Delete the local copy
 
-# Delete the local copy of the token
+Remember to delete the local copy after populating `.secret/secret.yaml`.
+
+```bash
 rm .secret/accessToken.txt
 ```
 
-#### 5. Upgrade the `helm` chart
+#### 4. Upgrade the `helm` chart
 
 Upgrade the `helm` chart to roll out the change to the BinderHub.
 
+```bash
+helm upgrade hub23 jupyterhub/binderhub \
+    --version=0.2.0-<commit-hash> \
+    -f .secret/secret.yaml \
+    -f deploy/config.yaml
 ```
-helm upgrade hub23 jupyterhub/binderhub --version=0.2.0-<commit-hash> -f .secret/secret.yaml -f .secret/config.yaml
-```
+
+Here, `<commit-hash>` can be the most recent Helm Chart version.
