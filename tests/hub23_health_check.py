@@ -101,7 +101,7 @@ class LogIt:
 
 async def main(once=False):
     if once:
-        global IsUp, BinderBuilds
+        global IsUp
         IsUp = partial(IsUp, every=None)
 
     checks = [
