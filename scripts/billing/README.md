@@ -14,11 +14,10 @@ Make sure to select the "West Europe" location and we list the prices in $USD.
 To calculate how much credit you should request via the TopDesk ticketing system,
 run the [Python script](calculate_billing.py) in this directory.
 
-This script requires Python version >= 3.6.
+This script requires Python version 3.7.
 
-```
+```bash
 cd billing
-pip install -r requirements.txt
 python calculate_billing.py
 ```
 
@@ -26,13 +25,14 @@ This will output the total monthly cost of the ACR and Kubernetes cluster with a
 without a contingency. By default, the script calculates a 10% contingency but other
 contingencies may be calculated by parsing the `--contingency [-c]` flag.
 
-```
+```bash
 python calculate_billing.py --contingency 20
 ```
+
 where `20` is 20% (not 0.2!).
 
 The total cost can also be calculated for more than 1 month by using the `--months [-m]` flag.
 
-```
+```bash
 python calculate_billing.py --months 3
 ```

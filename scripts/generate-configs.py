@@ -7,7 +7,7 @@ import json
 import logging
 import argparse
 from subprocess import check_output
-from HubClass.run_command import run_cmd
+from .HubClass.run_command import run_cmd
 
 
 def find_dir():
@@ -87,13 +87,8 @@ class GenerateConfigFiles:
         self.folder = folder
 
         # Set arguments as variables
-        self.subscription = argsDict["subscription"]
-        self.vault_name = argsDict["vault_name"]
-        self.registry_name = argsDict["registry_name"]
-        self.image_prefix = argsDict["image_prefix"]
-        self.jupyterhub_ip = argsDict["jupyterhub_ip"]
-        self.binder_ip = argsDict["binder_ip"]
-        self.identity = argsDict["identity"]
+        for k, v in argsDict.items():
+            setattr(self, k, v)
 
         # Initialise secrets
         self.get_secrets()
@@ -127,13 +122,14 @@ class GenerateConfigFiles:
             "github-client-secret",
             "SP-appID",
             "SP-key",
+            "binderhub-access-token",
         ]
 
         self.secrets = {}
 
         # Get secrets
         for secret in secret_names:
-            logging.info(f"Pulling secret: {secret}")
+            logging.info("Pulling secret: %s" % secret)
             # Get secret information and convert to json
             value = (
                 check_output(
@@ -165,35 +161,36 @@ class GenerateConfigFiles:
         deploy_dir = os.path.join(self.folder, "deploy")
         secret_dir = os.path.join(self.folder, ".secret")
         if not os.path.exists(secret_dir):
-            logging.info(f"Creating directory: {secret_dir}")
+            logging.info("Creating directory: %s" % secret_dir)
             os.mkdir(secret_dir)
-            logging.info(f"Created directory: {secret_dir}")
+            logging.info("Created directory: %s" % secret_dir)
         else:
-            logging.info(f"Directory already exists: {secret_dir}")
+            logging.info("Directory already exists: %s" % secret_dir)
 
         # Generate config files
         logging.info("Generating configuration files")
         for filename in ["prod"]:
-            logging.info(f"Reading template file for: {filename}")
+            logging.info("Reading template file for: %s" % filename)
 
             with open(f"{deploy_dir}/{filename}-template.yaml", "r") as f:
                 template = f.read()
 
             template = template.format(
-                apiToken=self.secrets["apiToken"],
-                secretToken=self.secrets["secretToken"],
+                binderhub_access_token=self.secrets["binderhub-access-token"],
                 username=self.secrets["SP-appID"],
                 password=self.secrets["SP-key"],
+                apiToken=self.secrets["apiToken"],
+                secretToken=self.secrets["secretToken"],
                 github_client_id=self.secrets["github-client-id"],
                 github_client_secret=self.secrets["github-client-secret"],
             )
 
-            logging.info(f"Writing YAML file for: {filename}")
+            logging.info("Writing YAML file for: %s" % filename)
             with open(os.path.join(secret_dir, f"{filename}.yaml"), "w") as f:
                 f.write(template)
 
         logging.info(
-            f"BinderHub files have been configured: {os.listdir(secret_dir)}"
+            "BinderHub files have been configured: %s" % os.listdir(secret_dir)
         )
 
 

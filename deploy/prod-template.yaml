@@ -1,4 +1,8 @@
 binderhub:
+  config:
+    GitHubRepoProvider:
+      access_token: {binderhub_access_token}
+
   registry:
     username: {username}
     password: {password}

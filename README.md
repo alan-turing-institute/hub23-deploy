@@ -119,16 +119,6 @@ pre-commit install
 
 ### Useful commands
 
-To print the pods and IP addresses of the Binder page and JupyterHub:
-
-```bash
-python info.py \
-    --hub-name [-n] HUB-NAME \
-    --cluster-name [-c] CLUSTER-NAME \
-    --resource-group [-g] RESOURCE-GROUP \
-    --identity
-```
-
 To access the JupyterHub logs:
 
 ```bash

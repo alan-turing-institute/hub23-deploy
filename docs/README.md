@@ -2,24 +2,34 @@
 
 This folder contains documentation around deploying, maintaining and customising the Hub23 BinderHub instance.
 
-## Recommended Reading Order:
+## Recommended Reading Order
 
 1. [Creating an Azure Key Vault for Hub23](./01-azure-keyvault.md)
 
-2. Methods of deploying BinderHub
+2. Methods of deploying a Kubernetes Cluster
 
-   a. [Deploy a BinderHub on the Turing's Azure subscription](./02a-deploy-binderhub.md)
+   1. [Deploy a standard Kubernetes cluster](./02i-deploy-standard-k8s-cluster.md)
 
-   b. Autoscaling:
+   2. [Deploy an Autoscaling Kubernetes Cluster](./02ii-deploy-autoscaling-k8s-cluster.md)
 
-      i. [Deploy an Autoscaling BinderHub on the Turing's Azure subscription](./02bi-deploy-binderhub-with-autoscaling.md)
+   3. [Deploy a Kubernetes Cluster with Multiple Nodepools](./02iii-deploy-k8s-cluster-multiple-nodepools.md)
 
-      ii. [Optimizing the JupyterHub for Autoscaling](./02bii-optimising-autoscaling.md)
+3. Methods of Installing BinderHub
 
-3. [Creating an Azure Container Registry and connecting to the Kubernetes Cluster](./03-create-azure-container-registry.md)
+    1. [Installing BinderHub](./03i-installing-binderhub.md)
 
-4. [Customising the JupyterHub](./04-customise-jupyterhub.md)
+    2. [Installing BinderHub with a Local Helm Chart](./03ii-installing-binderhub-local-helm-chart.md)
 
-5. [Enabling Authentication](./05-enabling-authentication.md)
+4. [Creating an Azure Container Registry and connecting to the Kubernetes Cluster](./04-create-azure-container-registry.md)
 
-6. [Changing the logo on the Binder page](./06-changing-logo.md)
+5. [Customising the JupyterHub](./05-customise-jupyterhub.md)
+
+6. [Enabling Authentication](./06-enabling-authentication.md)
+
+7. [Changing the logo on the Binder page](./07-changing-logo.md)
+
+8. [Enabling Page Redirection](./08-enabling-page-redirection.md)
+
+9. [Optimizing the JupyterHub for Autoscaling](./09-optimising-autoscaling.md)
+
+10. [Enabling HTTPS](./10-enabling-https.md)
