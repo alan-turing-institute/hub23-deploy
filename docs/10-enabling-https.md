@@ -1,9 +1,9 @@
 # Enabling HTTPS using `cert-manager`
 
 This document will walk through the steps required to enable HTTPS on Hub23 using [`cert-manager`](https://docs.cert-manager.io/en/latest/).
-It assumes you have deployed Hub23 using a local helm chart as outlined in [`docs/03ii-installing-binderhub-local-helm-chart.md`](03ii-installing-binderhub-local-helm-chart.md).
+It assumes you have deployed Hub23 using a local helm chart as outlined in [`docs/03ii-installing-binderhub-local-helm-chart.md`](03ii-installing-binderhub-local-helm-chart.md) and created a subdomain as per [docs/08-enabling-page-redirection.md](08-enabling-page-redirection.md).
 
-The following documentation is based on [this WIP documentation](https://discourse.jupyter.org/t/wip-documentation-about-cert-manager/2068)
+The following documentation is based on [this WIP documentation](https://discourse.jupyter.org/t/wip-documentation-about-cert-manager/2068).
 
 Table of Contents:
 
@@ -339,4 +339,61 @@ helm upgrade hub23 ./hub23-chart \
 
 **NOTE:** We use the `--force` flag here to avoid a `nodePorts` error.
 
+#### 10. Updating the A records
 
+By running the following command, we will see that the external IPs of Binder and JupyterHub have disappeared and we instead have one from the `nginx-ingress` load balancer.
+
+```bash
+kubectl get svc -n hub23
+```
+
+In the [Azure Portal](https://portal.azure.com), we will need to change our A records for the subdomain to both point to this new IP address.
+Instructions on how to set A records are in [docs/08-enabling-page-redirection.md](08-enabling-page-redirection.md).
+
+It is also recommended (though not necessary) to change the TTL (time to live) to 5 minutes (if not already set) as this will speed up propagation.
+
+#### 11. Perform another helm upgrade
+
+We upgrade the cluster to check the dummy certificates from "staging" works.
+
+```bash
+cd hub23-chart && helm dependency update && cd ..
+helm upgrade hub23 ./hub23-chart \
+    -f deploy/prod.yaml \
+    -f .secret/prod.yaml \
+```
+
+You can watch the `cert-manager` pods make the request by running the following command:
+
+```bash
+kubectl get pods -n hub23 --watch
+```
+
+Use `^C` ("control and C") to exit.
+
+#### 12. Switch to the "production" cluster issuer
+
+Once the dummy certificates have been verfied, we can now switch over to the production cluster issuer which will actually enable HTTPS.
+Add the following to `deploy/prod.yaml`:
+
+```yaml
+cert-manager:
+  ingressShim:
+    defaultIssuerName: "prod"
+```
+
+This overwrites the "staging" issuer set in `hub23-chart/values.yaml`.
+
+#### 13. Perform the last helm upgrade
+
+One last helm upgrade should complete the process.
+
+```bash
+cd hub23-chart && helm dependency update && cd ..
+helm upgrade hub23 ./hub23-chart \
+    -f deploy/prod.yaml \
+    -f .secret/prod.yaml \
+```
+
+It may take some time for all the Named Servers hosting your subdomain to update to HTTPS.
+Checking in an incognito browser may also help.
