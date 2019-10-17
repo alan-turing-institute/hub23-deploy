@@ -2,7 +2,7 @@
 Script to pull the logs of the JupyterHub
 """
 import argparse
-from HubClass.Hub import Hub
+from .HubClass.Hub import Hub
 
 
 def parse_args():
