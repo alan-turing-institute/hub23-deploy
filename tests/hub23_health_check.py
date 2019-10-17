@@ -14,6 +14,11 @@ from tornado.ioloop import IOLoop
 from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPClientError
 
+MG_API_KEY = os.getenv("MG_API_KEY", None)
+if MG_API_KEY is None:
+    print("Set the MG_API_KEY environment variable")
+    sys.exit(1)
+
 
 def timedelta(delta):
     return datetime.timedelta(seconds=delta)
@@ -53,6 +58,37 @@ class IsUp:
             self.done.set()
 
 
+class Email:
+    def __init__(self, to, at_most_every=600):
+        self.to = to
+        self.at_most_every = timedelta(at_most_every)
+        self._last_time = datetime.datetime.utcnow() - self.at_most_every
+
+        self.client = AsyncHTTPClient()
+
+    async def report(self, url, message):
+        now = datetime.datetime.utcnow()
+        if (now - self._last_time) >= self.at_most_every:
+            self._last_time = now
+
+            data = {
+                "from": "Is Hub23 Up? <ishub23up@sandbox13ae26f28a834e0f99963b8466fc6b84.mailgun.org>",
+                "sender": "Is Hub23 Up? <ishub23up@sandbox13ae26f28a834e0f99963b8466fc6b84.mailgun.org>",
+                "to": self.to,
+                "subject": "%s is down" % url,
+                "text": "%s\n\n%s"
+                % (now.strftime("%Y-%m-%d %H:%M:%S"), message),
+            }
+
+            await self.client.fetch(
+                "https://api.mailgun.net/v3/sandbox13ae26f28a834e0f99963b8466fc6b84.mailgun.org/messages",
+                method="POST",
+                auth_username="api",
+                auth_password=MG_API_KEY,
+                body=urllib.parse.urlencode(data),
+            )
+
+
 class LogIt:
     def __init__(self):
         self.url = None
@@ -69,8 +105,14 @@ async def main(once=False):
         IsUp = partial(IsUp, every=None)
 
     checks = [
-        IsUp("https://binder.hub23.turing.ac.uk", [None]),
-        IsUp("https://hub.hub23.turing.ac.uk/hub/api", [None]),
+        IsUp(
+            "https://binder.hub23.turing.ac.uk",
+            [Email("hub23registry@turing.ac.uk")],
+        ),
+        IsUp(
+            "https://hub.hub23.turing.ac.uk/hub/api",
+            [Email("hub23registry@turing.ac.uk")],
+        ),
     ]
 
     signals = []
