@@ -6,7 +6,7 @@ import sys
 import logging
 import argparse
 from subprocess import check_output
-from HubClass.run_command import run_cmd, run_pipe_cmd
+from .HubClass.run_command import run_cmd, run_pipe_cmd
 
 
 def find_dir():
@@ -116,9 +116,9 @@ class Upgrade:
                 "--namespace",
                 self.hub_name,
                 "-f",
-                os.path.join(self.folder, "/".join(["deploy", "prod.yaml"])),
+                os.path.join(self.folder, "deploy", "prod.yaml"),
                 "-f",
-                os.path.join(self.folder, "/".join([".secret", "prod.yaml"])),
+                os.path.join(self.folder, ".secret", "prod.yaml"),
                 "--wait",
             ]
             logging.info("Installing Helm Chart")
@@ -128,11 +128,11 @@ class Upgrade:
                 "helm",
                 "upgrade",
                 self.hub_name,
-                self.chart_name,
+                f"./{self.chart_name}",
                 "-f",
-                os.path.join(self.folder, "/".join(["deploy", "prod.yaml"])),
+                os.path.join(self.folder, "deploy", "prod.yaml"),
                 "-f",
-                os.path.join(self.folder, "/".join([".secret", "prod.yaml"])),
+                os.path.join(self.folder, ".secret", "prod.yaml"),
                 "--wait",
             ]
             logging.info("Upgrading Helm Chart")
