@@ -7,7 +7,7 @@ import json
 import logging
 import argparse
 from subprocess import check_output
-from HubClass.run_command import run_cmd
+from .HubClass.run_command import run_cmd
 
 
 def find_dir():
