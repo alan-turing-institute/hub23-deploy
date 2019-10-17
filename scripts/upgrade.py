@@ -6,7 +6,7 @@ import sys
 import logging
 import argparse
 from subprocess import check_output
-from HubClass.run_command import run_cmd, run_pipe_cmd
+from .HubClass.run_command import run_cmd, run_pipe_cmd
 
 
 def find_dir():
@@ -24,7 +24,7 @@ def find_dir():
 def parse_args():
     """Parse command line arguments and return them"""
     parser = argparse.ArgumentParser(
-        description="Script to upgrade a helm chart for a BinderHub deployment on Azure"
+        description="Script to upgrade a Helm Chart for a BinderHub deployment on Azure"
     )
 
     parser.add_argument(
@@ -77,6 +77,11 @@ def parse_args():
         action="store_true",
         help="Adds debugging output to helm upgrade command",
     )
+    parser.add_argument(
+        "--install",
+        action="store_true",
+        help="Install the Helm Chart if not already installed",
+    )
 
     return parser.parse_args()
 
@@ -86,14 +91,9 @@ class Upgrade:
 
     def __init__(self, argsDict, folder):
         """Set arguments as variables"""
-        self.hub_name = argsDict["hub_name"]
-        self.chart_name = argsDict["chart_name"]
-        self.cluster_name = argsDict["cluster_name"]
-        self.resource_group = argsDict["resource_group"]
-        self.subscription = argsDict["subscription"]
-        self.identity = argsDict["identity"]
-        self.dry_run = argsDict["dry_run"]
-        self.debug = argsDict["debug"]
+        for k, v in argsDict.items():
+            setattr(self, k, v)
+
         self.folder = folder
 
     def upgrade(self):
@@ -105,37 +105,54 @@ class Upgrade:
         self.login()
         self.update_local_chart()
 
-        # Helm Upgrade Command
-        helm_upgrade_cmd = [
-            "helm",
-            "upgrade",
-            self.hub_name,
-            self.chart_name,
-            "-f",
-            os.path.join(self.folder, "/".join(["deploy", "prod.yaml"])),
-            "-f",
-            os.path.join(self.folder, "/".join([".secret", "prod.yaml"])),
-            "--wait",
-        ]
+        if self.install:
+            # Helm install command
+            helm_cmd = [
+                "helm",
+                "install",
+                f"./{self.chart_name}",
+                "--name",
+                self.hub_name,
+                "--namespace",
+                self.hub_name,
+                "-f",
+                os.path.join(self.folder, "deploy", "prod.yaml"),
+                "-f",
+                os.path.join(self.folder, ".secret", "prod.yaml"),
+                "--wait",
+            ]
+            logging.info("Installing Helm Chart")
+        else:
+            # Helm Upgrade Command
+            helm_cmd = [
+                "helm",
+                "upgrade",
+                self.hub_name,
+                f"./{self.chart_name}",
+                "-f",
+                os.path.join(self.folder, "deploy", "prod.yaml"),
+                "-f",
+                os.path.join(self.folder, ".secret", "prod.yaml"),
+                "--wait",
+            ]
+            logging.info("Upgrading Helm Chart")
 
         if self.dry_run and self.debug:
             # Run as dry-run with debug output
-            helm_upgrade_cmd.extend(["--dry-run", "--debug"])
-            logging.info(
-                "Performing a dry-run helm upgrade with debugging output"
-            )
+            helm_cmd.extend(["--dry-run", "--debug"])
+            logging.info("Performing a dry-run with debugging output")
         elif self.dry_run and (not self.debug):
             # Run as dry-run
-            helm_upgrade_cmd.append("--dry-run")
-            logging.info("Performing a dry-run helm upgrade")
+            helm_cmd.append("--dry-run")
+            logging.info("Performing dry-run")
         elif (not self.dry_run) and self.debug:
             # Run with debug output
-            helm_upgrade_cmd.append("--debug")
-            logging.info("Performing a helm upgrade with debugging output")
+            helm_cmd.append("--debug")
+            logging.info("Activating debug")
         else:
-            logging.info("Upgrading helm chart")
+            logging.info("Executing helm command")
 
-        result = run_cmd(helm_upgrade_cmd)
+        result = run_cmd(helm_cmd)
         if result["returncode"] != 0:
             logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
