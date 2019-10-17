@@ -15,12 +15,6 @@ from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPClientError
 
 
-API_KEY = os.getenv("API_KEY", None)
-if API_KEY is None:
-    print("Set the API_KEY environment variable.")
-    sys.exit(1)
-
-
 def timedelta(delta):
     return datetime.timedelta(seconds=delta)
 
@@ -137,37 +131,6 @@ class BinderBuilds:
             self.done.set()
 
 
-class Email:
-    def __init__(self, to, at_most_every=600):
-        self.to = to
-        self.at_most_every = timedelta(at_most_every)
-        self._last_time = datetime.datetime.utcnow() - self.at_most_every
-
-        self.client = AsyncHTTPClient()
-
-    async def report(self, url, message):
-        now = datetime.datetime.utcnow()
-        if now - self._last_time >= self.at_most_every:
-            self._last_time = now
-
-            data = {
-                "from": "Is the Hub Up <ishubup@mg.wildtreetech.com>",
-                "sender": "Is the Hub Up <ishubup@mg.wildtreetech.com>",
-                "to": self.to,
-                "subject": "%s is down" % url,
-                "text": "%s\n\n%s"
-                % (now.strftime("%d %B %Y at %X UTC"), message),
-            }
-
-            await self.client.fetch(
-                "https://api.mailgun.net/v3/mg.wildtreetech.com/messages",
-                method="POST",
-                auth_username="api",
-                auth_password=API_KEY,
-                body=urllib.parse.urlencode(data),
-            )
-
-
 class LogIt:
     def __init__(self):
         self.url = None
@@ -185,18 +148,9 @@ async def main(once=False):
         BinderBuilds = partial(BinderBuilds, every=None)
 
     checks = [
-        IsUp(
-            "https://binder.hub23.turing.ac.uk",
-            [Email("sgibson@turing.ac.uk")],
-        ),
-        IsUp(
-            "https://hub.hub23.turing.ac.uk/hub/api",
-            [Email("sgibson@turing.ac.uk")],
-        ),
-        BinderBuilds(
-            "gh/binder-examples/requirements/master",
-            [Email("sgibson@turing.ac.uk")],
-        ),
+        IsUp("https://binder.hub23.turing.ac.uk", [None]),
+        IsUp("https://hub.hub23.turing.ac.uk/hub/api", [None]),
+        BinderBuilds("gh/binder-examples/requirements/master", [None]),
     ]
 
     signals = []
@@ -210,8 +164,8 @@ async def main(once=False):
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.DEBUG,
-        datefmt="%X %Z",
-        format="%(asctime)s %(levelname)-8s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        format="[%(asctime)s %(levelname)s] %(message)s",
     )
 
     parser = argparse.ArgumentParser(description="Is the hub up?")
