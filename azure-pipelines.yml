@@ -45,7 +45,7 @@ jobs:
       - task: HelmInstaller@1
         displayName: 'Install Helm'
         inputs:
-          helmVersionToInstall: 'latest'
+          helmVersionToInstall: '2.14.3'
 
       - task: HelmDeploy@0
         displayName: 'Initialise Helm'
@@ -56,7 +56,6 @@ jobs:
           kubernetesCluster: 'hub23cluster'
           namespace: 'hub23'
           command: 'init'
-          arguments: '--client-only --upgrade'
           tillerNamespace: 'kube-system'
 
       - task: Bash@3
