@@ -45,7 +45,7 @@ jobs:
       - task: HelmInstaller@1
         displayName: 'Install Helm'
         inputs:
-          helmVersionToInstall: '2.14.3'
+          helmVersionToInstall: 'latest'
 
       - task: HelmDeploy@0
         displayName: 'Initialise Helm'
@@ -56,6 +56,7 @@ jobs:
           kubernetesCluster: 'hub23cluster'
           namespace: 'hub23'
           command: 'init'
+          arguments: '--upgrade'
           tillerNamespace: 'kube-system'
 
       - task: Bash@3
@@ -87,5 +88,5 @@ jobs:
           chartType: 'FilePath'
           chartPath: './hub23-chart'
           releaseName: 'hub23'
-          waitForExecution: true
-          arguments: '-f deploy/prod.yaml -f .secret/prod.yaml'
+          force: true
+          arguments: '-f deploy/prod.yaml -f .secret/prod.yaml --wait --timeout 600'
