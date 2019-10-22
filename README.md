@@ -2,6 +2,8 @@
 
 A repo to manage the private Turing BinderHub instance, Hub23.
 
+[![Build Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/alan-turing-institute.hub23-deploy?branchName=master)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=1&branchName=master)
+
 - [Hub23 Helm Chart](#hub23-helm-chart)
 - [Developing Hub23](#developing-hub23)
   - [Requirements](#requirements)
