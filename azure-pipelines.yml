@@ -80,6 +80,7 @@ jobs:
             cd ..
 
       - task: Bash@3
+        displayName: 'Perform helm upgrade'
         inputs:
           targetType: 'inline'
           script: 'helm upgrade --install hub23 ./hub23-chart --force --wait --timeout 600 -f deploy/prod.yaml -f .secret/prod.yaml'
