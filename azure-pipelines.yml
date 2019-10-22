@@ -14,7 +14,7 @@ jobs:
         inputs:
           azureSubscription: 'hub23-deploy-scn'
           KeyVaultName: 'hub23-keyvault'
-          SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key, binderhub-access-token'
+          SecretsFilter: 'apiToken, secretToken, SP-appID, SP-key, binderhub-access-token'
 
       - task: Bash@3
         displayName: 'Make .secret folder'
@@ -32,8 +32,6 @@ jobs:
             -e "s/{password}/$(SP-key)/" \
             -e "s/{apiToken}/$(apiToken)/" \
             -e "s/{secretToken}/$(secretToken)/" \
-            -e "s/{github_client_id}/$(github-client-id)/" \
-            -e "s/{github_client_secret}/$(github-client-secret)/" \
             deploy/prod-template.yaml > .secret/prod.yaml
 
       - task: AzureCLI@1
@@ -65,9 +63,7 @@ jobs:
           targetType: 'inline'
           script: |
             helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-            helm repo add jetstack https://charts.jetstack.io
             helm repo update
-            kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.10/deploy/manifests/00-crds.yaml
 
       - task: Bash@3
         displayName: 'Updating local chart'
