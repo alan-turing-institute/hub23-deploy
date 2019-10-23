@@ -11,3 +11,35 @@ binderhub:
 
   registry:
     url: https://hub23registry.azurecr.io
+
+  jupyterhub:
+    cull:
+      every: 660
+      timeout: 600
+      maxAge: 21600  # maxAge is 6 hours: 6 * 3600 = 21600
+
+    singleuser:
+      memory:
+        limit: 1G
+        guarantee: 1G
+      cpu:
+        limit: .5
+        guarantee: .5
+
+    prePuller:
+      continuous:
+        enabled: true
+
+    scheduling:
+      podPriority:
+        enabled: true
+      userPlaceholder:
+        replicas: 3
+      userScheduler:
+        enabled: true
+      corePods:
+        nodeAffinity:
+          matchNodePurpose: require
+      userPods:
+        nodeAffinity:
+          matchNodePurpose: prefer
