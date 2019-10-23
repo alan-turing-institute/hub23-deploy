@@ -14,7 +14,7 @@ jobs:
         inputs:
           azureSubscription: 'hub23-deploy-scn'
           KeyVaultName: 'hub23-keyvault'
-          SecretsFilter: 'apiToken, secretToken, SP-appID, SP-key, binderhub-access-token'
+          SecretsFilter: 'apiToken, secretToken, SP-appID, SP-key'
 
       - task: Bash@3
         displayName: 'Make .secret folder'
@@ -27,8 +27,7 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            sed -e "s/{binderhub_access_token}/$(binderhub-access-token)/" \
-            -e "s/{username}/$(SP-appID)/" \
+            sed -e "s/{username}/$(SP-appID)/" \
             -e "s/{password}/$(SP-key)/" \
             -e "s/{apiToken}/$(apiToken)/" \
             -e "s/{secretToken}/$(secretToken)/" \
