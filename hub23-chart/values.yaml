@@ -37,9 +37,8 @@ binderhub:
 
   jupyterhub:
     hub:
-      hub:
-        extraConfig: |
-          c.JupyterHub.allow_named_servers = True
+      extraConfig: |
+        c.JupyterHub.allow_named_servers = True
 
     auth:
       admin:
