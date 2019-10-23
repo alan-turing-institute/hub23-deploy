@@ -43,3 +43,7 @@ binderhub:
       userPods:
         nodeAffinity:
           matchNodePurpose: prefer
+
+cert-manager:
+  ingressShim:
+    defaultIssuerName: "prod"
