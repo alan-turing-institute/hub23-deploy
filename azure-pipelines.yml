@@ -64,7 +64,10 @@ jobs:
           targetType: 'inline'
           script: |
             helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
+            helm repo add nginx-ingress https://kubernetes-charts.storage.googleapis.com
+            helm repo add cert-manager https://charts.jetstack.io
             helm repo update
+            kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.10/deploy/manifests/00-crds.yaml
 
       - task: Bash@3
         displayName: 'Updating local chart'
