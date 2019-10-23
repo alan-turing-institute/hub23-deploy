@@ -15,6 +15,35 @@ binderhub:
       template_variables:
         EXTRA_STATIC_URL_PREFIX: "/extra_static/"
 
+  ingress:
+    enabled: true
+    annotations:
+      # cert-manager provides a TLS secret
+      # This will ask cert-manager to be configured with default values. It's better to configure default values.
+      kubernetes.io/tls-acme: "true"
+      # nginx-ingress controller to be explicitly utilised instead of "gce"
+      # This is required to allow nginx-ingress-controller to function. This will override any cloud provided ingress controllers and use the one we choose to deploy, i.e. nginx.
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - binder.hub23.turing.ac.uk
+    tls:
+      - secretName: hub23-binder-tls
+        hosts:
+          - binder.hub23.turing.ac.uk
+
+  jupyterhub:
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/tls-acme: "true"
+        kubernetes.io/ingress.class: nginx
+      hosts:
+        - hub.hub23.turing.ac.uk
+      tls:
+        - secretName: hub23-hub-tls
+          hosts:
+            - hub.hub23.turing.ac.uk
+
   initContainers:
     - name: git-clone-templates
       image: alpine/git
