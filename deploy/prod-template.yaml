@@ -11,11 +11,11 @@ binderhub:
     hub:
       services:
         binder:
-          apiToken: "{apiToken}"
+          apiToken: {apiToken}
     proxy:
-      secretToken: "{secretToken}"
+      secretToken: {secretToken}
 
     auth:
       github:
-        clientId: "{github_client_id}"
-        clientSecret: "{github_client_secret}"
+        clientId: {github_client_id}
+        clientSecret: {github_client_secret}

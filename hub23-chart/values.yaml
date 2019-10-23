@@ -17,8 +17,6 @@ binderhub:
         EXTRA_STATIC_URL_PREFIX: "/extra_static/"
 
   service:
-    # nodePorts:
-    #   http: false
     type: ClusterIP
 
   ingress:
@@ -51,8 +49,6 @@ binderhub:
 
     proxy:
       service:
-        # nodePorts:
-        #   http: false
         type: ClusterIP
 
     ingress:
