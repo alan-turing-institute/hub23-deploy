@@ -14,3 +14,8 @@ binderhub:
           apiToken: {apiToken}
     proxy:
       secretToken: {secretToken}
+
+    auth:
+      github:
+        clientId: {github_client_id}
+        clientSecret: {github_client_secret}
