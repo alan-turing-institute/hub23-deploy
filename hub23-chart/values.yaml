@@ -39,7 +39,7 @@ binderhub:
     hub:
       extraConfig:
         myConfig: |
-          c.KubeSpawner.pod_name_template = 'my-pod-template-{servername}'
+          c.KubeSpawner.pod_name_template = 'jupyter-{username}{servername}'
 
     auth:
       admin:
