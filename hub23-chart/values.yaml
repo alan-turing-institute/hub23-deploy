@@ -37,9 +37,9 @@ binderhub:
 
   jupyterhub:
     hub:
-      extraConfig:
-        myConfig:  |
-          c.KubeSpawner.pod_name_template = 'jupyter-{username}{servername}'
+      hub:
+        extraConfig: |
+          c.JupyterHub.allow_named_servers = True
 
     auth:
       admin:
