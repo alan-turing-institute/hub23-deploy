@@ -32,6 +32,7 @@ jobs:
             -e "s/{apiToken}/$(apiToken)/" \
             -e "s/{secretToken}/$(secretToken)/" \
             deploy/prod-template.yaml > .secret/prod.yaml
+            cat .secret/prod.yaml
 
       - task: AzureCLI@1
         displayName: 'Merging kubectl config'

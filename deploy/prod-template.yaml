@@ -8,6 +8,6 @@ binderhub:
     hub:
       services:
         binder:
-          apiToken: "{apiToken}"
+          apiToken: {apiToken}
     proxy:
-      secretToken: "{secretToken}"
+      secretToken: {secretToken}

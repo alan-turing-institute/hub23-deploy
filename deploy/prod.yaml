@@ -7,7 +7,7 @@ binderhub:
       hub_url: http://51.105.173.40
 
     DockerRegistry:
-      token_url: "https://hub23registry.azurecr.io/oauth2/token?service=hub23registry.azurecr.io"
+      token_url: https://hub23registry.azurecr.io/oauth2/token?service=hub23registry.azurecr.io
 
   registry:
     url: https://hub23registry.azurecr.io
