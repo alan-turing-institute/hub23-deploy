@@ -98,10 +98,9 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            LATEST=$(curl --silent "https://api.github.com/repos/garethr/kubeval/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-            wget https://github.com/garethr/kubeval/releases/download/$LATEST/kubeval-linux-amd64.tar.gz
-            tar -xf kubeval-darwin-amd64.tar.gz
-            mv kubeval /usr/local/bin
+            wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+            tar xf kubeval-linux-amd64.tar.gz
+            sudo cp kubeval /usr/local/bin
 
       - task: PythonScript@0
         displayName: 'Lint and Validate hub23-chart'
