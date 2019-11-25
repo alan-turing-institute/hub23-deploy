@@ -92,7 +92,7 @@ jobs:
         displayName: 'pip install requirements'
         inputs:
           scriptSource: 'inline'
-          script: 'python -m pip install -r requirements.txt'
+          script: 'pip install -r requirements.txt'
 
       - task: Bash@3
         displayName: 'Install kubeval'
