@@ -8,11 +8,6 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
 
-    strategy:
-     matrix:
-       Python37:
-         python.version: '3.7'
-
     steps:
       - task: AzureKeyVault@1
         displayName: 'Pull Key Vault Secrets'
@@ -87,18 +82,15 @@ jobs:
             cd ..
 
       - task: UsePythonVersion@0
-        displayName: 'Use Python v3.7'
+        displayName: 'Use Python 3.7'
         inputs:
-          versionSpec: '$(python.version)'
+          versionSpec: '3.7'
           addToPath: true
-          architecture: 'x64'
-        name: 'myPython'
 
       - script: python -m pip install --upgrade pip setuptools wheel
         displayName: 'Install tools'
 
-      - script: |
-          'python -m pip install -r requirements.txt'
+      - script: python -m pip install -r requirements.txt
         displayName: 'Install requirements'
 
       - task: Bash@3
