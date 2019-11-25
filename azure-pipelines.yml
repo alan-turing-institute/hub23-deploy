@@ -88,6 +88,11 @@ jobs:
           addToPath: true
           architecture: 'x64'
 
+      - task: PipAuthenticate@1
+        displayName: 'Pip Authenticate'
+        inputs:
+          onlyAddExtraIndex: true
+
       - task: PythonScript@0
         displayName: 'pip install requirements'
         inputs:
