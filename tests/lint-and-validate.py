@@ -67,11 +67,18 @@ def parse_args():
         default="yamllint-config.yaml",
         help="Specify a yamllint config",
     )
+    parser.add_argument(
+        "--chart-name",
+        default="hub23-chart",
+        help="Name of helm chart to lint and validate",
+    )
 
     return parser.parse_args()
 
 
-def lint(yamllint_config, values, kubernetes_version, output_dir, debug):
+def lint(
+    yamllint_config, values, kubernetes_version, output_dir, debug, chart_name
+):
     """Calls `helm lint`, `helm template`, `yamllint` and `kubeval`."""
     print("### Clearing output directory")
     check_call(["mkdir", "-p", output_dir])
@@ -82,7 +89,7 @@ def lint(yamllint_config, values, kubernetes_version, output_dir, debug):
     helm_lint_cmd = [
         "helm",
         "lint",
-        os.path.join(os.pardir, "hub23-chart"),
+        os.path.join(os.pardir, chart_name),
         "--values",
         values,
     ]
@@ -94,7 +101,7 @@ def lint(yamllint_config, values, kubernetes_version, output_dir, debug):
     helm_template_cmd = [
         "helm",
         "template",
-        os.path.join(os.pardir, "hub23-chart"),
+        os.path.join(os.pardir, chart_name),
         "--value",
         values,
         "--output-dir",
@@ -132,4 +139,5 @@ if __name__ == "__main__":
         args.kubernetes_version,
         args.output_dir,
         args.debug,
+        args.chart_name,
     )
