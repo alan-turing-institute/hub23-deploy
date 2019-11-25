@@ -81,6 +81,36 @@ jobs:
             helm dependency update
             cd ..
 
+      - task: UsePythonVersion@0
+        displayName: 'Use Python v3.7'
+        inputs:
+          versionSpec: '3.7'
+          addToPath: true
+          architecture: 'x64'
+
+      - task: PythonScript@0
+        displayName: 'pip install requirements'
+        inputs:
+          scriptSource: 'inline'
+          script: 'python -m pip install -r requirements.txt'
+
+      - task: Bash@3
+        displayName: 'Install kubeval'
+        inputs:
+          targetType: 'inline'
+          script: |
+            LATEST=$(curl --silent "https://api.github.com/repos/garethr/kubeval/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+            wget https://github.com/garethr/kubeval/releases/download/$LATEST/kubeval-linux-amd64.tar.gz
+            tar -xf kubeval-darwin-amd64.tar.gz
+            mv kubeval /usr/local/bin
+
+      - task: PythonScript@0
+        displayName: 'Lint and Validate hub23-chart'
+        inputs:
+          scriptSource: 'filePath'
+          scriptPath: 'tests/lint-and-validate.py'
+          arguments: '--values hub23-chart/values.yaml deploy/prod.yaml .secret/prod.yaml'
+
       - task: HelmDeploy@0
         displayName: 'Perform helm upgrade'
         inputs:
