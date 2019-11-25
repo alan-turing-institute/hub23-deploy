@@ -92,14 +92,10 @@ jobs:
           versionSpec: '$(python.version)'
           addToPath: true
           architecture: 'x64'
-
-      - task: PipAuthenticate@1
-        displayName: 'Pip Authenticate'
-        inputs:
-          onlyAddExtraIndex: true
+        name: 'myPython'
 
       - script: |
-          'python -m pip install --upgrade pip setuptools wheel'
+          '$(myPython.pythonLocation)/bin/python -m pip install --upgrade pip setuptools wheel'
         displayName: 'Install tools'
 
       - script: |
