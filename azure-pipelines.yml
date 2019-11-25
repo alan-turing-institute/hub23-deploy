@@ -107,7 +107,7 @@ jobs:
         inputs:
           scriptSource: 'filePath'
           scriptPath: 'tests/lint-and-validate.py'
-          arguments: '--values hub23-chart/values.yaml deploy/prod.yaml .secret/prod.yaml'
+          arguments: '--values ../hub23-chart/values.yaml ../deploy/prod.yaml ../.secret/prod.yaml'
 
       - task: HelmDeploy@0
         displayName: 'Perform helm upgrade'
