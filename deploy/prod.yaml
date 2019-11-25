@@ -5,6 +5,7 @@ binderhub:
     BinderHub:
       image_prefix: hub23registry.azurecr.io/hub23/binder-dev-
       hub_url: https://hub.hub23.turing.ac.uk
+      use_named_servers: true
 
     DockerRegistry:
       token_url: https://hub23registry.azurecr.io/oauth2/token?service=hub23registry.azurecr.io
@@ -19,22 +20,24 @@ binderhub:
       maxAge: 21600  # maxAge is 6 hours: 6 * 3600 = 21600
 
     hub:
-        services:
-          binder:
-            oauth_redirect_uri: "https://binder.hub23.turing.ac.uk/oauth_callback"
-            oauth_client_id: "binder-oauth-client-test"
-        extraConfig:
-          hub_extra: |
-            c.JupyterHub.redirect_to_server = False
-          binder: |
-            from kubespawner import KubeSpawner
-            class BinderSpawner(KubeSpawner):
-              def start(self):
-                if 'image' in self.user_options:
-                  # binder service sets the image spec via user options
-                  self.image = self.user_options['image']
-                return super().start()
-            c.JupyterHub.spawner_class = BinderSpawner
+      allowNamedServers: true
+
+      services:
+        binder:
+          oauth_redirect_uri: "https://binder.hub23.turing.ac.uk/oauth_callback"
+          oauth_client_id: "binder-oauth-client-test"
+      extraConfig:
+        hub_extra: |
+          c.JupyterHub.redirect_to_server = False
+        binder: |
+          from kubespawner import KubeSpawner
+          class BinderSpawner(KubeSpawner):
+            def start(self):
+              if 'image' in self.user_options:
+                # binder service sets the image spec via user options
+                self.image = self.user_options['image']
+              return super().start()
+          c.JupyterHub.spawner_class = BinderSpawner
 
     singleuser:
       cmd: jupyterhub-singleuser
