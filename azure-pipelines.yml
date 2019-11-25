@@ -7,10 +7,10 @@ jobs:
   - job:
     pool:
       vmImage: 'ubuntu-latest'
-    
+
     strategy:
      matrix:
-       py37:
+       Python37:
          python.version: '3.7'
 
     steps:
@@ -89,10 +89,9 @@ jobs:
       - task: UsePythonVersion@0
         displayName: 'Use Python v3.7'
         inputs:
-          versionSpec: '3.7'
-          addToPath: false
+          versionSpec: '$(python.version)'
+          addToPath: true
           architecture: 'x64'
-        name: py
 
       - task: PipAuthenticate@1
         displayName: 'Pip Authenticate'
@@ -100,7 +99,7 @@ jobs:
           onlyAddExtraIndex: true
 
       - script: |
-          '$(py.pythonLocation)/bin/pip install -r requirements.txt'
+          'python3 -m pip3 install -r requirements.txt'
         displayName: 'pip install requirements'
 
       - task: Bash@3
