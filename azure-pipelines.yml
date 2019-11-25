@@ -58,8 +58,7 @@ jobs:
           kubernetesCluster: 'hub23cluster'
           namespace: 'hub23'
           command: 'init'
-          upgradeTiller: false
-          arguments: '--upgrade --force-upgrade'
+          arguments: '--force-upgrade'
           tillerNamespace: 'kube-system'
 
       - task: Bash@3
