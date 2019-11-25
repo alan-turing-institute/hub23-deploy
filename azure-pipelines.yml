@@ -93,11 +93,9 @@ jobs:
         inputs:
           onlyAddExtraIndex: true
 
-      - task: PythonScript@0
+      - script: |
+          'pip install -r requirements.txt'
         displayName: 'pip install requirements'
-        inputs:
-          scriptSource: 'inline'
-          script: 'pip install -r requirements.txt'
 
       - task: Bash@3
         displayName: 'Install kubeval'
