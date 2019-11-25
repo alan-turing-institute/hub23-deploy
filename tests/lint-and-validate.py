@@ -49,6 +49,7 @@ def parse_args():
     )
     parser.add_argument(
         "--values",
+        nargs="?",
         help="Specify helm values in a YAML file (can specify multiple)",
     )
     parser.add_argument(
