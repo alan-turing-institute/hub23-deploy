@@ -7,6 +7,11 @@ jobs:
   - job:
     pool:
       vmImage: 'ubuntu-latest'
+    
+    strategy:
+     matrix:
+       py37:
+         python.version: '3.7'
 
     steps:
       - task: AzureKeyVault@1
@@ -85,8 +90,9 @@ jobs:
         displayName: 'Use Python v3.7'
         inputs:
           versionSpec: '3.7'
-          addToPath: true
+          addToPath: false
           architecture: 'x64'
+        name: py
 
       - task: PipAuthenticate@1
         displayName: 'Pip Authenticate'
@@ -94,7 +100,7 @@ jobs:
           onlyAddExtraIndex: true
 
       - script: |
-          'pip install -r requirements.txt'
+          '$(py.pythonLocation)/bin/pip install -r requirements.txt'
         displayName: 'pip install requirements'
 
       - task: Bash@3
