@@ -7,6 +7,9 @@
 # Ignore charts folder
 */charts/*
 
+# Ignore rendered charts for linting
+tests/rendered-templates/*
+
 # Ignore requirements lock
 */requirements.lock
 
