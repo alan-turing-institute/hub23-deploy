@@ -18,7 +18,7 @@ rules:
     max-spaces-after: 1
   comments:
     require-starting-space: false   # Default: true (*)
-    min-spaces-from-content: 2
+    min-spaces-from-content: -1
   comments-indentation: {}
   document-end: disable
   document-start: disable           # Default: { present: true }
