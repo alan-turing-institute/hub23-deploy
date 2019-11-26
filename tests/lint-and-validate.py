@@ -49,7 +49,7 @@ def parse_args():
     )
     parser.add_argument(
         "--values",
-        nargs="?",
+        nargs="+",
         help="Specify helm values in a YAML file (can specify multiple)",
     )
     parser.add_argument(
@@ -86,13 +86,9 @@ def lint(
 
     print("### Linting started")
     print("### 1/4 - helm lint")
-    helm_lint_cmd = [
-        "helm",
-        "lint",
-        os.path.join(os.pardir, chart_name),
-        "--values",
-        values,
-    ]
+    helm_lint_cmd = ["helm", "lint", os.path.join(os.pardir, chart_name)]
+    for f in values:
+        helm_lint_cmd.extend(["-f", f])
     if debug:
         helm_lint_cmd.append("--debug")
     check_call(helm_lint_cmd)
@@ -102,11 +98,11 @@ def lint(
         "helm",
         "template",
         os.path.join(os.pardir, chart_name),
-        "--value",
-        values,
         "--output-dir",
         output_dir,
     ]
+    for f in values:
+        helm_template_cmd.extend(["-f", f])
     if debug:
         helm_template_cmd.append("--debug")
     check_call(helm_template_cmd)
