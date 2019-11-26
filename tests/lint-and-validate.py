@@ -110,7 +110,7 @@ def lint(
     print("### 3/4 - yamllint")
     check_call(["yamllint", "-c", yamllint_config, output_dir])
 
-    print("### 4/4 kubeval")
+    print("### 4/4 - kubeval")
     for filename in glob.iglob(
         os.path.join(output_dir, "**", "*.yaml"), recursive=True
     ):
