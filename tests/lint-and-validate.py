@@ -114,15 +114,16 @@ def lint(
     for filename in glob.iglob(
         os.path.join(output_dir, "**", "*.yaml"), recursive=True
     ):
-        check_call(
-            [
-                "kubeval",
-                filename,
-                "--kubernetes-version",
-                kubernetes_version,
-                "--strict",
-            ]
-        )
+        if not ("clusterissuer" in filename):
+            check_call(
+                [
+                    "kubeval",
+                    filename,
+                    "--kubernetes-version",
+                    kubernetes_version,
+                    "--strict",
+                ]
+            )
 
     print("\n### Linting and validation of templates finished: All good!")
 
