@@ -11,7 +11,7 @@ rules:
     max-spaces-inside-empty: -1
   colons:
     max-spaces-before: 0
-    max-spaces-after: 1
+    max-spaces-after: -1
   commas:
     max-spaces-before: 0
     min-spaces-after: 1
