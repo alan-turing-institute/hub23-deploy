@@ -78,14 +78,3 @@ binderhub:
 cert-manager:
   ingressShim:
     defaultIssuerName: "prod"
-
-prometheus:
-  server:
-    retention: 30d
-    ingress:
-      hosts:
-        - prometheus.hub23.turing.ac.uk
-      tls:
-        - hosts:
-            - prometheus.hub23.turing.ac.uk
-          secretName: certmanager-tls-prometheus
