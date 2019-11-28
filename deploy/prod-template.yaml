@@ -19,3 +19,8 @@ binderhub:
       github:
         clientId: {github_client_id}
         clientSecret: {github_client_secret}
+
+prometheus:
+  scrape_configs:
+    basic_auth:
+      password: {prometheus_password}
