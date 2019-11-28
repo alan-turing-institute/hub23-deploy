@@ -14,22 +14,24 @@ This folder contains documentation around deploying, maintaining and customising
 
    3. [Deploy a Kubernetes Cluster with Multiple Nodepools](./02iii-deploy-k8s-cluster-multiple-nodepools.md)
 
-3. Methods of Installing BinderHub
+3. [Setup Helm](03-setup-helm.md)
 
-    1. [Installing BinderHub](./03i-installing-binderhub.md)
+4. Methods of Installing BinderHub
 
-    2. [Installing BinderHub with a Local Helm Chart](./03ii-installing-binderhub-local-helm-chart.md)
+    1. [Installing BinderHub](./04i-installing-binderhub.md)
 
-4. [Creating an Azure Container Registry and connecting to the Kubernetes Cluster](./04-create-azure-container-registry.md)
+    2. [Installing BinderHub with a Local Helm Chart](./04ii-installing-binderhub-local-helm-chart.md)
 
-5. [Customising the JupyterHub](./05-customise-jupyterhub.md)
+5. [Creating an Azure Container Registry and connecting to the Kubernetes Cluster](./05-create-azure-container-registry.md)
 
-6. [Enabling Authentication](./06-enabling-authentication.md)
+6. [Customising the JupyterHub](./06-customise-jupyterhub.md)
 
-7. [Changing the logo on the Binder page](./07-changing-logo.md)
+7. [Enabling Authentication](./07-enabling-authentication.md)
 
-8. [Enabling Page Redirection](./08-enabling-page-redirection.md)
+8. [Changing the logo on the Binder page](./08-changing-logo.md)
 
-9. [Optimizing the JupyterHub for Autoscaling](./09-optimising-autoscaling.md)
+9.  [Enabling Page Redirection](./09-enabling-page-redirection.md)
 
-10. [Enabling HTTPS](./10-enabling-https.md)
+10. [Optimizing the JupyterHub for Autoscaling](./10-optimising-autoscaling.md)
+
+11. [Enabling HTTPS](./11-enabling-https.md)

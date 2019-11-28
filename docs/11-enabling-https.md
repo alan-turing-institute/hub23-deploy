@@ -1,7 +1,7 @@
 # Enabling HTTPS using `cert-manager`
 
 This document will walk through the steps required to enable HTTPS on Hub23 using [`cert-manager`](https://docs.cert-manager.io/en/latest/).
-It assumes you have deployed Hub23 using a local helm chart as outlined in [`docs/03ii-installing-binderhub-local-helm-chart.md`](03ii-installing-binderhub-local-helm-chart.md) and created a subdomain as per [docs/08-enabling-page-redirection.md](08-enabling-page-redirection.md).
+It assumes you have deployed Hub23 using a local helm chart as outlined in [`docs/04ii-installing-binderhub-local-helm-chart.md`](04ii-installing-binderhub-local-helm-chart.md) and created a subdomain as per [docs/09-enabling-page-redirection.md](09-enabling-page-redirection.md).
 
 The following documentation is based on [this WIP documentation](https://discourse.jupyter.org/t/wip-documentation-about-cert-manager/2068).
 
@@ -102,7 +102,7 @@ hub23-chart/
 |-values.yaml
 ```
 
-We will have already created `Chart.yaml`, `requirements.yaml` and `values.yaml` in [`docs/03ii-installing-binderhub-local-helm-chart.md`](03ii-installing-binderhub-local-helm-chart.md).
+We will have already created `Chart.yaml`, `requirements.yaml` and `values.yaml` in [`docs/04ii-installing-binderhub-local-helm-chart.md`](04ii-installing-binderhub-local-helm-chart.md).
 
 ### Create `templates/clusterisuuer.yaml`
 
@@ -405,7 +405,7 @@ kubectl get svc -n hub23
 ```
 
 In the [Azure Portal](https://portal.azure.com), we will need to change our A records for the subdomain to both point to this new IP address.
-Instructions on how to set A records are in [docs/08-enabling-page-redirection.md](08-enabling-page-redirection.md).
+Instructions on how to set A records are in [docs/09-enabling-page-redirection.md](09-enabling-page-redirection.md).
 
 It is also recommended (though not necessary) to change the TTL (time to live) to 5 minutes (if not already set) as this will speed up propagation.
 
