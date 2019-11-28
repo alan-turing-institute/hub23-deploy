@@ -21,7 +21,7 @@ The line should look as follows.
 ```html
 <pre>
   <code>
-    <img id="logo" src={% block logo_image %}"/extra_static/<image-name>"{% endblock logo_image %} width="390px" />
+    <img id="logo" src={% block logo_image %}"/extra_static/IMAGE_NAME"{% endblock logo_image %} width="390px" />
   </code>
 </pre>
 ```
