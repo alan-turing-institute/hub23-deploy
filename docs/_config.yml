@@ -15,16 +15,16 @@
 # in the templates via {{ site.myvariable }}.
 remote_theme: mmistakes/so-simple-theme
 skin: "/assets/css/skins/default.css"
-locale: en-US
-title: "My Awesome Site"
-description: "It really is the best."
+locale: en-GB
+title: "Hub23 Deployment Guide"
+description: ""
 baseurl: "/docs"
 url: "hub23-docs.github.io"
 logo: # path of site logo, e.g. "/images/logo.png"
 date_format: "%B %-d, %Y"
 read_time: # reading time estimates, e.g. true
 words_per_minute: # 200
-mathjax: # MathJax equations, e.g. true
+mathjax: true
 google_fonts:
   - name: "Source Sans Pro"
     weights: "400,400i,700,700i"
@@ -87,10 +87,10 @@ defaults:
 
 # Site Author
 author:
-  name:
+  name: Sarah Gibson
   picture:
-  email:
-  twitter:
+  email: sgibson@turing.ac.uk
+  twitter: drsarahlgibson
   links:
     - title:
       url:
