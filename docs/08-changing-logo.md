@@ -18,7 +18,7 @@ In `templates/page.html`, change the name of the image to match that of your cho
 
 The line should look as follows.
 
-```html
+```
 <img id="logo" src={% block logo_image %}"/extra_static/<image-name>"{% endblock logo_image %} width="390px" />
 ```
 
