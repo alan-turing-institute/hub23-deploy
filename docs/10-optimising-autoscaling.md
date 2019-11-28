@@ -92,7 +92,7 @@ See [docs/02ii-deploy-autoscaling-k8s-cluster.md](02ii-deploy-autoscaling-k8s-cl
 
 Add a `core` label to all the nodes in the node pool.
 
-1. Setup a node pool (with autoscaling; `docs/deploy-binderhub-with-autoscaling.md`) and a certain label.
+1. Setup a node pool (with autoscaling; [`docs/02ii-deploy-autoscaling-k8s-cluster.md`](02ii-deploy-autoscaling-k8s-cluster.md) or [`docs/02iii-deploy-k8s-cluster-multiple-nodepools.md`](02iii-deploy-k8s-cluster-multiple-nodepools.md)) and a certain label.
 
    1. The label: `hub.jupyter.org/node-purpose=core`
 

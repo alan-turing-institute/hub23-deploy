@@ -2,7 +2,7 @@
 
 This documentation walks through the steps required to install a BinderHub using a local helm chart.
 
-In [`docs/03i-installing-binderhub.md`](03i-installing-binderhub.md), BinderHub was installed and configured by using the [BinderHub chart](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub) directly.
+In [`docs/04i-installing-binderhub.md`](04i-installing-binderhub.md), BinderHub was installed and configured by using the [BinderHub chart](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub) directly.
 By writing a helm chart that _depends_ on the BinderHub chart, we can later introduce other helm charts to increase the functionality of Hub23.
 
 This documentation assumes you have the following CLI's installed:
@@ -157,8 +157,8 @@ helm upgrade hub23 ./hub23-chart \
 Any customisations described in the following documents can be applied to this setup.
 Just be vigilant with your indentation!
 
-- [`docs/05-customise-jupyterhub.md`](05-customise-jupyterhub.md)
-- [`docs/06-enabling-authentication.md`](06-enabling-authentication.md)
-- [`docs/07-changing-logo.md`](07-changing-logo.md)
-- [`docs/08-enabling-page-redirection.md`](08-enabling-page-redirection.md)
-- [`docs/09-optimising-autoscaling`](09-optimising-autoscaling.md)
+- [`docs/06-customise-jupyterhub.md`](06-customise-jupyterhub.md)
+- [`docs/07-enabling-authentication.md`](07-enabling-authentication.md)
+- [`docs/08-changing-logo.md`](08-changing-logo.md)
+- [`docs/09-enabling-page-redirection.md`](09-enabling-page-redirection.md)
+- [`docs/10-optimising-autoscaling`](10-optimising-autoscaling.md)

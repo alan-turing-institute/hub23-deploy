@@ -223,7 +223,7 @@ I would recommend a `--node-count 2`.
 
 #### Scaling the `default` nodepool back
 
-I would recommend scaling the `default` nodepool down to 1 node as we will most likely use node affinities to preferentially assign core pods to the core pool and user pods to the user pool (see [`docs/09-optimising-autoscaling.md`](09-optimising-autoscaling.md)).
+I would recommend scaling the `default` nodepool down to 1 node as we will most likely use node affinities to preferentially assign core pods to the core pool and user pods to the user pool (see [`docs/10-optimising-autoscaling.md`](10-optimising-autoscaling.md)).
 
 ```bash
 az aks nodepool scale \
