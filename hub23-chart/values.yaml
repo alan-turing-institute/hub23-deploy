@@ -36,10 +36,14 @@ binderhub:
           - binder.hub23.turing.ac.uk
 
   jupyterhub:
-    # hub:
-    #   extraConfig:
-    #     myConfig: |
-    #       c.KubeSpawner.pod_name_template = 'jupyter-{username}{servername}'
+    hub:
+      extraConfig:
+        noAuthMetrics: |
+          c.JupyterHub.authenticate_prometheus = False
+      service:
+        annotations:
+          prometheus.io/scrape: 'true'
+          prometheus.io/path: '/hub/metrics'
 
     auth:
       admin:
@@ -90,9 +94,35 @@ nginx-ingress:
   controller:
     config:
       proxy-body-size: 64m
+    metrics:
+      enabled: true
+      service:
+        annotations:
+          prometheus.io/scrape: 'true'
+  statsExporter:
+    service:
+      annotations:
+        prometheus.io/scrape: 'true'
 
 cert-manager:
   ingressShim:
     defaultIssuerName: "staging"
     defaultIssuerKind: "ClusterIssuer"
     defaultACMEChallengeType: "http01"
+
+prometheus:
+  nodeExporter:
+    updateStrategy:
+      type: RollingUpdate
+  alertmanager:
+    enabled: false
+  pushgateway:
+    enabled: false
+  rbac:
+    create: true
+  server:
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'true'
