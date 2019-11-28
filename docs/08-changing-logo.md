@@ -18,8 +18,12 @@ In `templates/page.html`, change the name of the image to match that of your cho
 
 The line should look as follows.
 
-```
-<img id="logo" src={% block logo_image %}"/extra_static/<image-name>"{% endblock logo_image %} width="390px" />
+```html
+<pre>
+  <code>
+    <img id="logo" src={% block logo_image %}"/extra_static/<image-name>"{% endblock logo_image %} width="390px" />
+  </code>
+</pre>
 ```
 
 #### 3. Update `deploy/config.yaml`
