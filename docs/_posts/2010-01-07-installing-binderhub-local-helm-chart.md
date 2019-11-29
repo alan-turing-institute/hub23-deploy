@@ -6,7 +6,7 @@ title: "Installing BinderHub with a Local Helm Chart"
 
 This documentation walks through the steps required to install a BinderHub using a local helm chart.
 
-In [`docs/04i-installing-binderhub.md`](04i-installing-binderhub.md), BinderHub was installed and configured by using the [BinderHub chart](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub) directly.
+In ["Installing BinderHub"]({% post_url 2010-01-06-installing-binderhub %}), BinderHub was installed and configured by using the [BinderHub chart](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub) directly.
 By writing a helm chart that _depends_ on the BinderHub chart, we can later introduce other helm charts to increase the functionality of Hub23.
 
 This documentation assumes you have the following CLI's installed:
@@ -83,7 +83,7 @@ Add the [`.helmignore` file](https://github.com/helm/helm/blob/master/pkg/repo/r
 
 #### 1. Create `deploy/prod.yaml`
 
-This file is the same as `deploy/config.yaml` in [`docs/03i-installing-binderhub.md`](03i-installing-binderhub.md), but we are now calling it `prod` to indicate production status.
+This file is the same as `deploy/config.yaml` in ["Installing BinderHub"]({% post_url 2010-01-06-installing-binderhub %}), but we are now calling it `prod` to indicate production status.
 
 ```yaml
 projectName: hub23
@@ -103,7 +103,7 @@ binderhub:
 
 #### 2. Create `deploy/prod-template.yaml`
 
-This file performs the same role as `deploy/secret-template.yaml` in [`docs/03i-installing-binderhub.md`](03i-installing-binderhub.md).
+This file performs the same role as `deploy/secret-template.yaml` in ["Installing BinderHub"]({% post_url 2010-01-06-installing-binderhub %}).
 
 ```yaml
 binderhub:
@@ -120,7 +120,7 @@ binderhub:
       secretToken: "{secretToken}"
 ```
 
-`sed` commands or [`generate-configs.py`](../scripts/generate-configs.py) can be used to populate this template and save it to `.secret/`.
+`sed` commands or [`scripts/generate-configs.py`](https://github.com/alan-turing-institute/hub23-deploy/blob/master/scripts/generate-configs.py) can be used to populate this template and save it to `.secret/`.
 
 ## Installing `hub23-chart`
 
@@ -161,8 +161,8 @@ helm upgrade hub23 ./hub23-chart \
 Any customisations described in the following documents can be applied to this setup.
 Just be vigilant with your indentation!
 
-- [`docs/06-customise-jupyterhub.md`](06-customise-jupyterhub.md)
-- [`docs/07-enabling-authentication.md`](07-enabling-authentication.md)
-- [`docs/08-changing-logo.md`](08-changing-logo.md)
-- [`docs/09-enabling-page-redirection.md`](09-enabling-page-redirection.md)
-- [`docs/10-optimising-autoscaling`](10-optimising-autoscaling.md)
+- ["Customising the JupyterHub"]({% post_url 2010-01-09-customise-jupyterhub %})
+- ["Enabling Authentication"]({% post_url 2010-01-10-enabling-authentication %})
+- ["Changing the logo on the Binder Page"]({% post_url 2010-01-11-changing-logo %})
+- ["Enabling Page Redirection"]({% post_url 2010-01-12-enabling-page-redirection %})
+- ["Optimizing the JupyterHub for Autoscaling"]({% post_url 2010-01-13-optimising-autoscaling %})

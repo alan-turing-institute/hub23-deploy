@@ -93,7 +93,7 @@ Fill in the form as per the image below and click Register Application:
 This will create an OAuth app owned by `binderhub-test-org` that will allow anyone with a valid GitHub account to login to Hub23.
 
 The `clientId` and `clientSecret` values will be generated.
-Add these values to the key vault (see [`01-azure-keyvault.md`](01-azure-keyvault.md)) and create a `sed` command to populate `deploy/secret-template.yaml`.
+Add these values to the key vault (see ["Creating an Azure Key Vault for Hub23"]({% post_url 2010-01-01-azure-keyvault %})) and create a `sed` command to populate `deploy/secret-template.yaml`.
 
 #### Giving access to GitHub organisations
 

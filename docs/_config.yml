@@ -18,7 +18,7 @@ skin: "/assets/css/skins/default.css"
 locale: en-GB
 title: "Hub23 Deployment Guide"
 description: ""
-baseurl: "/docs"
+baseurl: #"/docs"
 url: "hub23-docs.github.io"
 logo: # path of site logo, e.g. "/images/logo.png"
 date_format: "%B %-d, %Y"

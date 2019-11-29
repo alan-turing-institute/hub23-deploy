@@ -90,13 +90,13 @@ Some system pods end up on the new nodes with user pods.
 At night, when the _culler_ has removed many inactive pods, the nodes are now free from user pods but cannot be removing since there is a single system pod remaining.
 
 We setup a node affinity for core pods to remain on the 3 nodes that were deployed.
-See [docs/02ii-deploy-autoscaling-k8s-cluster.md](02ii-deploy-autoscaling-k8s-cluster.md)
+See ["Deploy an Autoscaling Kubernetes Cluster"]({% post_url 2010-01-03-deploy-autoscaling-k8s-cluster %}).
 
 #### Labelling nodes for core purpose
 
 Add a `core` label to all the nodes in the node pool.
 
-1. Setup a node pool (with autoscaling; [`docs/02ii-deploy-autoscaling-k8s-cluster.md`](02ii-deploy-autoscaling-k8s-cluster.md) or [`docs/02iii-deploy-k8s-cluster-multiple-nodepools.md`](02iii-deploy-k8s-cluster-multiple-nodepools.md)) and a certain label.
+1. Setup a node pool (with [autoscaling]({% post_url 2010-01-03-deploy-autoscaling-k8s-cluster %}) and/or [nodepools]({% post_url 2010-01-04-deploy-k8s-cluster-multiple-nodepools %})) and a certain label.
 
    1. The label: `hub.jupyter.org/node-purpose=core`
 

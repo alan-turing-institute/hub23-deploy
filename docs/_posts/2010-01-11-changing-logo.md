@@ -6,7 +6,7 @@ title: "Changing the logo on the Binder page"
 
 See these docs:
 
-- https://binderhub.readthedocs.io/en/latest/customizing.html#template-customization
+- <https://binderhub.readthedocs.io/en/latest/customizing.html#template-customization>
 
 The html content must be publicly hosted so the repo must remain public.
 

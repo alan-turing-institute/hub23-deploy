@@ -6,7 +6,7 @@ title: "Deploy a standard Kubernetes Cluster"
 
 This document walks through the steps required to deploy a standard Kubernetes cluster onto the Turing's Azure subscription.
 
-We assume you have the following CLI's installed:
+We assume you have the following CLIs installed:
 
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 - [Kubernetes CLI (`kubectl`)](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl)
