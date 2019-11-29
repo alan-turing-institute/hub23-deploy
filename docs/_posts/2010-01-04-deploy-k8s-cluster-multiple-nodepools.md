@@ -6,7 +6,7 @@ title: "Deploy a Kubernetes Cluster with Multiple Nodepools"
 
 This document walks through the steps required to deploy a Kubernetes cluster with multiple nodepools onto the Turing's Azure subscription.
 
-We assume you have the following CLI's installed:
+We assume you have the following CLIs installed:
 
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 - [Kubernetes CLI (`kubectl`)](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl)
@@ -169,7 +169,7 @@ az provider register --namespace Microsoft.ContainerService
 
 ## Create the Kubernetes cluster
 
-**NOTE:** These commands can also be used in conjunction with those in [`docs/02ii-deploy-autoscaling-k8s-cluster.md`](02ii-deploy-autoscaling-k8s-cluster.md) to create autoscaling nodepools.
+**NOTE:** These commands can also be used in conjunction with those in <a href={{ '_posts/2010-01-03-deploy-autoscaling-k8s-cluster.md' | relative.url }}>"Deploy an Autoscaling Kubernetes Cluster"</a> to create autoscaling nodepools.
 
 #### 1. Create the AKS cluster
 
