@@ -57,6 +57,7 @@ dependencies:
 ```
 
 **NOTE:** The `version` field should be up-to-date from [this list](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub).
+{: .notice--info}
 
 #### 4. Create `hub23-chart/values.yaml`
 
@@ -73,6 +74,7 @@ binderhub:
 ```
 
 **NOTE:** Now we are no longer using the BinderHub chart directly, we reference changes we want to make to the BinderHub chart with the top level key `binderhub`.
+{: .notice--info}
 
 #### 5. Add `hub23-chart/.helmignore`
 

@@ -134,8 +134,8 @@ It's only task is to schedule new user pods to the _most utilised node_.
 This can be compared to the _default scheduler_ that instead always tries to schedule pods so the _least utilised node_.
 Only the user scheduler would allow the underutilised nodes to free up over time as the total amount of users decrease but a few users still arrive.
 
-**NOTE:** IF you don't want to scale down, it makes more sense to let users spread out and utilise all available nodes.
-Only activate the user scheduler if you have an autoscaling node pool.
+**NOTE:** If you don't want to scale down, it makes more sense to let users spread out and utilise all available nodes. Only activate the user scheduler if you have an autoscaling node pool.
+{: .notice--info}
 
 Enable the user scheduler with the following code snippet:
 

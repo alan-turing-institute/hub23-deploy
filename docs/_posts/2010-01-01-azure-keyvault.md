@@ -63,11 +63,8 @@ az group create --name Hub23 --location westeurope --output table
 - `--output table` prints the info in a human-readable format.
 
 **NOTE:** If the resource group already exists, this step can be skipped.
-Test if the resource group exists by running the following.
-
-```bash
-az group exists --name Hub23
-```
+Test if the resource group exists by running the following: ```az group exists --name Hub23```
+{: .notice--info}
 
 #### 4. Create the key vault
 
