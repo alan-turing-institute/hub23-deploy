@@ -140,3 +140,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# jekyll build artifacts
+**/*.lock
+**/.sass-cache/
+**/_site/
+**/.jekyll-cache/
+**/.jekyll-metadata
