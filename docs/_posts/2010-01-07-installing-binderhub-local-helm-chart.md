@@ -6,7 +6,7 @@ title: "Installing BinderHub with a Local Helm Chart"
 
 This documentation walks through the steps required to install a BinderHub using a local helm chart.
 
-In ["Installing BinderHub"]({% post_url 2010-01-06-installing-binderhub %}), BinderHub was installed and configured by using the [BinderHub chart](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub) directly.
+In ["Installing BinderHub"]({{ site.baseurl }}{% post_url 2010-01-06-installing-binderhub %}), BinderHub was installed and configured by using the [BinderHub chart](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub) directly.
 By writing a helm chart that _depends_ on the BinderHub chart, we can later introduce other helm charts to increase the functionality of Hub23.
 
 This documentation assumes you have the following CLI's installed:
@@ -83,7 +83,7 @@ Add the [`.helmignore` file](https://github.com/helm/helm/blob/master/pkg/repo/r
 
 #### 1. Create `deploy/prod.yaml`
 
-This file is the same as `deploy/config.yaml` in ["Installing BinderHub"]({% post_url 2010-01-06-installing-binderhub %}), but we are now calling it `prod` to indicate production status.
+This file is the same as `deploy/config.yaml` in ["Installing BinderHub"]({{ site.baseurl }}{% post_url 2010-01-06-installing-binderhub %}), but we are now calling it `prod` to indicate production status.
 
 ```yaml
 projectName: hub23
@@ -103,7 +103,7 @@ binderhub:
 
 #### 2. Create `deploy/prod-template.yaml`
 
-This file performs the same role as `deploy/secret-template.yaml` in ["Installing BinderHub"]({% post_url 2010-01-06-installing-binderhub %}).
+This file performs the same role as `deploy/secret-template.yaml` in ["Installing BinderHub"]({{ site.baseurl }}{% post_url 2010-01-06-installing-binderhub %}).
 
 ```yaml
 binderhub:
@@ -161,8 +161,8 @@ helm upgrade hub23 ./hub23-chart \
 Any customisations described in the following documents can be applied to this setup.
 Just be vigilant with your indentation!
 
-- ["Customising the JupyterHub"]({% post_url 2010-01-09-customise-jupyterhub %})
-- ["Enabling Authentication"]({% post_url 2010-01-10-enabling-authentication %})
-- ["Changing the logo on the Binder Page"]({% post_url 2010-01-11-changing-logo %})
-- ["Enabling Page Redirection"]({% post_url 2010-01-12-enabling-page-redirection %})
-- ["Optimizing the JupyterHub for Autoscaling"]({% post_url 2010-01-13-optimising-autoscaling %})
+- ["Customising the JupyterHub"]({{ site.baseurl }}{% post_url 2010-01-09-customise-jupyterhub %})
+- ["Enabling Authentication"]({{ site.baseurl }}{% post_url 2010-01-10-enabling-authentication %})
+- ["Changing the logo on the Binder Page"]({{ site.baseurl }}{% post_url 2010-01-11-changing-logo %})
+- ["Enabling Page Redirection"]({{ site.baseurl }}{% post_url 2010-01-12-enabling-page-redirection %})
+- ["Optimizing the JupyterHub for Autoscaling"]({{ site.baseurl }}{% post_url 2010-01-13-optimising-autoscaling %})

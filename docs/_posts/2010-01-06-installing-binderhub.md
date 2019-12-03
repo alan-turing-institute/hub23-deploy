@@ -66,7 +66,7 @@ As in the above step, you could use `sed` to input these variables.
 
 #### 1b. Connecting with an Azure Container Registry (ACR)
 
-See ["Creating an Azure Container Registry and connecting to the Kubernetes Cluster"]({% post_url 2010-01-08-create-azure-container-registry %}).
+See ["Creating an Azure Container Registry and connecting to the Kubernetes Cluster"]({{ site.baseurl }}{% post_url 2010-01-08-create-azure-container-registry %}).
 
 #### 2. Create a `config.yaml` file
 

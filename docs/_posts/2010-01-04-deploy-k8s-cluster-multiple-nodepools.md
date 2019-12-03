@@ -169,7 +169,7 @@ az provider register --namespace Microsoft.ContainerService
 
 ## Create the Kubernetes cluster
 
-**NOTE:** These commands can also be used in conjunction with those in ["Deploy an Autoscaling Kubernetes Cluster"]({% post_url 2010-01-03-deploy-autoscaling-k8s-cluster %}) to create autoscaling nodepools.
+**NOTE:** These commands can also be used in conjunction with those in ["Deploy an Autoscaling Kubernetes Cluster"]({{ site.baseurl }}{% post_url 2010-01-03-deploy-autoscaling-k8s-cluster %}) to create autoscaling nodepools.
 
 #### 1. Create the AKS cluster
 
@@ -227,7 +227,7 @@ I would recommend a `--node-count 2`.
 
 #### Scaling the `default` nodepool back
 
-I would recommend scaling the `default` nodepool down to 1 node as we will most likely use node affinities to preferentially assign core pods to the core pool and user pods to the user pool (see ["Optimizing the JupyterHub for Autoscaling"]({% post_url 2010-01-13-optimising-autoscaling %})).
+I would recommend scaling the `default` nodepool down to 1 node as we will most likely use node affinities to preferentially assign core pods to the core pool and user pods to the user pool (see ["Optimizing the JupyterHub for Autoscaling"]({{ site.baseurl }}{% post_url 2010-01-13-optimising-autoscaling %})).
 
 ```bash
 az aks nodepool scale \
