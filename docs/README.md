@@ -40,8 +40,11 @@ They are built with jekyll and hosted at by GitHub pages at <https://alan-turing
 
 ## Locally Buidling the Documentation
 
+Install [Ruby](https://www.ruby-lang.org/en/documentation/installation/) and [Bundler](https://bundler.io/).
+
 ```bash
-cd docs
+git clone https://github.com/alan-turing-institute/hub23-deploy.git
+cd hub23-deploy/docs
 bundle install
 bundle exec jekyll serve --livereload
 ```
