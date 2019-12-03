@@ -2,6 +2,8 @@
 
 This folder contains documentation around deploying, maintaining and customising the Hub23 BinderHub instance.
 
+They are built with jekyll and hosted at by GitHub pages at <https://alan-turing-institute.github.io/hub23-deploy/>
+
 ## Recommended Reading Order
 
 1. [Creating an Azure Key Vault for Hub23](./01-azure-keyvault.md)
@@ -30,8 +32,16 @@ This folder contains documentation around deploying, maintaining and customising
 
 8. [Changing the logo on the Binder page](./08-changing-logo.md)
 
-9.  [Enabling Page Redirection](./09-enabling-page-redirection.md)
+9. [Enabling Page Redirection](./09-enabling-page-redirection.md)
 
 10. [Optimizing the JupyterHub for Autoscaling](./10-optimising-autoscaling.md)
 
 11. [Enabling HTTPS](./11-enabling-https.md)
+
+## Locally Buidling the Documentation
+
+```bash
+cd docs
+bundle install
+bundle exec jekyll serve --livereload
+```
