@@ -170,6 +170,7 @@ az provider register --namespace Microsoft.ContainerService
 ## Create the Kubernetes cluster
 
 **NOTE:** These commands can also be used in conjunction with those in ["Deploy an Autoscaling Kubernetes Cluster"]({{ site.baseurl }}{% post_url 2010-01-03-deploy-autoscaling-k8s-cluster %}) to create autoscaling nodepools.
+{: .notice--info}
 
 #### 1. Create the AKS cluster
 
@@ -194,7 +195,8 @@ az aks create \
 - `--kubernetes-version`: It's recommended to use the most up-to-date version of Kubernetes.
 - `--nodepool-name` sets the name of the first pool.
 
-**NOTE:** The default nodepool _cannot_ be deleted.
+**WARNING:** The default nodepool _cannot_ be deleted.
+{: .notice--warning}
 
 #### Delete local copies of the secret files
 
@@ -221,6 +223,7 @@ az aks nodepool add \
 ```
 
 **NOTE:** The flags to enable autoscaling can also be used here.
+{: .notice--info}
 
 The same command can be run to create a `user` nodepool.
 I would recommend a `--node-count 2`.

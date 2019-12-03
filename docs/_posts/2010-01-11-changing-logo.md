@@ -62,6 +62,7 @@ extraVolumeMounts:
 ```
 
 **NOTE:** If you are testing the logo on a branch of this repo, you will need to update the `--branch` argument to match.
+{: .notice--info}
 
 #### 4. Upgrade the BinderHub deployment and visit the Binder page!
 

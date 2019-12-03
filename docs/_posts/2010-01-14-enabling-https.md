@@ -33,12 +33,12 @@ But CA's don't jkust give away certificates.
 They require proof of domain ownership through a _challenge_.
 This is technically cumbersone and often automated by services like [`kube-lego`](https://github.com/jetstack/kube-lego) and [`cert-manager`](https://github.com/jetstack/cert-manager).
 
-> **HTTPS vs TLS**
->
-> _HTTPS_ is the secured version of HTTP: HyperText Transfer Protocol.
-> HTTP is the protocol used by browsers and web servers to communicate and exchange information.
-> When that exchange of data is encrypted with SSL/_TLS_, then we call it _HTTPS_.
-> The S stands for Secure.
+**HTTPS vs TLS**<br>
+_HTTPS_ is the secured version of HTTP: HyperText Transfer Protocol.
+HTTP is the protocol used by browsers and web servers to communicate and exchange information.
+When that exchange of data is encrypted with SSL/_TLS_, then we call it _HTTPS_.
+The S stands for Secure.
+{: .notice--accent}
 
 TLS termination, the transition from encrypted to unencrypted traffic, can be done in various locations.
 A common place in the world of Kubernetes is to let this be managed by ingress controllers.
@@ -269,6 +269,7 @@ helm upgrade hub23 ./hub23-chart \
 ```
 
 **NOTE:** We use the `--force` flag here to avoid a `nodePorts` error.
+{: .notice--info}
 
 #### 10. Updating the A records
 

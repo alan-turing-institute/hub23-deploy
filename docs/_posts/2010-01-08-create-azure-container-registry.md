@@ -39,6 +39,7 @@ az group create --name Hub23 --location westeurope
 ```
 
 **NOTE:** This step can be skipped if the Resource Group already exists.
+{: .notice--info}
 
 #### 4. Create an ACR
 
@@ -72,8 +73,9 @@ ACR_ID=$(az acr show --name hub23-registry --query is --output tsv)
 The Service Principal needs an AcrPush role so that it is permitted to both push and pull images to/from the registry.
 Without this, BinderHub won't be able to store the images it generates.
 
-**NOTE:** You will only have permission to perform this step if you are an owner on the Turing-BinderHub Azure subscription.
-Otherwise, you should add IT to assign this role to the Service Principal.
+**WARNING:** You will only have permission to perform this step if you are an owner on the Turing-BinderHub Azure subscription.
+Otherwise, you should ask IT to assign this role to the Service Principal.
+{: .notice--warning}
 
 ```bash
 # First download the Service Principal Client ID
@@ -104,6 +106,7 @@ registry:
 In `deploy/secret-template.yaml`, `{username}` and `{password}` will be replaced with the Service Prinicipal app ID and key, respectively.
 
 **NOTE:** Don't forget to delete the local copies of the Service Principal once you're finished with them.
+{: .notice--info}
 
 #### 10. Update `config.yaml`
 
