@@ -1,5 +1,6 @@
 ---
-layout: page
+layout: home
+posts_limit: 0
 ---
 
 This site hosts documentation around deploying, maintaining and customising the Hub23 BinderHub instance.

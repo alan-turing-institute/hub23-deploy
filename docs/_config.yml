@@ -83,21 +83,4 @@ defaults:
       type: posts
     values:
       layout: post
-      share: true
-
-# Site Author
-author:
-  name: Sarah Gibson
-  picture:
-  email: sgibson@turing.ac.uk
-  twitter: drsarahlgibson
-  links:
-    - title:
-      url:
-      icon:
-
-# Footer Links
-footer_links:
-  - title: Feed
-    url: atom.xml
-    icon: fas fa-rss-square
+      share: false
