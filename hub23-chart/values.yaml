@@ -36,11 +36,6 @@ binderhub:
           - binder.hub23.turing.ac.uk
 
   jupyterhub:
-    # hub:
-    #   extraConfig:
-    #     myConfig: |
-    #       c.KubeSpawner.pod_name_template = 'jupyter-{username}{servername}'
-
     auth:
       admin:
         access: true
