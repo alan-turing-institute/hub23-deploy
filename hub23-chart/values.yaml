@@ -5,8 +5,52 @@ letsencrypt:
   contactEmail: hub23registry@turing.ac.uk
 
 binderhub:
+  pdb:
+    minAvailable: 0
+  replicas: 1
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+
+  imageCleaner:
+    enabled: false
+
+  extraEnv:
+    # NOTE: When changing the limit, update hub.templateVars.projects_limit too
+    - name: PROJECTS_LIMIT_PER_USER
+      value: "10"
+
+  extraConfig:
+    00-launcher: |
+      from tornado import web
+      import json
+      import os
+
+      async def check_user_projects(launcher, image, username, server_name, repo_url):
+        # We are making request to API with admin token
+        resp = await launcher.api_request(
+          'projects/%s' % username,
+          method=GET,
+        )
+        body = json.loads(resp.body.decode('utf-8'))
+        projects = body['projects']
+        projects_limit = int(os.getenv('PROJECTS_LIMIT_PER_USER', 0))
+        if projects_limit > 0 and projects:
+          projects_repo_list = [p[0] for p in projects]
+          if repo_url not in projects_repo_list and len(projects) >= projects_limit:
+            raise web.HTTPError(409, "No more than {} projects is allowed. "
+                                     "One must be deleted before a new project can be created.".format(projects_limit))
+      c.Launcher.pre_launch_hook = check_user_projects
+
   config:
     BinderHub:
+      per_repo_quota: 100
+      per_repo_quota_higher: 200
+
       use_registry: true
       auth_enabled: true
 
@@ -36,6 +80,53 @@ binderhub:
           - binder.hub23.turing.ac.uk
 
   jupyterhub:
+    hub:
+      shutdownOnLogout: true
+      templateVars:
+        projects_limit: "10"
+      templatePaths:
+        - "/etc/jupyterhub/templates"
+
+      extraVolumes:
+        - name: hub-templates
+          configMap:
+            name: hub-templates
+        - name: hub-extra-config
+          configMap:
+            name: hub-extra-config
+
+      extraVolumeMounts:
+        - name: hub-templates
+          mountPath: /etc/jupyterhub/templates
+        - name: hub-extra-config
+          mountPath: /etc/jupyterhub/extra_config.py
+          subPath: extra_config.py
+
+      pdb:
+        minAvailable: 0
+
+      extraConfig:
+        00-binder: |
+          from extra_config import PersistentBinderSpawner, ProjectAPIHandler
+          c.JupyterHub.spawner_class = PersistentBinderSpawner
+          c.JupyterHub.extra_handlers = [(r'/api/projects/([^/]+)', ProjectAPIHandler), ]
+        01-hub: |
+          c.JupyterHub.bind_url = 'https://binder.hub23.turing.ac.uk'
+          if "cookie_options" in c.JupyterHub.tornado_settings:
+            c.JupyterHub.tornado_settings['cookie_options'].update({"secure": True})
+          else:
+            c.JupyterHub.tornado_settings["cookie_options"] = dict(secure=True)
+        02-never-restart: |
+          c.Kubespawner.extra_pod_config.update({'restart_policy': "Never"})
+
+      resources:
+        requests:
+          cpu: "0.25"
+          memory: 512Mi
+        limits:
+          cpu: "1"
+          memory: 1Gi
+
     auth:
       admin:
         access: true
@@ -43,6 +134,8 @@ binderhub:
           - "sgibson91"
 
     proxy:
+      pdb:
+        minAvailable: 0
       service:
         type: ClusterIP
 
@@ -57,6 +150,12 @@ binderhub:
         - secretName: hub23-hub-tls
           hosts:
             - hub.hub23.turing.ac.uk
+
+    singleuser:
+      events: true  # events_enabled - to get events from KubeSpawner
+      storage:
+        type: dynamic
+        capacity: 5Gi
 
   initContainers:
     - name: git-clone-templates
