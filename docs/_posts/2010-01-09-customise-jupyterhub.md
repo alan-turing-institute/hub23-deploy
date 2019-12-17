@@ -12,7 +12,7 @@ See the following docs:
 - <https://zero-to-jupyterhub.readthedocs.io/en/latest/user-resources.html>
 - <https://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html>
 
-Table of Contents:
+## Table of Contents
 
 - [Customising User Resources](#customising-user-resources)
 
