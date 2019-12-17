@@ -3,6 +3,7 @@ projectName: hub23
 binderhub:
   config:
     BinderHub:
+      debug: true
       auth_enabled: true
       use_named_servers: true
 
