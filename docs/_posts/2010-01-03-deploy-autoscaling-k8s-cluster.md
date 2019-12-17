@@ -75,7 +75,7 @@ We will require some info from the key vault in order to deploy the Kubernetes c
 Create a folder in which to download the secrets to.
 This will be git-ignored.
 
-```mkdir
+```bash
 mkdir .secret
 ```
 
