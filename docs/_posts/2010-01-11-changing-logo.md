@@ -10,7 +10,13 @@ See these docs:
 
 The html content must be publicly hosted so the repo must remain public.
 
+## Table of Contents
+
+- [Changing the Logo](#changing-the-logo)
+
 ---
+
+## Changing the Logo
 
 #### 1. Add the logo image file to the `static` folder
 
