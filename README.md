@@ -101,7 +101,7 @@ where:
 - `RESOURCE-GROUP` is the Azure Resource Group;
 - `SUBSCRIPTION` is the Azure subscription name;
 - `--identity` is a flag to tell the script to login to Azure using a Managed System Identity;
-- ``--dry-run` will perform a dry-run of the upgrade; and
+- `--dry-run` will perform a dry-run of the upgrade; and
 - `--debug` will provide debugging output from the `helm upgrade` command.
 
 ### Pre-Commit Hook
