@@ -1,6 +1,3 @@
-rbac:
-  enabled: true
-
 letsencrypt:
   contactEmail: hub23registry@turing.ac.uk
 
@@ -16,109 +13,38 @@ binderhub:
       cpu: "1"
       memory: 1Gi
 
+  config:
+    BinderHub:
+      debug: true
+      hub_url: http://51.105.168.213
+      per_repo_quota: 100
+      per_repo_quota_higher: 200
+      use_registry: true
+      image_prefix: hub23registry.azurecr.io/testhub/binder-dev-
+
+    DockerRegistry:
+      token_url: https://hub23registry.azurecr.io/oauth2/token?service=hub23registry.azurecr.io
+
   imageCleaner:
     enabled: false
 
-  extraEnv:
-    # NOTE: When changing the limit, update hub.templateVars.projects_limit too
-    - name: PROJECTS_LIMIT_PER_USER
-      value: "10"
-
-  extraConfig:
-    00-launcher: |
-      from tornado import web
-      import json
-      import os
-
-      async def check_user_projects(launcher, image, username, server_name, repo_url):
-        # We are making request to API with admin token
-        resp = await launcher.api_request(
-          'projects/%s' % username,
-          method=GET,
-        )
-        body = json.loads(resp.body.decode('utf-8'))
-        projects = body['projects']
-        projects_limit = int(os.getenv('PROJECTS_LIMIT_PER_USER', 0))
-        if projects_limit > 0 and projects:
-          projects_repo_list = [p[0] for p in projects]
-          if repo_url not in projects_repo_list and len(projects) >= projects_limit:
-            raise web.HTTPError(409, "No more than {} projects is allowed. "
-                                     "One must be deleted before a new project can be created.".format(projects_limit))
-      c.Launcher.pre_launch_hook = check_user_projects
-
-  config:
-    BinderHub:
-      per_repo_quota: 100
-      per_repo_quota_higher: 200
-
-      use_registry: true
-      auth_enabled: true
-
-      template_path: /etc/binderhub/custom/templates
-      extra_static_path: /etc/binderhub/custom/static
-      extra_static_url_prefix: /extra_static/
-      template_variables:
-        EXTRA_STATIC_URL_PREFIX: "/extra_static/"
-
-  service:
-    type: ClusterIP
-
-  ingress:
-    enabled: true
-    annotations:
-      # cert-manager provides a TLS secret
-      # This will ask cert-manager to be configured with default values. It's better to configure default values.
-      kubernetes.io/tls-acme: "true"
-      # nginx-ingress controller to be explicitly utilised instead of "gce"
-      # This is required to allow nginx-ingress-controller to function. This will override any cloud provided ingress controllers and use the one we choose to deploy, i.e. nginx.
-      kubernetes.io/ingress.class: nginx
-    hosts:
-      - binder.hub23.turing.ac.uk
-    tls:
-      - secretName: hub23-binder-tls
-        hosts:
-          - binder.hub23.turing.ac.uk
-
   jupyterhub:
+    debug:
+      enabled: true
+
     hub:
-      shutdownOnLogout: true
-      templateVars:
-        projects_limit: "10"
-      templatePaths:
-        - "/etc/jupyterhub/templates"
-
-      extraVolumes:
-        - name: hub-templates
-          configMap:
-            name: hub-templates
-        - name: hub-extra-config
-          configMap:
-            name: hub-extra-config
-
-      extraVolumeMounts:
-        - name: hub-templates
-          mountPath: /etc/jupyterhub/templates
-        - name: hub-extra-config
-          mountPath: /etc/jupyterhub/extra_config.py
-          subPath: extra_config.py
-
       pdb:
         minAvailable: 0
-
+      redirectToServer: false
+      shutdownOnLogout: true
       extraConfig:
-        00-binder: |
-          from extra_config import PersistentBinderSpawner, ProjectAPIHandler
-          c.JupyterHub.spawner_class = PersistentBinderSpawner
-          c.JupyterHub.extra_handlers = [(r'/api/projects/([^/]+)', ProjectAPIHandler), ]
         01-hub: |
-          c.JupyterHub.bind_url = 'https://binder.hub23.turing.ac.uk'
           if "cookie_options" in c.JupyterHub.tornado_settings:
-            c.JupyterHub.tornado_settings['cookie_options'].update({"secure": True})
+            c.JupyterHub.tornado_settings["cookie_options"].update({"secure": True})
           else:
             c.JupyterHub.tornado_settings["cookie_options"] = dict(secure=True)
         02-never-restart: |
-          c.Kubespawner.extra_pod_config.update({'restart_policy': "Never"})
-
+          c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
       resources:
         requests:
           cpu: "0.25"
@@ -127,66 +53,30 @@ binderhub:
           cpu: "1"
           memory: 1Gi
 
-    auth:
-      admin:
-        access: true
-        users:
-          - "sgibson91"
-
     proxy:
       pdb:
         minAvailable: 0
-      service:
-        type: ClusterIP
-
-    ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/tls-acme: "true"
-        kubernetes.io/ingress.class: nginx
-      hosts:
-        - hub.hub23.turing.ac.uk
-      tls:
-        - secretName: hub23-hub-tls
-          hosts:
-            - hub.hub23.turing.ac.uk
+      chp:
+        resources:
+          requests:
+            cpu: "0.5"
+            memory: 512Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
 
     singleuser:
-      events: true  # events_enabled - to get events from KubeSpawner
-      storage:
-        type: dynamic
-        capacity: 5Gi
+      cpu:
+        guarantee: 0.1
+        limit: 0.5
+      memory:
+        guarantee: 512M
+        limit: 1G
 
-  initContainers:
-    - name: git-clone-templates
-      image: alpine/git
-      args:
-        - clone
-        - --single-branch
-        - --branch=master
-        - --depth=1
-        - --
-        - https://github.com/alan-turing-institute/hub23-deploy
-        - /etc/binderhub/custom
-      securityContext:
-        runAsUser: 0
-      volumeMounts:
-        - name: custom-templates
-          mountPath: /etc/binderhub/custom
-  extraVolumes:
-    - name: custom-templates
-      emptyDir: {}
-  extraVolumeMounts:
-    - name: custom-templates
-      mountPath: /etc/binderhub/custom
-
-nginx-ingress:
-  controller:
-    config:
-      proxy-body-size: 64m
-
-cert-manager:
-  ingressShim:
-    defaultIssuerName: "staging"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"
+    scheduling:
+      userScheduler:
+        enabled: false
+      podPriority:
+        enabled: false
+      userPlaceholder:
+        enabled: false

@@ -3,77 +3,34 @@ projectName: hub23
 binderhub:
   config:
     BinderHub:
-      image_prefix: hub23registry.azurecr.io/hub23/binder-dev-
-      hub_url: https://hub.hub23.turing.ac.uk
+      auth_enabled: true
       use_named_servers: true
-
-    DockerRegistry:
-      token_url: https://hub23registry.azurecr.io/oauth2/token?service=hub23registry.azurecr.io
-
-  registry:
-    url: https://hub23registry.azurecr.io
 
   jupyterhub:
     cull:
-      # Don't cull authenticated users
-      users: false
-      every: 660
-      timeout: 600
-      maxAge: 21600  # maxAge is 6 hours: 6 * 3600 = 21600
-
+      # don't cull authenticated users
+      users: False
     custom:
       binderauth_enabled: true
-
     hub:
       allowNamedServers: true
+      namedServerLimitPerUser: 2
       redirectToServer: false
-
       services:
         binder:
-          oauth_redirect_uri: "https://binder.hub23.turing.ac.uk/oauth_callback"
+          oauth_redirect_uri: "http://51.145.189.150/oauth_callback"
           oauth_client_id: "binder-oauth-client-test"
 
-      extraConfig:
-        # set pod restart_policy back to default value OnFailure
-        02-never-restart: |
-          c.Kubespawner.extra_pod_config.update({'restart_policy': "OnFailure"})
-
     singleuser:
+      # to make notebook servers aware of hub
       cmd: jupyterhub-singleuser
-      memory:
-        limit: 1G
-        guarantee: 1G
-      cpu:
-        limit: .5
-        guarantee: .5
-
-    prePuller:
-      continuous:
-        enabled: true
-
-    scheduling:
-      podPriority:
-        enabled: true
-      userPlaceholder:
-        replicas: 3
-      userScheduler:
-        enabled: true
-      corePods:
-        nodeAffinity:
-          matchNodePurpose: require
-      userPods:
-        nodeAffinity:
-          matchNodePurpose: prefer
 
     auth:
       type: github
       github:
-        callbackUrl: "https://hub.hub23.turing.ac.uk/hub/oauth_callback"
-        orgWhitelist:
-          - "binderhub-test-org"
+        callbackUrl: "http://51.105.168.213/hub/oauth_callback"
       scopes:
         - "read:user"
-
-cert-manager:
-  ingressShim:
-    defaultIssuerName: "prod"
+      admin:
+        users:
+          - 'sgibson91'
