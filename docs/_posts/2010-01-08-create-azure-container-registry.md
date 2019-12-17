@@ -8,7 +8,13 @@ This document walks through the creation of an Azure Container Registry for the 
 
 It assumes you have the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) installed.
 
+## Table of Contents
+
+- [Create an Azure Container Registry](#create-an-azure-container-registry)
+
 ---
+
+## Create an Azure Container Registry
 
 #### 1. Login to Azure
 

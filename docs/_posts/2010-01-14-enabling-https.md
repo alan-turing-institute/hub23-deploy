@@ -9,7 +9,7 @@ It assumes you have deployed Hub23 using a local helm chart as outlined in ["Ins
 
 The following documentation is based on [this WIP documentation](https://discourse.jupyter.org/t/wip-documentation-about-cert-manager/2068).
 
-Table of Contents:
+## Table of Contents
 
 - [Context](#context)
   - [How `cert-manager` works](#how-cert-manager-works)

@@ -9,10 +9,11 @@ See the following docs:
 - <https://binderhub.readthedocs.io/en/latest/authentication.html>
 - <https://zero-to-jupyterhub.readthedocs.io/en/stable/authentication.html>
 
-Table of Contents:
+## Table of Contents
 
 - [Enabling Authentication using JupyterHub as an OAuth provider](#enabling-authentication-using-jupyterhub-as-an-oauth-provider)
 - [OAuth with GitHub](#oauth-with-github)
+- [Enabling Named Servers](#enabling-named-servers)
 
 ---
 
@@ -87,7 +88,8 @@ Add these values to the key vault (see ["Creating an Azure Key Vault for Hub23"]
 
 #### Giving access to GitHub organisations
 
-**_This section of the docs is a work in progress and needs improvement._**
+This section of the docs is a work in progress and needs improvement.
+{: .notice--warning}
 
 Update `deploy/config.yaml` to include the following under `auth`:
 
@@ -105,3 +107,29 @@ auth:
 The `read:user` scope will read a user's organisation/team memberships and look for `binderhub-test-org`.
 If the membership is not found, they will be forbidden from accessing Hub23.
 **This scope requires a user's membership of `binderhub-test-org` to be public.**
+
+## Enabling Named Servers
+
+With authentication enabled, BinderHub automatically launches new pods with the username of the authenticated person in the pod name.
+This can cause errors such as `Launch failed. User already has a running server.`
+To avoid this, we can used [named servers](https://blog.jupyter.org/announcing-jupyterhub-1-0-8fff78acad7f).
+To enable this feature, add the following to `deploy/config.yaml`.
+
+```yaml
+config:
+  BinderHub:
+    use_named_servers:true
+  
+  jupyterhub:
+    hub:
+      allowNamedServers: true
+```
+
+The number of named servers a user is allowed can be controlled as in the following example.
+
+```yaml
+config:
+  jupyterhub:
+    hub:
+      namedServerLimitPerUser: 5
+```

@@ -6,7 +6,7 @@ title: "Enabling Page Redirection"
 
 These docs will walk through how to create a DNS at which the Binder page and JupyterHub are found.
 
-Table of Contents:
+## Table of Contents
 
 - [Creating a new DNS Zone](#creating-a-new-dns-zone)
 - [Creating A records](#creating-a-records)
