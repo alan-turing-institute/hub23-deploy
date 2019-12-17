@@ -11,7 +11,7 @@ We assume you have the following CLIs installed:
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 - [Kubernetes CLI (`kubectl`)](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl)
 
-Table of Contents:
+## Table of Contents
 
 - [Setup](#setup)
 - [Download the required secrets](#download-the-required-secrets)
