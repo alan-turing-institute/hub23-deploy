@@ -14,7 +14,7 @@ This documentation assumes you have the following CLI's installed:
 - [Kubernetes CLI (`kubectl`)](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl)
 - [Helm CLI](https://helm.sh/docs/using_helm/#installing-helm)
 
-Table of Contents:
+## Table of Contents
 
 - [Writing the `hub23-chart` Helm Chart](#writing-the-hub23-chart-helm-chart)
 - [Configuring Hub23](#configuring-hub23)
@@ -129,7 +129,7 @@ binderhub:
 #### 1. Update the chart's dependencies
 
 ```bash
-cd hub23-chart && helm dependency update && cd..
+cd hub23-chart && helm dependency update && cd ..
 ```
 
 #### 2. Install the helm chart
@@ -147,7 +147,7 @@ helm install ./hub23-chart \
 #### 1. Update the chart's dependencies
 
 ```bash
-cd hub23-chart && helm dependency update && cd..
+cd hub23-chart && helm dependency update && cd ..
 ```
 
 #### 2. Upgrade the helm chart itself

@@ -10,7 +10,7 @@ We assume you have the following CLI installed:
 
 - [Helm CLI](https://helm.sh/docs/using_helm/#installing-helm)
 
-Table of Contents:
+## Table of Contents
 
 - [Setting up Helm](#setting-up-helm)
 
@@ -57,11 +57,8 @@ This is the command that connects your remote Kubernetes cluster to the commands
 helm init --service-account tiller --wait
 ```
 
-If you install `helm` on another computer to access the same cluster, you will not need to run this step again, instead run the following.
-
-```bash
-helm init --client-only
-```
+If you install `helm` on another computer to access the same cluster, you will not need to run this step again, instead run the following. `helm init --client-only`
+{: .notice--info}
 
 #### 4. Secure Helm against attacks from within the cluster
 

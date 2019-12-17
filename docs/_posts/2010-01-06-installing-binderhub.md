@@ -11,7 +11,7 @@ We assume you have the following CLI's installed:
 - [Kubernetes CLI (`kubectl`)](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl)
 - [Helm CLI](https://helm.sh/docs/using_helm/#installing-helm)
 
-Table of Contents:
+## Table of Contents
 
 - [Installing a BinderHub](#installing-a-binderhub)
 - [Increasing GitHub API limit](#increasing-github-api-limit)

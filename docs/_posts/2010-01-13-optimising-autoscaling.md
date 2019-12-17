@@ -13,7 +13,7 @@ See the following docs:
 
 All config code snippets should be added to `deploy/config.yaml`.
 
-Table of Contents:
+## Table of Contents
 
 - [Culling user pods](#culling-user-pods)
 - [Efficient Cluster Autoscaling](#efficient-cluster-autoscaling)
