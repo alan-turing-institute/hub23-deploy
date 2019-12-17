@@ -8,7 +8,7 @@ from tornado.escape import json_decode
 from kubespawner import KubeSpawner
 from jupyterhub.utils import admin_only
 from jupyterhub.apihandlers.base import APIHandler
-from jupyterhub.apihandlers.users import admin_or_Self
+from jupyterhub.apihandlers.users import admin_or_self
 
 
 class PersistentBinderSpawner(KubeSpawner):
@@ -189,7 +189,7 @@ class PersistentBinderSpawner(KubeSpawner):
         return env
 
 
-class ProejctAPIHandler(APIHandler):
+class ProjectAPIHandler(APIHandler):
     @admin_only
     async def get(self, name):
         # Get user's projects

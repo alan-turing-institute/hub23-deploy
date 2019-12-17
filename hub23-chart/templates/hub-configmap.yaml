@@ -1,0 +1,24 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: hub-templates
+  labels:
+    app: jupyterhub
+    component: etc-jupyterhub
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  {{- (.Files.Glob "files/etc/jupyterhub/templates/*").AsConfig | nindent 2 }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: hub-extra-config
+  labels:
+    app: jupyterhub
+    component: etc-jupyterhub
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  extra_config.py: |-
+    {{- .Files.Get "files/etc/jupyterhub/extra_config.py" | nindent 4 }}
