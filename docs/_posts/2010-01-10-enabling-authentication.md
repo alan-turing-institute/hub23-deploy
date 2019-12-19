@@ -88,7 +88,7 @@ Add these values to the key vault (see ["Creating an Azure Key Vault for Hub23"]
 
 #### Giving access to GitHub organisations
 
-This section of the docs is a work in progress and needs improvement.
+**WARNING:** This section of the docs is a work in progress and needs improvement.
 {: .notice--warning}
 
 Update `deploy/config.yaml` to include the following under `auth`:
@@ -119,7 +119,7 @@ To enable this feature, add the following to `deploy/config.yaml`.
 config:
   BinderHub:
     use_named_servers:true
-  
+
   jupyterhub:
     hub:
       allowNamedServers: true
