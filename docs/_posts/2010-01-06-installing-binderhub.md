@@ -13,10 +13,23 @@ We assume you have the following CLI's installed:
 
 ## Table of Contents
 
+- [Downloading the Required Secrets](#downloading-the-required-secrets)
 - [Installing a BinderHub](#installing-a-binderhub)
 - [Increasing GitHub API limit](#increasing-github-api-limit)
 
 ---
+
+## Downloading the Required Secrets
+
+To set up the BinderHub, we will need to download the API and secret tokens from the keyvault like so:
+
+```bash
+az keyvault secret download --vault-name hub23-keyvault --name apiToken --file .secret/apiToken.txt
+```
+
+```bash
+az keyvault secret download --vault-name hub23-keyvault --name secretToken --file .secret/secretToken.txt
+```
 
 ## Installing a BinderHub
 

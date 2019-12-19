@@ -16,12 +16,25 @@ This documentation assumes you have the following CLI's installed:
 
 ## Table of Contents
 
+- [Downloading the Required Secrets](#downloading-the-required-secrets)
 - [Writing the `hub23-chart` Helm Chart](#writing-the-hub23-chart-helm-chart)
 - [Configuring Hub23](#configuring-hub23)
 - [Installing `hub23-chart`](#installing-hub23-chart)
 - [Upgrading `hub23-chart`](#upgrading-hub23-chart)
 
 ---
+
+## Downloading the Required Secrets
+
+To set up the BinderHub, we will need to download the API and secret tokens from the keyvault like so:
+
+```bash
+az keyvault secret download --vault-name hub23-keyvault --name apiToken --file .secret/apiToken.txt
+```
+
+```bash
+az keyvault secret download --vault-name hub23-keyvault --name secretToken --file .secret/secretToken.txt
+```
 
 ## Writing the `hub23-chart` Helm Chart
 
