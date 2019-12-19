@@ -89,8 +89,5 @@ helm version
 You must have at least version 2.11.0 and the client (`helm`) and server (`tiller`) versions must match.
 The server may take a little while to appear.
 
-If the versions do not match, run the following commands and check the versions again.
-
-```bash
-helm init --upgrade
-```
+If the versions do not match, run the following commands and check the versions again. `helm init --upgrade`
+{: .notice--info}

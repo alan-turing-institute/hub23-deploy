@@ -162,7 +162,8 @@ Check the deployment is working by launching a repo, e.g.: <https://github.com/b
 
 ## Increasing GitHub API limit
 
-**N.B.:** This step is not strictly necessary though is recommended before sharing the Binder link with others.
+This step is not strictly necessary though is recommended before sharing the Binder link with others.
+{: .notice--info}
 
 By default, GitHub allows 60 API requests per hour.
 We can create an Access Token to authenticate the BinderHub and hence increase this limit to 5,000 requests an hour.
