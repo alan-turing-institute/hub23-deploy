@@ -112,6 +112,56 @@ az keyvault secret download \
     --file .secret/ssh-key-hub23cluster.pub
 ```
 
+## Create a VNET
+
+#### 1.
+
+```bash
+az network vnet create \
+    --resource-group Hub23 \
+    --name hub23-vnet \
+    --address-prefixes 10.0.0.0/8 \
+    --subnet-name hub23-subnet \
+    --subnet-prefix 10.240.0.0/16
+```
+
+#### 2.
+
+```bash
+VNET_ID=$(
+    az network vnet show \
+    --resource-group Hub23 \
+    --name hub23-vnet \
+    --query id \
+    --output tsv
+)
+```
+
+#### 3.
+
+```bash
+az role assignment create \
+    --assignee $(cat .secret/appID.txt) \
+    --scope $VNET_ID \
+    --role Contributor
+```
+
+**WARNING:** You must have Owner permissions on the subscription for this step to work.
+{: .notice--warning}
+
+#### 4.
+
+```bash
+SUBNET_ID=$(
+    az network vnet subnet show \
+    --resource-group Hub23 \
+    --vnet-name hub23-vnet \
+    --name hub23-subnet \
+    --query id \
+    --output tsv
+)
+```
+
 ## Setup for Multiple Nodepools
 
 See the following docs:
@@ -165,14 +215,20 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 az aks create \
     --resource-group Hub23 \
     --name hub23cluster \
-    --kubernetes-version 1.14.6 \
+    --kubernetes-version 1.14.8 \
     --node-count 3 \
     --node-vm-size Standard_D2s_v3 \
     --nodepool-name default \
     --service-principal $(cat .secret/appID.txt) \
     --client-secret $(cat .secret/key.txt) \
     --ssh-key-value .secret/ssh-key-hub23cluster.pub \
-    ---output table
+    --dns-service-ip 10.0.0.10 \
+    --docker-bridge-address 172.17.0.1/16 \
+    --network-plugin azure \
+    --network-policy azure
+    --service-cidr 10.0.0.0/16 \
+    --vnet-subnet-id $SUBNET_ID \
+    --output table
 ```
 
 - `--node-count` is the number of nodes to be deployed. 3 is recommended for a stable, scalable cluster.
