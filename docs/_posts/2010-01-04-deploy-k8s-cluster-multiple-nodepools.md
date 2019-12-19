@@ -257,9 +257,13 @@ az aks nodepool add \
     --cluster-name hub23cluster \
     --name core \
     --resource-group Hub23 \
-    --kubernetes-version 1.14.6 \
+    --kubernetes-version 1.14.8 \
     --node-count 1 \
-    --node-vm-size Standard_D2s_v3
+    --node-vm-size Standard_D2s_v3 \
+    --vnet-subnet-id $SUBNET_ID \
+    --enable-cluster-autoscaler \
+    --min-count MINIMUM_NODE_NUMBER \
+    --max-count MAXIMUM_NODE_NUMBER
 ```
 
 **NOTE:** The flags to enable autoscaling can also be used here.
