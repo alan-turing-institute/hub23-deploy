@@ -85,7 +85,6 @@ We will require the following secrets:
 
 - Service Principal app ID and key
 - public SSH key
-- API and secret tokens
 
 They should be downloaded to files in the `.secret` folder so that they are git-ignored.
 Download the Service Principal:
@@ -111,22 +110,6 @@ az keyvault secret download \
     --vault-name hub23-keyvault \
     --name ssh-key-Hub23cluster-public \
     --file .secret/ssh-key-hub23cluster.pub
-```
-
-Download the API and secret tokens:
-
-```bash
-az keyvault secret download \
-    --vault-name hub23-keyvault \
-    --name apiToken \
-    --file .secret/apiToken.txt
-```
-
-```bash
-az keyvault secret download \
-    --vault-name hub23-keyvault \
-    --name secretToken \
-    --file .secret/secretToken.txt
 ```
 
 ## Set up for Autoscaling
