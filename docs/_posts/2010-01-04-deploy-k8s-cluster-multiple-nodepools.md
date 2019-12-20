@@ -15,6 +15,7 @@ We assume you have the following CLIs installed:
 
 - [Setup](#setup)
 - [Download the required secrets](#download-the-required-secrets)
+- [Enable Network Policies](#enable-network-policies)
 - [Setup for Multiple Nodepools](#setup-for-multiple-nodepools)
 - [Create the Kubernetes cluster](#create-the-kubernetes-cluster)
 
