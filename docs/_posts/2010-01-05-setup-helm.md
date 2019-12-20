@@ -57,7 +57,7 @@ This is the command that connects your remote Kubernetes cluster to the commands
 helm init --service-account tiller --wait
 ```
 
-If you install `helm` on another computer to access the same cluster, you will not need to run this step again, instead run the following. `helm init --client-only`
+**NOTE:** If you install `helm` on another computer to access the same cluster, you will not need to run this step again, instead run the following. `helm init --client-only`
 {: .notice--info}
 
 #### 4. Secure Helm against attacks from within the cluster
@@ -89,8 +89,5 @@ helm version
 You must have at least version 2.11.0 and the client (`helm`) and server (`tiller`) versions must match.
 The server may take a little while to appear.
 
-If the versions do not match, run the following commands and check the versions again.
-
-```bash
-helm init --upgrade
-```
+**NOTE:** If the versions do not match, run the following commands and check the versions again. `helm init --upgrade`
+{: .notice--info}

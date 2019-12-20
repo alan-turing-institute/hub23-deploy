@@ -13,10 +13,23 @@ We assume you have the following CLI's installed:
 
 ## Table of Contents
 
+- [Downloading the Required Secrets](#downloading-the-required-secrets)
 - [Installing a BinderHub](#installing-a-binderhub)
 - [Increasing GitHub API limit](#increasing-github-api-limit)
 
 ---
+
+## Downloading the Required Secrets
+
+To set up the BinderHub, we will need to download the API and secret tokens from the keyvault like so:
+
+```bash
+az keyvault secret download --vault-name hub23-keyvault --name apiToken --file .secret/apiToken.txt
+```
+
+```bash
+az keyvault secret download --vault-name hub23-keyvault --name secretToken --file .secret/secretToken.txt
+```
 
 ## Installing a BinderHub
 
@@ -149,7 +162,8 @@ Check the deployment is working by launching a repo, e.g.: <https://github.com/b
 
 ## Increasing GitHub API limit
 
-**N.B.:** This step is not strictly necessary though is recommended before sharing the Binder link with others.
+**NOTE:** This step is not strictly necessary though is recommended before sharing the Binder link with others.
+{: .notice--info}
 
 By default, GitHub allows 60 API requests per hour.
 We can create an Access Token to authenticate the BinderHub and hence increase this limit to 5,000 requests an hour.

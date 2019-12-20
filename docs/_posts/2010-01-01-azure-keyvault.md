@@ -68,7 +68,7 @@ Test if the resource group exists by running the following: ```az group exists -
 
 #### 4. Create the key vault
 
-Key vault names must be lower case and/or numerical and may only include hyphens (`-`), no underscores (`_`) or other non-alphanumeric characters. They must also be unique.
+**NOTE:** Key vault names must be lower case and/or numerical and may only include hyphens (`-`), no underscores (`_`) or other non-alphanumeric characters. They must also be unique.
 {: .notice--info}
 
 ```bash

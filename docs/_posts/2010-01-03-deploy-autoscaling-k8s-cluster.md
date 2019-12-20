@@ -15,6 +15,7 @@ We assume you have the following CLIs installed:
 
 - [Setup](#setup)
 - [Download the required secrets](#download-the-required-secrets)
+- [Enable Network Policies](#enable-network-policies)
 - [Set up for Autoscaling](#set-up-for-autoscaling)
 - [Create the Kubernetes cluster](#create-the-kubernetes-cluster)
 - [Enabling Autoscaling](#enabling-autoscaling)
@@ -47,7 +48,7 @@ If not, request access by opening a TopDesk ticket.
 To activate the subscription, run the following:
 
 ```bash
-az account set --subcription Turing-BinderHub
+az account set --subscription Turing-BinderHub
 ```
 
 #### 3. Create a Resource Group
@@ -64,7 +65,8 @@ az group create --name Hub23 --location westeurope --output table
 - `--location` sets the [data centre](https://azure.microsoft.com/en-gb/global-infrastructure/locations/) that will host the resources.
 - `--output table` prints the info in a human-readable format.
 
-**N.B.:** If you have already followed the docs on creating a key vault, then this resource group should already exist and this step can be skipped.
+**NOTE:** If you have already followed the docs on creating a key vault, then this resource group should already exist and this step can be skipped.
+{: .notice--info}
 
 ## Download the required secrets
 
@@ -85,7 +87,6 @@ We will require the following secrets:
 
 - Service Principal app ID and key
 - public SSH key
-- API and secret tokens
 
 They should be downloaded to files in the `.secret` folder so that they are git-ignored.
 Download the Service Principal:
@@ -113,20 +114,67 @@ az keyvault secret download \
     --file .secret/ssh-key-hub23cluster.pub
 ```
 
-Download the API and secret tokens:
+## Enable Network Policies
+
+The BinderHub helm chart contains network policies designed to restrict access to pods and the JupyterHub.
+However, the Kubernetes cluster will not be automatically configured to obey these network policies.
+Therefore, we need create a virtual network (vnet) and sub network (subnet) with network policies enabled so that these pod traffic restrictions are obeyed.
+
+See the following documentation: <https://docs.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy>
+
+#### 1. Create a VNET
 
 ```bash
-az keyvault secret download \
-    --vault-name hub23-keyvault \
-    --name apiToken \
-    --file .secret/apiToken.txt
+az network vnet create \
+    --resource-group Hub23 \
+    --name hub23-vnet \
+    --address-prefixes 10.0.0.0/8 \
+    --subnet-name hub23-subnet \
+    --subnet-prefix 10.240.0.0/16
 ```
 
+- `--address-prefixes`: IP address prefixes for the VNet;
+- `--subnet-prefix`: IP address prefixes in CIDR format for the new subnet.
+
+#### 2. Retrieve the VNet ID
+
+This saves the VNet ID into a bash variable.
+
 ```bash
-az keyvault secret download \
-    --vault-name hub23-keyvault \
-    --name secretToken \
-    --file .secret/secretToken.txt
+VNET_ID=$(
+    az network vnet show \
+    --resource-group Hub23 \
+    --name hub23-vnet \
+    --query id \
+    --output tsv
+)
+```
+
+#### 3. Assign the Contributor role to the Service Principal for accessing the VNet
+
+```bash
+az role assignment create \
+    --assignee $(cat .secret/appID.txt) \
+    --scope $VNET_ID \
+    --role Contributor
+```
+
+**WARNING:** You must have Owner permissions on the subscription for this step to work.
+{: .notice--warning}
+
+#### 4. Retrieve the subnet ID
+
+This will save the subnet ID to a bash variable.
+
+```bash
+SUBNET_ID=$(
+    az network vnet subnet show \
+    --resource-group Hub23 \
+    --vnet-name hub23-vnet \
+    --name hub23-subnet \
+    --query id \
+    --output tsv
+)
 ```
 
 ## Set up for Autoscaling
@@ -175,7 +223,7 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 az aks create \
     --resource-group Hub23 \
     --name hub23cluster \
-    --kubernetes-version 1.14.6 \  # Or whichever is newest
+    --kubernetes-version 1.14.8 \
     --node-count 3 \
     --enable-vmss \
     --enable-cluster-autoscaler \
@@ -184,13 +232,26 @@ az aks create \
     --ssh-key-value .secret/ssh-key-hub23cluster.pub \
     --service-principal $(cat .secret/appID.txt) \
     --client-secret $(cat .secret/key.txt) \
+    --dns-service-ip 10.0.0.10 \
+    --docker-bridge-address 172.17.0.1/16 \
+    --network-plugin azure \
+    --network-policy azure \
+    --service-cidr 10.0.0.0/16 \
+    --vnet-subnet-id $SUBNET_ID \
     --output table
 ```
 
 - `--node-count` is the number of nodes to be deployed. 3 is recommended for a stable, scalable cluster.
 - `--kubernetes-version` needs to be 1.12.4 or greater to be compatible with the cluster autoscaler.
+  It's recommended to use the most up-to-date version of Kubernetes.
 - `--enable-vmss` enables the Virtual Machine Scale Set of scalable VMs.
 - `--min-count`/`--max-count` defines the minimum and maximum number of nodes to be spun up/down.
+- `--dns-service-ip`: An IP address assigned to the Kubernetes DNS service.
+- `--docker-bridge-address`: A specific IP address and netmask for the Docker bridge, using standard CIDR notation.
+- `--network-plugin`: The Kubernetes network plugin to use.
+- `--network-policy`: The Kubernetes network policy to use.
+- `--service-cidr`: A CIDR notation IP range from which to assign service cluster IPs.
+- `--vnet-subnet-id`: The ID of a subnet in an existing VNet into which to deploy the cluster.
 
 #### Delete local copies of the secret files
 
