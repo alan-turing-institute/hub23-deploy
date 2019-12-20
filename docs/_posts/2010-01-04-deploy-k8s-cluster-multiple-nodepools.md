@@ -112,9 +112,15 @@ az keyvault secret download \
     --file .secret/ssh-key-hub23cluster.pub
 ```
 
-## Create a VNET
+## Enable Network Policies
 
-#### 1.
+The BinderHub helm chart contains network policies designed to restrict access to pods and the JupyterHub.
+However, the Kubernetes cluster will not be automatically configured to obey these network policies.
+Therefore, we need create a virtual network (vnet) and sub network (subnet) with network policies enabled so that these pod traffic restrictions are obeyed.
+
+See the following documentation: <https://docs.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy>
+
+#### 1. Create a VNET
 
 ```bash
 az network vnet create \
@@ -125,7 +131,12 @@ az network vnet create \
     --subnet-prefix 10.240.0.0/16
 ```
 
-#### 2.
+- `--address-prefixes`: IP address prefixes for the VNet;
+- `--subnet-prefix`: IP address prefixes in CIDR format for the new subnet.
+
+#### 2. Retrieve the VNet ID
+
+This saves the VNet ID into a bash variable.
 
 ```bash
 VNET_ID=$(
@@ -137,7 +148,7 @@ VNET_ID=$(
 )
 ```
 
-#### 3.
+#### 3. Assign the Contributor role to the Service Principal for accessing the VNet
 
 ```bash
 az role assignment create \
@@ -149,7 +160,9 @@ az role assignment create \
 **WARNING:** You must have Owner permissions on the subscription for this step to work.
 {: .notice--warning}
 
-#### 4.
+#### 4. Retrieve the subnet ID
+
+This will save the subnet ID to a bash variable.
 
 ```bash
 SUBNET_ID=$(
