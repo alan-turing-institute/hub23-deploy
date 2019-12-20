@@ -239,7 +239,7 @@ az aks create \
     --dns-service-ip 10.0.0.10 \
     --docker-bridge-address 172.17.0.1/16 \
     --network-plugin azure \
-    --network-policy azure
+    --network-policy azure \
     --service-cidr 10.0.0.0/16 \
     --vnet-subnet-id $SUBNET_ID \
     --output table
@@ -248,6 +248,12 @@ az aks create \
 - `--node-count` is the number of nodes to be deployed. 3 is recommended for a stable, scalable cluster.
 - `--kubernetes-version`: It's recommended to use the most up-to-date version of Kubernetes.
 - `--nodepool-name` sets the name of the first pool.
+- `--dns-service-ip`: An IP address assigned to the Kubernetes DNS service.
+- `--docker-bridge-address`: A specific IP address and netmask for the Docker bridge, using standard CIDR notation.
+- `--network-plugin`: The Kubernetes network plugin to use.
+- `--network-policy`: The Kubernetes network policy to use.
+- `--service-cidr`: A CIDR notation IP range from which to assign service cluster IPs.
+- `--vnet-subnet-id`: The ID of a subnet in an existing VNet into which to deploy the cluster.
 
 **WARNING:** The default nodepool _cannot_ be deleted.
 {: .notice--warning}
