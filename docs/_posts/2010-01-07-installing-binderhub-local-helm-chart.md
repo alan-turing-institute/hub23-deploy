@@ -21,6 +21,8 @@ This documentation assumes you have the following CLI's installed:
 - [Configuring Hub23](#configuring-hub23)
 - [Installing `hub23-chart`](#installing-hub23-chart)
 - [Upgrading `hub23-chart`](#upgrading-hub23-chart)
+- [Increasing GitHub API limit](#increasing-github-api-limit)
+- [Customisations](#customisations)
 
 ---
 
@@ -170,6 +172,71 @@ helm upgrade hub23 ./hub23-chart \
     -f deploy/prod.yaml \
     -f .secret/prod.yaml
 ```
+
+## Increasing GitHub API limit
+
+**NOTE:** This step is not strictly necessary though is recommended before sharing the Binder link with others.
+{: .notice--info}
+
+By default, GitHub allows 60 API requests per hour.
+We can create an Access Token to authenticate the BinderHub and hence increase this limit to 5,000 requests an hour.
+This is advisable if you are expecting users to hosts repositories on your BinderHub.
+
+#### 1. Create a Personal Access Token
+
+Create a new token with default,read-pnly permissions (do not check any boxes) [here](https://github.com/settings/tokens/new/).
+
+Immediately copy the token as you will not be able to see it again!
+
+#### 2. Add the token to the Azure Keyvault
+
+Save the token to the Azure key vault.
+
+```bash
+az keyvault secret set \
+  --vault-name hub23-keyvault \
+  --name binderhub-access-token \
+  --value <PASTE-TOKEN-HERE>
+```
+
+Download the secret like so:
+
+```bash
+az keyvault secret download \
+    --vault-name hub23-keyvault \
+    --name binderhub-access-token \
+    --file .secret/accessToken.txt
+```
+
+#### 3. Update `secret-template.yaml`
+
+Update `deploy/prod-template.yaml` with the following.
+
+```yaml
+jupyterhub:
+  config:
+    GitHubRepoProvider:
+      access_token: {accessToken}
+```
+
+Again, we can use `sed` to populate this secret:
+
+```bash
+sed -e "s/{accessToken}/$(cat .secret/accessToken.txt)/" \
+    deploy/prod-template.yaml > .secret/prod.yaml
+```
+
+#### Delete the local copy
+
+Remember to delete the local copy after populating `.secret/prod.yaml`.
+
+```bash
+rm .secret/accessToken.txt
+```
+
+#### 4. Upgrade the `helm` chart
+
+Follow the steps in [Upgrading `hub23-chart`](#upgrading-hub23-chart) to upgrade.
 
 ## Customisations
 
