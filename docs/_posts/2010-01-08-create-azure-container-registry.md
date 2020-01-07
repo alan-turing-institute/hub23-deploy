@@ -71,7 +71,7 @@ LOGIN_SERVER=$(az acr show --name hub23-registry --query loginServer --output ts
 #### 7. Save the registry ID to a variable
 
 ```bash
-ACR_ID=$(az acr show --name hub23-registry --query is --output tsv)
+ACR_ID=$(az acr show --name hub23-registry --query id --output tsv)
 ```
 
 #### 8. Assign AcrPush role to the Service Principal
