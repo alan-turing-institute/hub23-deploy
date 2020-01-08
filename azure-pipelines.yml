@@ -9,25 +9,73 @@ jobs:
       vmImage: 'ubuntu-latest'
 
     steps:
+      # Stage 1: Installation
       - task: KubectlInstaller@0
+        displayName: 'Stage 1 Step 1: Install kubectl'
         inputs:
           kubectlVersion: '1.14.8'
 
+      - task: AzureCLI@1
+        displayName: 'Stage 1 Step 2: Merge kubectl config'
+        inputs:
+          azureSubscription: 'hub23-deploy-scn'
+          scriptLocation: 'inlineScript'
+          inlineScript: 'az aks get-credentials -n hub23cluster -g Hub23'
+
+      - task: HelmInstaller@1
+        displayName: 'Stage 1 Step 3: Install helm'
+        inputs:
+          helmVersionToInstall: '2.15.0'
+
+      - task: HelmDeploy@0
+        displayName: 'Stage 1 Step 4: Initialise helm'
+        inputs:
+          connectionType: 'Azure Resource Manager'
+          azureSubscription: 'hub23-deploy-scn'
+          azureResourceGroup: 'Hub23'
+          kubernetesCluster: 'hub23cluster'
+          namespace: 'hub23'
+          command: 'init'
+          arguments: '--force-upgrade'
+          tillerNamespace: 'kube-system'
+
+      - task: UsePythonVersion@0
+        displayName: 'Stage 1 Step 5: Install Python 3.7'
+        inputs:
+          versionSpec: '3.7'
+          addToPath: true
+
+      - script: python -m pip install --upgrade pip setuptools wheel
+        displayName: 'Stage 1 Step 6: Install Python tools'
+
+      - script: python -m pip install -r requirements.txt
+        displayName: 'Stage 1 Step 7: Install Python requirements'
+
+      - task: Bash@3
+        displayName: 'Stage 1 Step 8: Install kubeval'
+        inputs:
+          targetType: 'inline'
+          script: |
+            wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+            tar xf kubeval-linux-amd64.tar.gz
+            sudo cp kubeval /usr/local/bin
+
+      # Stage 2: Perform linting, validation and upgrade
       - task: AzureKeyVault@1
-        displayName: 'Pull Key Vault Secrets'
+        displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
         inputs:
           azureSubscription: 'hub23-deploy-scn'
           KeyVaultName: 'hub23-keyvault'
           SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key, binderhub-access-token'
 
       - task: Bash@3
-        displayName: 'Make .secret folder'
+        displayName: 'Stage 2 Step 2: Make .secret folder'
         inputs:
           targetType: 'inline'
           script: 'mkdir -p .secret'
 
       - task: Bash@3
-        displayName: "Generate .secret/prod.yaml"
+        displayName: "Stage 2 Step 3: Generate .secret/prod.yaml"
         inputs:
           targetType: 'inline'
           script: |
@@ -41,32 +89,8 @@ jobs:
             deploy/prod-template.yaml > .secret/prod.yaml
             cat .secret/prod.yaml
 
-      - task: AzureCLI@1
-        displayName: 'Merging kubectl config'
-        inputs:
-          azureSubscription: 'hub23-deploy-scn'
-          scriptLocation: 'inlineScript'
-          inlineScript: 'az aks get-credentials -n hub23cluster -g Hub23'
-
-      - task: HelmInstaller@1
-        displayName: 'Install Helm'
-        inputs:
-          helmVersionToInstall: '2.15.0'
-
-      - task: HelmDeploy@0
-        displayName: 'Initialise Helm'
-        inputs:
-          connectionType: 'Azure Resource Manager'
-          azureSubscription: 'hub23-deploy-scn'
-          azureResourceGroup: 'Hub23'
-          kubernetesCluster: 'hub23cluster'
-          namespace: 'hub23'
-          command: 'init'
-          arguments: '--force-upgrade'
-          tillerNamespace: 'kube-system'
-
       - task: Bash@3
-        displayName: 'Add helm chart repos'
+        displayName: 'Stage 2 Step 4: Add helm chart repos'
         inputs:
           targetType: 'inline'
           script: |
@@ -77,7 +101,7 @@ jobs:
             kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.10/deploy/manifests/00-crds.yaml
 
       - task: Bash@3
-        displayName: 'Updating local chart'
+        displayName: 'Stage 2 Step 5: Update local helm chart'
         inputs:
           targetType: 'inline'
           script: |
@@ -85,36 +109,15 @@ jobs:
             helm dependency update
             cd ..
 
-      - task: UsePythonVersion@0
-        displayName: 'Use Python 3.7'
-        inputs:
-          versionSpec: '3.7'
-          addToPath: true
-
-      - script: python -m pip install --upgrade pip setuptools wheel
-        displayName: 'Install tools'
-
-      - script: python -m pip install -r requirements.txt
-        displayName: 'Install requirements'
-
-      - task: Bash@3
-        displayName: 'Install kubeval'
-        inputs:
-          targetType: 'inline'
-          script: |
-            wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
-            tar xf kubeval-linux-amd64.tar.gz
-            sudo cp kubeval /usr/local/bin
-
       - task: PythonScript@0
-        displayName: 'Lint and Validate hub23-chart'
+        displayName: 'Stage 2 Step 6: Lint and validate hub23-chart'
         inputs:
           scriptSource: 'filePath'
           scriptPath: 'tests/lint-and-validate.py'
           arguments: '--values ../hub23-chart/values.yaml ../deploy/prod.yaml ../.secret/prod.yaml'
 
       - task: HelmDeploy@0
-        displayName: 'Perform helm upgrade'
+        displayName: 'Stage 2 Step 7: Perform helm upgrade'
         inputs:
           connectionType: 'Azure Resource Manager'
           azureSubscription: 'hub23-deploy-scn'
