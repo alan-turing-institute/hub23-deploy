@@ -58,7 +58,6 @@ This will set up the redirection to the JupyterHub for login and spin up user se
 auth:
   type: github
   github:
-
     callbackUrl: "http://<jupyter-ip>/hub/oauth_callback"
 ```
 
@@ -118,8 +117,7 @@ To enable this feature, add the following to `deploy/config.yaml`.
 ```yaml
 config:
   BinderHub:
-    use_named_servers:true
-
+    use_named_servers: true
   jupyterhub:
     hub:
       allowNamedServers: true
@@ -128,8 +126,7 @@ config:
 The number of named servers a user is allowed can be controlled as in the following example.
 
 ```yaml
-config:
-  jupyterhub:
-    hub:
-      namedServerLimitPerUser: 5
+jupyterhub:
+  hub:
+    namedServerLimitPerUser: 5
 ```
