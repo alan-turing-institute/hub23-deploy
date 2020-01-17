@@ -25,3 +25,4 @@ jobs:
       - name: Lint with Flake8
         run: |
           flake8 --builtins=ArgumentError scripts/
+          flake8 --builtins=ArgumentError tests/
