@@ -21,9 +21,9 @@ jobs:
       scriptLocation: 'inlineScript'
       inlineScript: 'az account show --subscription Turing-BinderHub --query state --output tsv'
 
-# - job: B
-#   dependsOn: A
-#   variables:
-#     outputFromA: $[ dependencies.A.outputs['getSubscriptionStatus'] ]
-#   steps:
-#   - script: 
+- job: checkSubscriptionStatus
+  dependsOn: A
+  variables:
+    subStatus: $[ dependencies.getSubscriptionStatus.outputs['getSubscriptionStatus'] ]
+  steps:
+  - script: echo $(subStatus)
