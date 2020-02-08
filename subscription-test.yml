@@ -10,7 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-- job: 'Get Subscription Status'
+- job: getSubscriptionStatus
   steps:
   - task: AzureCLI@2
     displayName: 'Check subscription status'
