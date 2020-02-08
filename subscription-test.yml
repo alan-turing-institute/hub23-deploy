@@ -26,4 +26,6 @@ jobs:
   variables:
     subStatus: $[ dependencies.getSubscriptionStatus.outputs['getSubscriptionStatus'] ]
   steps:
-  - bash: [[ $subStatus == 'Enabled' ]]
+  - task: CmdLine@2
+    inputs:
+      script: '[[ $subStatus == ''Enabled'' ]]'
