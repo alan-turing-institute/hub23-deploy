@@ -22,7 +22,7 @@ jobs:
       inlineScript: 'az account show --subscription Turing-BinderHub --query state --output tsv'
 
 - job: checkSubscriptionStatus
-  dependsOn: A
+  dependsOn: getSubscriptionStatus
   variables:
     subStatus: $[ dependencies.getSubscriptionStatus.outputs['getSubscriptionStatus'] ]
   steps:
