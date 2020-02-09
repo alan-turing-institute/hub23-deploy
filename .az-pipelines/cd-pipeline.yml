@@ -39,6 +39,7 @@ jobs:
       tillerNamespace: 'kube-system'
 
 - job: HelmUpgrade
+  dependsOn: Installation
   steps:
   - task: AzureKeyVault@1
     displayName: 'Step 1: Pull Key Vault Secrets'

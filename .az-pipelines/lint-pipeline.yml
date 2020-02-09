@@ -37,6 +37,7 @@ jobs:
         sudo cp kubeval /usr/local/bin
 
 - job: LintAndValidateHelmChart
+  dependsOn: Installation
   steps:
   - task: Bash@3
     displayName: 'Step 1: Add helm chart repos'
