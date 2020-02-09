@@ -31,4 +31,4 @@ jobs:
   steps:
   - task: CmdLine@2
     inputs:
-      script: '[[ $subStatus == ''Enabled'' ]]'
+      script: '[[ $getSubcriptionStatus == ''Enabled'' ]]'
