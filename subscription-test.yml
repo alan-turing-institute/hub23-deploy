@@ -16,7 +16,7 @@ jobs:
 - job: getSubscriptionStatus
   steps:
   - task: AzureCLI@2
-    displayName: 'Check subscription status'
+    displayName: 'Get subscription status'
     name: getSubscriptionStatus
     inputs:
       azureSubscription: 'hub23-deploy-scn'
@@ -30,6 +30,7 @@ jobs:
     subStatus: $[ dependencies.getSubscriptionStatus.outputs['getSubscriptionStatus'] ]
   steps:
   - task: CmdLine@2
+    displayName: 'Check subscription status'
     inputs:
       script: |
         'echo $getSubscriptionStatus && [[ $getSubcriptionStatus == ''Enabled'' ]]'
