@@ -6,27 +6,28 @@ pr: none
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-  # Stage 1: Installation
+jobs:
+- job: Installation
+  steps:
   - task: KubectlInstaller@0
-    displayName: 'Stage 1 Step 1: Install kubectl'
+    displayName: 'Step 1: Install kubectl'
     inputs:
       kubectlVersion: '1.14.8'
 
   - task: AzureCLI@1
-    displayName: 'Stage 1 Step 2: Merge kubectl config'
+    displayName: 'Step 2: Merge kubectl config'
     inputs:
       azureSubscription: 'hub23-deploy-scn'
       scriptLocation: 'inlineScript'
       inlineScript: 'az aks get-credentials -n hub23cluster -g Hub23'
 
   - task: HelmInstaller@1
-    displayName: 'Stage 1 Step 3: Install helm'
+    displayName: 'Step 3: Install helm'
     inputs:
       helmVersionToInstall: '2.15.0'
 
   - task: HelmDeploy@0
-    displayName: 'Stage 1 Step 4: Initialise helm'
+    displayName: 'Step 4: Initialise helm'
     inputs:
       connectionType: 'Azure Resource Manager'
       azureSubscription: 'hub23-deploy-scn'
@@ -37,30 +38,10 @@ steps:
       arguments: '--force-upgrade'
       tillerNamespace: 'kube-system'
 
-  - task: UsePythonVersion@0
-    displayName: 'Stage 1 Step 5: Install Python 3.7'
-    inputs:
-      versionSpec: '3.7'
-      addToPath: true
-
-  - script: python -m pip install --upgrade pip setuptools wheel
-    displayName: 'Stage 1 Step 6: Install Python tools'
-
-  - script: python -m pip install -r requirements.txt
-    displayName: 'Stage 1 Step 7: Install Python requirements'
-
-  - task: Bash@3
-    displayName: 'Stage 1 Step 8: Install kubeval'
-    inputs:
-      targetType: 'inline'
-      script: |
-        wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
-        tar xf kubeval-linux-amd64.tar.gz
-        sudo cp kubeval /usr/local/bin
-
-  # Stage 2: Perform linting, validation and upgrade
+- job: HelmUpgrade
+  steps:
   - task: AzureKeyVault@1
-    displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
+    displayName: 'Step 1: Pull Key Vault Secrets'
     inputs:
       azureSubscription: 'hub23-deploy-scn'
       KeyVaultName: 'hub23-keyvault'
@@ -103,16 +84,7 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        cd hub23-chart
-        helm dependency update
-        cd ..
-
-  - task: PythonScript@0
-    displayName: 'Stage 2 Step 6: Lint and validate hub23-chart'
-    inputs:
-      scriptSource: 'filePath'
-      scriptPath: 'tests/lint-and-validate.py'
-      arguments: '--values ../hub23-chart/values.yaml ../deploy/prod.yaml ../.secret/prod.yaml'
+        cd hub23-chart && helm dep up && cd ..
 
   - task: HelmDeploy@0
     displayName: 'Stage 2 Step 7: Perform helm upgrade'
