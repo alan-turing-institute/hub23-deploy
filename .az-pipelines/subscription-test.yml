@@ -26,7 +26,10 @@ jobs:
   variables:
     subStatus: $[ dependencies.getSubscriptionStatus.outputs['getSubscriptionStatus'] ]
   steps:
-  - task: CmdLine@2
+  - task: Bash@3
     displayName: 'Check subscription status'
     inputs:
-      script: '[[ $subStatus == ''Enabled'' ]]'
+      targetType: 'inline'
+      script: |
+        echo 'The subscription is ${subStatus}'
+        [[ $subStatus == Enabled' ]]
