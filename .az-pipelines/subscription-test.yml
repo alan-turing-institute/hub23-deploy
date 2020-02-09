@@ -24,7 +24,7 @@ jobs:
 - job: checkSubscriptionStatus
   dependsOn: getSubscriptionStatus
   variables:
-    subStatus: $[ dependencies.getSubscriptionStatus.outputs['getSubscriptionStatus'] ]
+    subStatus: $[ dependencies.getSubscriptionStatus.outputs['subStatus'] ]
   steps:
   - task: Bash@3
     displayName: 'Check subscription status'
