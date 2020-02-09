@@ -32,5 +32,4 @@ jobs:
   - task: CmdLine@2
     displayName: 'Check subscription status'
     inputs:
-      script: |
-        'echo $subStatus && [[ $subStatus == ''Enabled'' ]]'
+      script: '[[ $subStatus == ''Enabled'' ]]'
