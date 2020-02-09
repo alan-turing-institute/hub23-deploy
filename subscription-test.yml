@@ -33,4 +33,4 @@ jobs:
     displayName: 'Check subscription status'
     inputs:
       script: |
-        'echo $getSubscriptionStatus && [[ $getSubcriptionStatus == ''Enabled'' ]]'
+        'echo $subStatus && [[ $subStatus == ''Enabled'' ]]'
