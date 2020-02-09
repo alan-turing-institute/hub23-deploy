@@ -1,0 +1,35 @@
+trigger:
+- master
+
+schedules:
+- cron: "0 0 * * *"
+  displayName: Daily midnight subscription test
+  branches:
+    include:
+    - master
+  always: true
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: getSubscriptionStatus
+  steps:
+  - task: AzureCLI@2
+    displayName: 'Get subscription status'
+    name: getSubscriptionStatus
+    inputs:
+      azureSubscription: 'hub23-deploy-scn'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: 'az account show --subscription Turing-BinderHub --query state --output tsv'
+
+- job: checkSubscriptionStatus
+  dependsOn: getSubscriptionStatus
+  variables:
+    subStatus: $[ dependencies.getSubscriptionStatus.outputs['getSubscriptionStatus'] ]
+  steps:
+  - task: CmdLine@2
+    displayName: 'Check subscription status'
+    inputs:
+      script: '[[ $subStatus == ''Enabled'' ]]'
