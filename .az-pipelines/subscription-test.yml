@@ -32,4 +32,4 @@ jobs:
       targetType: 'inline'
       script: |
         echo 'The subscription is ${subStatus}'
-        [[ $subStatus == Enabled' ]]
+        [[ $subStatus == 'Enabled' ]]
