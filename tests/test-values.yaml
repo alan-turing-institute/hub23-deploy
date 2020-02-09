@@ -1,0 +1,23 @@
+# This file contains fake secrets in order to pass the lint and validation test
+
+binderhub:
+  config:
+    GitHubRepoProvider:
+      access_token: "9ab8266889889e2bc6d6e083c6fcd793c039a5aab3fe9cdfa0804a808da341c6"
+
+  registry:
+    username: "928c940c5155fcf847ace6e2e39677a5950c42bcd15d569f7d4732ebb5f56f47"
+    password: "b0edab4cfd3785eebb52439ba2f89e7666506f0076506f4c9d902da7356d5eee"
+
+  jupyterhub:
+    hub:
+      services:
+        binder:
+          apiToken: "f3f2b31a46b1141030cb9213594f99a3e3e9a2d7bf8e10e945fe8d96821de8cf"
+    proxy:
+      secretToken: "f330bcc46b1d6256d39b8a855cf7933660e9688adb127b6b4ceec6070d56c6e6"
+
+    auth:
+      github:
+        clientId: "6369759d02516e5b8a22bbc67809167867fbc5b62641ed0044ced17ce91aae91"
+        clientSecret: "99663fbc1a3cf35e3665f1629c6d7c73ad41dd1601df48841c3a12a2fee485dc"
