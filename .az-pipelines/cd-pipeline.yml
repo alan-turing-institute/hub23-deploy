@@ -35,7 +35,7 @@ jobs:
       kubernetesCluster: 'hub23cluster'
       namespace: 'hub23'
       command: 'init'
-      arguments: '--force-upgrade'
+      arguments: '--client-only'
       tillerNamespace: 'kube-system'
 
 - job: HelmUpgrade
