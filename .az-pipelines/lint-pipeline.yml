@@ -15,20 +15,32 @@ jobs:
     inputs:
       helmVersionToInstall: '2.15.0'
 
+  - task: HelmDeploy@0
+    displayName: 'Step 2: Initialise helm'
+    inputs:
+      connectionType: 'Azure Resource Manager'
+      azureSubscription: 'hub23-deploy-scn'
+      azureResourceGroup: 'Hub23'
+      kubernetesCluster: 'hub23cluster'
+      namespace: 'hub23'
+      command: 'init'
+      arguments: '--client-only'
+      tillerNamespace: 'kube-system'
+
   - task: UsePythonVersion@0
-    displayName: 'Step 2: Install Python 3.7'
+    displayName: 'Step 3: Install Python 3.7'
     inputs:
       versionSpec: '3.7'
       addToPath: true
 
   - script: python -m pip install --upgrade pip setuptools wheel
-    displayName: 'Step 3: Install Python tools'
+    displayName: 'Step 4: Install Python tools'
 
   - script: python -m pip install -r requirements.txt
-    displayName: 'Step 4: Install Python requirements'
+    displayName: 'Step 5: Install Python requirements'
 
   - task: Bash@3
-    displayName: 'Step 5: Install kubeval'
+    displayName: 'Step 6: Install kubeval'
     inputs:
       targetType: 'inline'
       script: |
