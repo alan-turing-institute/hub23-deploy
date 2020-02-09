@@ -31,4 +31,5 @@ jobs:
   steps:
   - task: CmdLine@2
     inputs:
-      script: '[[ $getSubcriptionStatus == ''Enabled'' ]]'
+      script: |
+        'echo $getSubscriptionStatus && [[ $getSubcriptionStatus == ''Enabled'' ]]'
