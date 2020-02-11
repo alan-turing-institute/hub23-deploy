@@ -76,7 +76,8 @@ class Hub:
     def helm_upgrade(self):
         self.login()
         self.configure_azure()
-        self.helm_init
+        self.helm_init()
+        self.update_local_chart()
 
     def check_filepaths(self):
         """Set filepaths and create secret directory"""
@@ -129,6 +130,7 @@ class Hub:
         )
 
     def get_cwd():
+        """Get working directory"""
         cwd = os.getcwd()
 
         if cwd.endswith("scripts"):
@@ -203,3 +205,12 @@ class Hub:
             secrets[secret] = value
 
         return secrets
+
+    def update_local_chart(self):
+        """Update the local helm chart"""
+        os.chdir(os.path.join(self.folder, self.chart_name))
+        update_cmd = ["helm", "dep", "up"]
+        result = run_cmd(update_cmd)
+        if result["returncode"] != 0:
+            raise Exception(result["err_msg"])
+        os.chdir(os.pardir)
