@@ -1,3 +1,5 @@
+import os
+
 from subprocess import check_output
 from .run_command import run_cmd, run_pipe_cmd
 
@@ -9,6 +11,33 @@ class Hub:
         """Constructor for Hub class"""
         for k, v in argsDict.items():
             setattr(self, k, v)
+
+    def generate_config_files(self):
+        """Generate configuration files for BinderHub"""
+        secrets = self.pull_secrets()
+        self.check_filepaths()
+
+        # Generate config files
+        for filename in ["prod"]:
+            with open(
+                os.path.join(self.deploy_dir, f"{filename}-template.yaml"), "r"
+            ) as f:
+                template = f.read()
+
+            template = template.format(
+                binderhub_access_token=secrets["binderhub-access-token"],
+                username=secrets["SP-appID"],
+                password=secrets["SP-key"],
+                apiToken=secrets["apiToken"],
+                secretToken=secrets["secretToken"],
+                github_client_id=secrets["github-client-id"],
+                github_client_secret=secrets["github-client-secret"],
+            )
+
+            with open(
+                os.path.join(self.secret_dir, f"{filename}.yaml"), "w"
+            ) as f:
+                f.write(template)
 
     def get_logs(self):
         """Return the logs of the JupyterHub Pod"""
@@ -37,6 +66,15 @@ class Hub:
             raise Exception(result["err_msg"])
 
         print(result["output"])
+
+    def check_filepaths(self):
+        """Set filepaths and create secret directory"""
+        self.deploy_dir = os.path.join(self.folder, "deploy")
+        self.secret_dir = os.path.join(self.folder, ".secret")
+
+        # Create the secrets folder
+        if not os.path.exists(self.secret_dir):
+            os.mkdir(self.secret_dir)
 
     def login(self):
         """Login to Azure"""
