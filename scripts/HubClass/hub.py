@@ -13,9 +13,11 @@ class Hub:
         for k, v in argsDict.items():
             setattr(self, k, v)
 
+        # Get working directory
         self.get_cwd()
 
         if self.verbose:
+            # Enable verbose output
             self.logging_config()
 
     def generate_config_files(self):
@@ -48,6 +50,7 @@ class Hub:
     def get_logs(self):
         """Return the logs of the JupyterHub Pod"""
         self.login()
+        self.configure_azure()
 
         kubectl_cmd = [
             "kubectl",
@@ -79,6 +82,7 @@ class Hub:
         self.configure_azure()
         self.helm_init()
         self.check_filepaths()
+        self.generate_config_files()
         self.update_local_chart()
 
         helm_upgrade_cmd = [
