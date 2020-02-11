@@ -2,15 +2,16 @@ import subprocess
 
 
 def run_cmd(cmd):
-    """Run a subprocess command
+    """Run a command in a subprocess sub-shell
 
-    Parameters
-    ----------
-    cmd: List of strings.
+    Arguments:
+        cmd {list of strings} -- Bash command to be run
 
-    Returns
-    -------
-    result: Dictionary
+    Returns:
+        dict -- A dictionary containing:
+                * return code
+                * output
+                * error message
     """
     result = {}
 
@@ -20,22 +21,23 @@ def run_cmd(cmd):
     output = proc.communicate()
 
     result["returncode"] = proc.returncode
-    result["output"] = output[0].decode(encoding="utf-8")
-    result["err_msg"] = output[1].decode(encoding="utf-8")
+    result["output"] = output[0].decode(encoding="utf-8").strip("\n")
+    result["err_msg"] = output[1].decode(encoding="utf-8").strip("\n")
 
     return result
 
 
 def run_pipe_cmd(cmds):
-    """Pipe together multiple commands
+    """Pipe together a set of bash commands
 
-    Parameters
-    ----------
-    cmds: Nested list of strings
+    Arguments:
+        cmds {a list of lists of strings} -- The commands to be piped together
 
-    Returns
-    -------
-    result: Dictionary
+    Returns:
+        dict -- A dictionary containing:
+                * return code
+                * output
+                * error message
     """
     N = len(cmds)  # Number of commands to pipe together
     procs = []  # List to track processes in
@@ -60,7 +62,7 @@ def run_pipe_cmd(cmds):
     output = procs[-1].communicate()
 
     result["returncode"] = procs[-1].returncode
-    result["output"] = output[0].decode(encoding="utf-8")
-    result["err_msg"] = output[1].decode(encoding="utf-8")
+    result["output"] = output[0].decode(encoding="utf-8").strip("\n")
+    result["err_msg"] = output[1].decode(encoding="utf-8").strip("\n")
 
     return result
