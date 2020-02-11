@@ -73,6 +73,11 @@ class Hub:
 
         print(result["output"])
 
+    def helm_upgrade(self):
+        self.login()
+        self.configure_azure()
+        self.helm_init
+
     def check_filepaths(self):
         """Set filepaths and create secret directory"""
         self.deploy_dir = os.path.join(self.folder, "deploy")
@@ -81,6 +86,39 @@ class Hub:
         # Create the secrets folder
         if not os.path.exists(self.secret_dir):
             os.mkdir(self.secret_dir)
+
+    def configure_azure(self):
+        """Set Azure subscription and Kubernetes context"""
+        sub_cmd = ["az", "account", "set", "--subscription"]
+
+        if " " in self.subscription:
+            sub_cmd.append(f'"{self.subscription}"')
+        else:
+            sub_cmd.append(self.subscription)
+
+        result = run_cmd(sub_cmd)
+        if result["returncode"] != 0:
+            raise Exception(result["err_msg"])
+
+        k8s_cmd = [
+            "az",
+            "aks",
+            "get-credentials",
+            "-n",
+            self.cluster_name,
+            "-g",
+            self.resource_group,
+        ]
+        result = run_cmd(k8s_cmd)
+        if result["returncode"] != 0:
+            raise Exception(result["err_msg"])
+
+    def helm_init(self):
+        """Initialise helm"""
+        cmd = ["helm", "init", "--client-only"]
+        result = run_cmd(cmd)
+        if result["returncode"] != 0:
+            raise Exception(result["err_msg"])
 
     def logging_config(self):
         """Set logging configuration"""
