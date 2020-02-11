@@ -12,6 +12,8 @@ class Hub:
         for k, v in argsDict.items():
             setattr(self, k, v)
 
+        self.get_cwd()
+
     def generate_config_files(self):
         """Generate configuration files for BinderHub"""
         secrets = self.pull_secrets()
@@ -75,6 +77,16 @@ class Hub:
         # Create the secrets folder
         if not os.path.exists(self.secret_dir):
             os.mkdir(self.secret_dir)
+
+    def get_cwd():
+        cwd = os.getcwd()
+
+        if cwd.endswith("scripts"):
+            tmp = cwd.split("/")
+            del tmp[-1]
+            cwd = "/".join(tmp)
+
+        self.folder = cwd
 
     def login(self):
         """Login to Azure"""
