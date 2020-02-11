@@ -32,8 +32,13 @@ class Hub:
         secrets = self.pull_secrets()
         self.check_filepaths()
 
+        if self.verbose:
+            logging.info("Generating config files")
+
         # Generate config files
         for filename in ["prod"]:
+            if self.verbose:
+                logging.info("Reading template file for: %s" % filename)
             with open(
                 os.path.join(self.deploy_dir, f"{filename}-template.yaml"), "r"
             ) as f:
@@ -49,15 +54,26 @@ class Hub:
                 github_client_secret=secrets["github-client-secret"],
             )
 
+            if self.verbose:
+                logging.info("Writing YAML file for: %s" % filename)
             with open(
                 os.path.join(self.secret_dir, f"{filename}.yaml"), "w"
             ) as f:
                 f.write(template)
 
+            if self.verbose:
+                logging.info(
+                    "Secret BinderHub files have been configured: %s"
+                    % os.listdir(self.secret_dir)
+                )
+
     def get_logs(self):
         """Return the logs of the JupyterHub Pod"""
         self.login()
         self.configure_azure()
+
+        if self.verbose:
+            logging.info("Pulling JupyterHub pod logs for: %s" % self.hub_name)
 
         kubectl_cmd = [
             "kubectl",
@@ -72,13 +88,15 @@ class Hub:
 
         result = run_pipe_cmd([kubectl_cmd, tr_cmd, grep_cmd])
         if result["returncode"] != 0:
+            if self.verbose:
+                logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
-        hub_pod = result["output"].strip("\n")
-
-        log_cmd = ["kubectl", "logs", hub_pod, "-n", self.hub_name]
+        log_cmd = ["kubectl", "logs", result["output"], "-n", self.hub_name]
         result = run_cmd(log_cmd)
         if result["returncode"] != 0:
+            if self.verbose:
+                logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
         print(result["output"])
@@ -106,28 +124,51 @@ class Hub:
         ]
 
         if self.dry_run:
+            if self.verbose:
+                logging.info(
+                    "THIS IS A DRY-RUN. HELM CHART WILL NOT BE UPGRADED."
+                )
             helm_upgrade_cmd.append("--dry-run")
 
         if self.debug:
+            if self.verbose:
+                logging.info("Debug option enabled for helm upgrade")
             helm_upgrade_cmd.append("--debug")
 
         result = run_cmd(helm_upgrade_cmd)
         if result["returncode"] != 0:
+            if self.verbose:
+                logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
         self.print_pods()
 
     def check_filepaths(self):
         """Set filepaths and create secret directory"""
+        if self.verbose:
+            logging.info("Constructing filepaths")
+
         self.deploy_dir = os.path.join(self.folder, "deploy")
         self.secret_dir = os.path.join(self.folder, ".secret")
 
         # Create the secrets folder
         if not os.path.exists(self.secret_dir):
-            os.mkdir(self.secret_dir)
+            if self.verbose:
+                logging.info("Creating directory: %s" % self.secret_dir)
+                os.mkdir(self.secret_dir)
+                logging.info("Created directory")
+            else:
+                os.mkdir(self.secret_dir)
+        else:
+            if self.verbose:
+                logging.info("Directory already exists: %s" % self.secret_dir)
+            pass
 
     def configure_azure(self):
         """Set Azure subscription and Kubernetes context"""
+        if self.verbose:
+            logging.info("Setting Azure subscription: %s" % self.subscription)
+
         sub_cmd = ["az", "account", "set", "--subscription"]
 
         if " " in self.subscription:
@@ -137,7 +178,13 @@ class Hub:
 
         result = run_cmd(sub_cmd)
         if result["returncode"] != 0:
+            if self.verbose:
+                logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        if self.verbose:
+            logging.info("Successfully set Azure subscription")
+            logging.info("Setting kubectl contect for: %s" % self.cluster_name)
 
         k8s_cmd = [
             "az",
@@ -150,14 +197,27 @@ class Hub:
         ]
         result = run_cmd(k8s_cmd)
         if result["returncode"] != 0:
+            if self.verbose:
+                logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        if self.verbose:
+            logging.info(result["output"])
 
     def helm_init(self):
         """Initialise helm"""
+        if self.verbose:
+            logging.info("Initialising helm")
+
         cmd = ["helm", "init", "--client-only"]
         result = run_cmd(cmd)
         if result["returncode"] != 0:
+            if self.verbose:
+                logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        if self.verbose:
+            logging.info(result["output"])
 
     def logging_config(self):
         """Set logging configuration"""
@@ -183,30 +243,36 @@ class Hub:
         login_cmd = ["az", "login"]
 
         if self.identity:
+            if self.verbose:
+                logging.info(
+                    "Logging into Azure with a Managed System Identity"
+                )
             login_cmd.append("--identity")
+        else:
+            if self.verbose:
+                logging.info("Logging into Azure")
+            pass
 
         result = run_cmd(login_cmd)
         if result["returncode"] != 0:
+            if self.verbose:
+                logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
-        cred_cmd = [
-            "az",
-            "aks",
-            "get-credentials",
-            "-n",
-            self.cluster_name,
-            "-g",
-            self.resource_group,
-        ]
-        result = run_cmd(cred_cmd)
-        if result["returncode"] != 0:
-            raise Exception(result["err_msg"])
+        if self.verbose:
+            logging.info("Successfully logged into Azure")
 
     def print_pods(self):
         """Print the Kubernetes pods"""
+        if self.verbose:
+            logging.info(
+                "Fetching the Kubernetes pods for: %s" % self.hub_name
+            )
         cmd = ["kubectl", "get", "pods", "-n", self.hub_name]
         result = run_cmd(cmd)
         if result["returncode"] != 0:
+            if self.verbose:
+                logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
 
         print(result["output"])
@@ -218,6 +284,9 @@ class Hub:
             Dict -- A dictionary containing the pulled secrets
         """
         self.login()
+
+        if self.verbose:
+            logging.info("Pulling secrets from: %s" % self.vault_name)
 
         # Secrets to be pulled
         secret_names = [
@@ -233,6 +302,9 @@ class Hub:
 
         # Pull the secrets
         for secret in secret_names:
+            if self.verbose:
+                logging.info("Pulling secret: %s" % secret)
+
             value = check_output(
                 [
                     "az",
@@ -255,9 +327,21 @@ class Hub:
 
     def update_local_chart(self):
         """Update the local helm chart"""
+        if self.verbose:
+            logging.info(
+                "Updating local helm chart dependencies for: %s"
+                % self.chart_name
+            )
+
         os.chdir(os.path.join(self.folder, self.chart_name))
         update_cmd = ["helm", "dep", "up"]
         result = run_cmd(update_cmd)
         if result["returncode"] != 0:
+            if self.verbose:
+                logging.error(result["err_msg"])
             raise Exception(result["err_msg"])
+
+        if self.verbose:
+            logging.info(result["output"])
+
         os.chdir(os.pardir)
