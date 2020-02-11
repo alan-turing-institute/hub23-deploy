@@ -1,4 +1,5 @@
 import os
+import logging
 
 from subprocess import check_output
 from .run_command import run_cmd, run_pipe_cmd
@@ -13,6 +14,9 @@ class Hub:
             setattr(self, k, v)
 
         self.get_cwd()
+
+        if self.verbose:
+            self.logging_config()
 
     def generate_config_files(self):
         """Generate configuration files for BinderHub"""
@@ -77,6 +81,14 @@ class Hub:
         # Create the secrets folder
         if not os.path.exists(self.secret_dir):
             os.mkdir(self.secret_dir)
+
+    def logging_config(self):
+        """Set logging configuration"""
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format="[%(asctime)s %(levelname)s] %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
 
     def get_cwd():
         cwd = os.getcwd()
