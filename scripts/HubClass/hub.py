@@ -10,6 +10,13 @@ class Hub:
 
     def __init__(self, argsDict):
         """Constructor for Hub class"""
+        self.chart_name = "hub23-chart"
+        self.cluster_name = "hub23cluster"
+        self.hub_name = "hub23"
+        self.resource_group = "Hub23"
+        self.subscription = "Turing-BinderHub"
+        self.vault_name = "hub23-keyvault"
+
         for k, v in argsDict.items():
             setattr(self, k, v)
 
