@@ -74,10 +74,37 @@ class Hub:
         print(result["output"])
 
     def helm_upgrade(self):
+        """Perform upgrade of the helm chart"""
         self.login()
         self.configure_azure()
         self.helm_init()
+        self.check_filepaths()
         self.update_local_chart()
+
+        helm_upgrade_cmd = [
+            "helm",
+            "upgrade",
+            self.hub_name,
+            f"./{self.chart_name}",
+            "-f",
+            os.path.join(self.deploy_dir, "prod.yaml"),
+            "-f",
+            os.path.join(self.folder, self.secret_dir, "prod.yaml"),
+            "--wait",
+            "--install",
+        ]
+
+        if self.dry_run:
+            helm_upgrade_cmd.append("--dry-run")
+
+        if self.debug:
+            helm_upgrade_cmd.append("--debug")
+
+        result = run_cmd(helm_upgrade_cmd)
+        if result["returncode"] != 0:
+            raise Exception(result["err_msg"])
+
+        self.print_pods()
 
     def check_filepaths(self):
         """Set filepaths and create secret directory"""
@@ -163,6 +190,15 @@ class Hub:
         result = run_cmd(cred_cmd)
         if result["returncode"] != 0:
             raise Exception(result["err_msg"])
+
+    def print_pods(self):
+        """Print the Kubernetes pods"""
+        cmd = ["kubectl", "get", "pods", "-n", self.hub_name]
+        result = run_cmd(cmd)
+        if result["returncode"] != 0:
+            raise Exception(result["err_msg"])
+
+        print(result["output"])
 
     def pull_secrets(self):
         """Pull secrets from an Azure Key Vault
