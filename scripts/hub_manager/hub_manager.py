@@ -5,7 +5,7 @@ from subprocess import check_output
 from .run_command import run_cmd, run_pipe_cmd
 
 
-class Hub:
+class HubManager:
     """Class for interacting with a BinderHub"""
 
     def __init__(self, argsDict):
