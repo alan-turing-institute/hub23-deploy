@@ -247,7 +247,7 @@ class HubManager:
             datefmt="%Y-%m-%d %H:%M:%S",
         )
 
-    def get_cwd():
+    def get_cwd(self):
         """Get working directory"""
         cwd = os.getcwd()
 

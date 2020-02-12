@@ -1,7 +1,7 @@
 import sys
 import argparse
 
-from .hub import HubManager
+from .hub_manager import HubManager
 
 DESCRIPTION = "Manage a BinderHub deployment from the command line"
 parser = argparse.ArgumentParser(description=DESCRIPTION)
