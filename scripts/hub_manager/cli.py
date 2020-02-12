@@ -8,7 +8,12 @@ parser = argparse.ArgumentParser(description=DESCRIPTION)
 
 parser.add_argument(
     "action",
-    choices=["generate-config-files", "get-logs", "helm-upgrade"],
+    choices=[
+        "generate-config-files",
+        "get-logs",
+        "helm-upgrade",
+        "print-pods",
+    ],
     type=str,
     help="The management action to run on the BinderHub",
 )
@@ -43,6 +48,8 @@ def main():
         obj.get_logs()
     elif args.action == "helm-upgrade":
         obj.helm_upgrade()
+    elif args.action == "print-pods":
+        obj.print_pods()
 
 
 if __name__ == "__main__":
