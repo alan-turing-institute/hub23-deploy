@@ -1,7 +1,7 @@
 import sys
 import argparse
 
-from .hub import Hub
+from .hub import HubManager
 
 DESCRIPTION = "Manage a BinderHub deployment from the command line"
 parser = argparse.ArgumentParser(description=DESCRIPTION)
@@ -35,7 +35,7 @@ parser.add_argument(
 def main():
     """Main function"""
     args = parser.parse_args(sys.argv[1:])
-    obj = Hub(vars(args))
+    obj = HubManager(vars(args))
 
     if args.action == "generate-config-files":
         obj.generate_config_files()
