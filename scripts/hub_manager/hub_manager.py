@@ -143,6 +143,26 @@ class HubManager:
 
         self.print_pods()
 
+    def print_pods(self):
+        """Print the Kubernetes pods"""
+        if self.verbose:
+            logging.info(
+                "Fetching the Kubernetes pods for: %s" % self.hub_name
+            )
+
+        if self.action == "print-pods":
+            self.login()
+            self.configure_azure()
+
+        cmd = ["kubectl", "get", "pods", "-n", self.hub_name]
+        result = run_cmd(cmd)
+        if result["returncode"] != 0:
+            if self.verbose:
+                logging.error(result["err_msg"])
+            raise Exception(result["err_msg"])
+
+        print(result["output"])
+
     def check_filepaths(self):
         """Set filepaths and create secret directory"""
         if self.verbose:
@@ -261,21 +281,6 @@ class HubManager:
 
         if self.verbose:
             logging.info("Successfully logged into Azure")
-
-    def print_pods(self):
-        """Print the Kubernetes pods"""
-        if self.verbose:
-            logging.info(
-                "Fetching the Kubernetes pods for: %s" % self.hub_name
-            )
-        cmd = ["kubectl", "get", "pods", "-n", self.hub_name]
-        result = run_cmd(cmd)
-        if result["returncode"] != 0:
-            if self.verbose:
-                logging.error(result["err_msg"])
-            raise Exception(result["err_msg"])
-
-        print(result["output"])
 
     def pull_secrets(self):
         """Pull secrets from an Azure Key Vault
