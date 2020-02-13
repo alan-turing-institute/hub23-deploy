@@ -36,7 +36,7 @@ jobs:
   - script: python -m pip install --upgrade pip setuptools wheel
     displayName: 'Step 4: Install Python tools'
 
-  - script: python -m pip install -r requirements.txt
+  - script: python -m pip install -r tests/requirements.txt
     displayName: 'Step 5: Install Python requirements'
 
   - task: Bash@3
