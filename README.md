@@ -17,6 +17,7 @@ A repo to manage the private Turing BinderHub instance, Hub23.
   - [Useful commands](#Useful-commands)
   - [Restarting the JupyterHub](#Restarting-the-JupyterHub)
   - [Pre-Commit Hook](#pre-commit-hook)
+  - [Billing](#billing)
 
 ---
 
@@ -99,3 +100,7 @@ pre-commit install
 ```
 
 [Black](https://github.com/psf/black) and [Flake8](http://flake8.pycqa.org/en/latest/) will then be applied to every commit effecting Python files.
+
+### Billing
+
+The `billing` subdir contains resources for calculating running costs of Hub23.
