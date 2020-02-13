@@ -14,9 +14,9 @@ A repo to manage the private Turing BinderHub instance, Hub23.
   - [Requirements](#requirements)
   - [Changing `hub23-chart`](#changing-hub23-chart)
 - [Things of Use](#things-of-use)
-  - [Useful commands](#Useful-commands)
   - [Restarting the JupyterHub](#Restarting-the-JupyterHub)
   - [Pre-Commit Hook](#pre-commit-hook)
+  - [Billing](#billing)
 
 ---
 
@@ -26,7 +26,7 @@ This repo contains the local Helm Chart that configures the Hub23 BinderHub depl
 
 The [HelmUpgradeBot](https://github.com/HelmUpgradeBot/hub23-deploy-upgrades) automatically opens Pull Requests to this repository that update the dependencies of the Helm Chart in [`hub23-chart/requirements.yaml`](hub23-chart/requirements.yaml).
 
-Upon merging the PR, the [Azure Pipelines configuration](azure-pipelines.yml) automatically applies the updated Helm Chart to the Kubernetes cluster running Hub23.
+Upon merging the PR, the [Azure Pipelines configuration](.az-pipelines/cd-pipeline.yml) automatically applies the updated Helm Chart to the Kubernetes cluster running Hub23.
 
 ## Developing Hub23
 
@@ -44,23 +44,11 @@ If changes are made to `.secret/prod.yaml` during development, make sure that:
 
 - the new format is reflected in `deploy/prod-template.yaml` and any new secrets/tokens/passwords are redacted;
 - new secrets/tokens/passwords are added to the Azure Key Vault (see `docs/azure-keyvault.md`); and
-- `azure-pipelines.yml` and [`scripts/hub_manager/hub_manager.py`](scripts/hub_manager/hub_manager.py) are updated in order to populate the template with the appropriate information.
+- [`.az-pipelines/cd-pipeline.yml`](.az-pipelines/cd-pipeline.yml) and [`cli-tool/hub_manager/hub_manager.py`](cli-tool/hub_manager/hub_manager.py) are updated in order to populate the template with the appropriate information.
 
 This will ensure that the Hub23 deployment is kept up-to-date with the repo, and a future developer (someone else or future-you!) can recreate the configuration files for Hub23.
 
 ## Things of Use
-
-### Useful commands
-
-To access the JupyterHub logs:
-
-```bash
-python logs.py \
-    --hub-name [-n] HUB-NAME \
-    --cluster-name [-c] CLUSTER-NAME \
-    --resource-group [-g] RESOURCE-GROUP \
-    --identity
-```
 
 To find out more info about a Pod:
 
@@ -99,3 +87,7 @@ pre-commit install
 ```
 
 [Black](https://github.com/psf/black) and [Flake8](http://flake8.pycqa.org/en/latest/) will then be applied to every commit effecting Python files.
+
+### Billing
+
+The `billing` subdir contains resources for calculating running costs of Hub23.

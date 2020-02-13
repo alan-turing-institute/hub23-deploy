@@ -18,6 +18,7 @@ This script requires Python version 3.7.
 
 ```bash
 cd billing
+pip install -r requirements.txt
 python calculate_billing.py
 ```
 

@@ -251,7 +251,7 @@ class HubManager:
         """Get working directory"""
         cwd = os.getcwd()
 
-        if cwd.endswith("scripts"):
+        if cwd.endswith("cli-tool"):
             tmp = cwd.split("/")
             del tmp[-1]
             cwd = "/".join(tmp)
