@@ -9,8 +9,8 @@ It is recommended to use Python version 3.7 with `hub-manager`.
 ```bash
 # Clone the repo
 git clone https://github.com/alan-turing-institute/hub23-deploy.git
-# Change to the scripts directory
-cd hub23-deploy/scripts
+# Change to the cli-tool directory
+cd hub23-deploy/cli-tool
 # Install the CLI
 python setup.py install
 # Test the CLI by calling the help message
