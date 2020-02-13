@@ -37,6 +37,12 @@ hub-manager get-logs
 
 The action will print the logs of the JupyterHub pod to the console.
 
+You can instead pull the logs of the Binder pod by providing the `--pod binder` argument.
+
+```bash
+hub-manager get-logs --pod binder
+```
+
 ### Print Pods
 
 ```bash
