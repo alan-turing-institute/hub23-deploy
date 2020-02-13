@@ -5,18 +5,11 @@ from .hub_manager import HubManager
 
 DESCRIPTION = "Manage a BinderHub deployment from the command line"
 parser = argparse.ArgumentParser(description=DESCRIPTION)
-
-parser.add_argument(
-    "action",
-    choices=[
-        "generate-config-files",
-        "get-logs",
-        "helm-upgrade",
-        "print-pods",
-    ],
-    type=str,
-    help="The management action to run on the BinderHub",
+subparsers = parser.add_subparsers(
+    help="hub-manager subcommands", dest="subcommand", required=True
 )
+
+# Define global option flags
 parser.add_argument(
     "-v", "--verbose", action="store_true", help="Turn on logging output"
 )
@@ -25,15 +18,41 @@ parser.add_argument(
     action="store_true",
     help="Login to Azure with a Managed System Identity",
 )
-parser.add_argument(
+
+# Add generate-config subcommand
+generate_config = subparsers.add_parser(
+    "generate-config", help="Generate the configuration files for Hub23"
+)
+
+# Add get-logs subcommand
+get_logs = subparsers.add_parser(
+    "get-logs", help="Pull the logs of a Kubernetes pod. Default: hub pod."
+)
+get_logs.add_argument(
+    "--pod",
+    choices=["hub", "binder"],
+    default="hub",
+    help="Define which Kubernetes pod to pull the logs for",
+)
+
+# Add helm-upgrade subcommand
+helm_upgrade = subparsers.add_parser(
+    "helm-upgrade", help="Perform an upgrade of the Hub23 helm chart"
+)
+helm_upgrade.add_argument(
     "--dry-run",
     action="store_true",
     help="Perform a dry run of the helm upgrade",
 )
-parser.add_argument(
+helm_upgrade.add_argument(
     "--debug",
     action="store_true",
     help="Enable debugging output for the helm upgrade",
+)
+
+# Add print-pods subcommand
+print_pods = subparsers.add_parser(
+    "print-pods", help="Print the status of the running Kubernetes pods"
 )
 
 
@@ -42,27 +61,13 @@ def main():
     args = parser.parse_args(sys.argv[1:])
     obj = HubManager(vars(args))
 
-    if args.action != "helm-upgrade":
-        if args.dry_run:
-            raise Exception(
-                "--dry-run flag can only be used with helm-upgrade action"
-            )
-        elif args.debug:
-            raise Exception(
-                "--debug flag can only be used with helm-upgrade action"
-            )
-        elif args.dry_run and args.debug:
-            raise Exception(
-                "--dry-run and --debug flags can only be used with helm-upgrade action"
-            )
-
-    if args.action == "generate-config-files":
+    if args.subcommand == "generate-config":
         obj.generate_config_files()
-    elif args.action == "get-logs":
+    elif args.subcommand == "get-logs":
         obj.get_logs()
-    elif args.action == "helm-upgrade":
+    elif args.subcommand == "helm-upgrade":
         obj.helm_upgrade()
-    elif args.action == "print-pods":
+    elif args.subcommand == "print-pods":
         obj.print_pods()
 
 
