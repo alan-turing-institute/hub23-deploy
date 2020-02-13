@@ -59,7 +59,6 @@ print_pods = subparsers.add_parser(
 def main():
     """Main function"""
     args = parser.parse_args(sys.argv[1:])
-    print(vars(args))
     obj = HubManager(vars(args))
 
     if args.subcommand == "generate-config":
