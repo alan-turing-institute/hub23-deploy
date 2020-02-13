@@ -26,6 +26,13 @@ parser.add_argument(
     help="Login to Azure with a Managed System Identity",
 )
 parser.add_argument(
+    "--pod",
+    type=str,
+    default="jupyterhub",
+    choices=["jupyterhub", "binder"],
+    help="Define which pod to pull the logs for",
+)
+parser.add_argument(
     "--dry-run",
     action="store_true",
     help="Perform a dry run of the helm upgrade",

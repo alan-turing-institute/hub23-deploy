@@ -72,8 +72,20 @@ class HubManager:
         self.login()
         self.configure_azure()
 
-        if self.verbose:
-            logging.info("Pulling JupyterHub pod logs for: %s" % self.hub_name)
+        if self.pod == "jupyterhub":
+            if self.verbose:
+                logging.info(
+                    "Pulling JupyterHub pod logs for: %s" % self.hub_name
+                )
+            regex = "^hub-"
+        elif self.pod == "binder":
+            if self.verbose:
+                logging.info("Pulling Binder pod logs for: %s" % self.hub_name)
+            regex = "^binder-"
+        else:
+            raise ValueError(
+                "Unrecognised pod type. Expecting either jupyterhub or binder"
+            )
 
         kubectl_cmd = [
             "kubectl",
@@ -84,7 +96,7 @@ class HubManager:
             "-o=jsonpath='{.items[*].metadata.name}'",
         ]
         tr_cmd = ["tr", "' '", "'\n'"]
-        grep_cmd = ["grep", "^hub-"]
+        grep_cmd = ["grep", regex]
 
         result = run_pipe_cmd([kubectl_cmd, tr_cmd, grep_cmd])
         if result["returncode"] != 0:
