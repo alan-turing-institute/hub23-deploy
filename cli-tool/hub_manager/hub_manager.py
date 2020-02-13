@@ -72,7 +72,7 @@ class HubManager:
         self.login()
         self.configure_azure()
 
-        if self.pod == "jupyterhub":
+        if self.pod == "hub":
             if self.verbose:
                 logging.info(
                     "Pulling JupyterHub pod logs for: %s" % self.hub_name
@@ -162,7 +162,7 @@ class HubManager:
                 "Fetching the Kubernetes pods for: %s" % self.hub_name
             )
 
-        if self.action == "print-pods":
+        if self.subcommand == "print-pods":
             self.login()
             self.configure_azure()
 
@@ -216,7 +216,7 @@ class HubManager:
 
         if self.verbose:
             logging.info("Successfully set Azure subscription")
-            logging.info("Setting kubectl contect for: %s" % self.cluster_name)
+            logging.info("Setting kubectl context for: %s" % self.cluster_name)
 
         k8s_cmd = [
             "az",
