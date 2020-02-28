@@ -25,6 +25,7 @@ binderhub:
     hub:
       allowNamedServers: true
       redirectToServer: false
+      namedServerLimitPerUser: 5
 
       services:
         binder:
