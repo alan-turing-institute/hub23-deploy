@@ -18,6 +18,7 @@ jobs:
       script: 'curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash'
 
   - task: CmdLine@2
+    displayName: 'Check subscription Status'
     inputs:
       script: |
         az login --service-principal --username $(appId) --password $(appKey) --tenant $(tenantId)
