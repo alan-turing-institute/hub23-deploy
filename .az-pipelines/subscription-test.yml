@@ -19,7 +19,9 @@ jobs:
       azureSubscription: 'hub23-deploy-scn'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
-      inlineScript: 'subStatus=$(az account show --subscription Turing-BinderHub --query state --output tsv)'
+      inlineScript: |
+        echo "##vso[task.setvariable variable=subStatus]az account show --subscription Turing-BinderHub --query state --output tsv"
+      # inlineScript: 'az account show --subscription Turing-BinderHub --query state --output tsv'
 
   - task: Bash@3
     displayName: 'Check subscription status'
