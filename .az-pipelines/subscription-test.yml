@@ -20,7 +20,7 @@ jobs:
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        echo "##vso[task.setvariable variable=subStatus]az account show --subscription Turing-BinderHub --query state --output tsv"
+        ##vso[task.setvariable variable=subStatus]az account show --subscription Turing-BinderHub --query state --output tsv
       # inlineScript: 'az account show --subscription Turing-BinderHub --query state --output tsv'
 
   - task: Bash@3
