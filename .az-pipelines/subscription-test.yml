@@ -1,6 +1,6 @@
 schedules:
-- cron: "0 0 * * *"
-  displayName: Daily midnight subscription test
+- cron: "0 * * * *"
+  displayName: Hourly subscription test
   branches:
     include:
     - master
@@ -10,7 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-- job: getSubscriptionStatus
+- job: CheckSubscriptionStatus
   steps:
   - task: AzureCLI@2
     displayName: 'Get subscription status'
@@ -19,13 +19,8 @@ jobs:
       azureSubscription: 'hub23-deploy-scn'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
-      inlineScript: 'az account show --subscription Turing-BinderHub --query state --output tsv'
+      inlineScript: 'subStatus=$(az account show --subscription Turing-BinderHub --query state --output tsv)'
 
-- job: checkSubscriptionStatus
-  dependsOn: getSubscriptionStatus
-  variables:
-    subStatus: $[ dependencies.getSubscriptionStatus.outputs['subStatus'] ]
-  steps:
   - task: Bash@3
     displayName: 'Check subscription status'
     inputs:
