@@ -12,23 +12,7 @@ pool:
 jobs:
 - job: CheckSubscriptionStatus
   steps:
-  - task: AzureCLI@2
-    displayName: 'Get subscription status'
-    name: getSubscriptionStatus
+  - task: CmdLine@2
+    displayName: 'Install Azure CLI'
     inputs:
-      azureSubscription: 'hub23-deploy-scn'
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        'az account show --subscription Turing-BinderHub --query state --output tsv'
-
-  - task: Bash@3
-    displayName: 'Check subscription status'
-    dependsOn: getSubscriptionStatus
-    variables:
-      subStatus: $[ dependencies.getSubscriptionStatus.outputs['subStatus'] ]
-    inputs:
-      targetType: 'inline'
-      script: |
-        echo 'The subscription is $(subStatus)'
-        [[ $subStatus == 'Enabled' ]]
+      script: 'curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash'
