@@ -7,27 +7,27 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-- job: Installation
+- job: DeployUpgradetoHub23
   steps:
   - task: KubectlInstaller@0
-    displayName: 'Step 1: Install kubectl'
+    displayName: 'Stage 1 Step 1: Install kubectl'
     inputs:
       kubectlVersion: '1.14.8'
 
   - task: AzureCLI@1
-    displayName: 'Step 2: Merge kubectl config'
+    displayName: 'Stage 1 Step 2: Merge kubectl config'
     inputs:
       azureSubscription: 'hub23-deploy-scn'
       scriptLocation: 'inlineScript'
       inlineScript: 'az aks get-credentials -n hub23cluster -g Hub23'
 
   - task: HelmInstaller@1
-    displayName: 'Step 3: Install helm'
+    displayName: 'Stage 1 Step 3: Install helm'
     inputs:
       helmVersionToInstall: '2.15.0'
 
   - task: HelmDeploy@0
-    displayName: 'Step 4: Initialise helm'
+    displayName: 'Stage 1 Step 4: Initialise helm'
     inputs:
       connectionType: 'Azure Resource Manager'
       azureSubscription: 'hub23-deploy-scn'
@@ -38,11 +38,8 @@ jobs:
       arguments: '--client-only'
       tillerNamespace: 'kube-system'
 
-- job: HelmUpgrade
-  dependsOn: Installation
-  steps:
   - task: AzureKeyVault@1
-    displayName: 'Step 1: Pull Key Vault Secrets'
+    displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
     inputs:
       azureSubscription: 'hub23-deploy-scn'
       KeyVaultName: 'hub23-keyvault'
@@ -88,7 +85,7 @@ jobs:
         cd hub23-chart && helm dep up && cd ..
 
   - task: HelmDeploy@0
-    displayName: 'Stage 2 Step 7: Perform helm upgrade'
+    displayName: 'Stage 2 Step 6: Perform helm upgrade'
     inputs:
       connectionType: 'Azure Resource Manager'
       azureSubscription: 'hub23-deploy-scn'
