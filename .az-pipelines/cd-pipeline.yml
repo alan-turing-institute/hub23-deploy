@@ -7,7 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-- job: Installation
+- job: DeployUpgradetoHub23
   steps:
   - task: KubectlInstaller@0
     displayName: 'Step 1: Install kubectl'
@@ -38,9 +38,6 @@ jobs:
       arguments: '--client-only'
       tillerNamespace: 'kube-system'
 
-- job: HelmUpgrade
-  dependsOn: Installation
-  steps:
   - task: AzureKeyVault@1
     displayName: 'Step 1: Pull Key Vault Secrets'
     inputs:
