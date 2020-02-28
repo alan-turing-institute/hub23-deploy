@@ -67,3 +67,7 @@ binderhub:
           - "binderhub-test-org"
       scopes:
         - "read:user"
+
+cert-manager:
+  ingressShim:
+    defaultIssuerName: "prod"
