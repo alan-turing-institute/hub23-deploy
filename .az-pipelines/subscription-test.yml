@@ -1,6 +1,6 @@
 schedules:
-- cron: "0 0 * * *"
-  displayName: Daily midnight subscription test
+- cron: "0 * * * *"
+  displayName: Hourly subscription test
   branches:
     include:
     - master
@@ -10,26 +10,18 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-- job: getSubscriptionStatus
+- job: CheckSubscriptionStatus
   steps:
-  - task: AzureCLI@2
-    displayName: 'Get subscription status'
-    name: getSubscriptionStatus
+  - task: CmdLine@2
+    displayName: 'Install Azure CLI'
     inputs:
-      azureSubscription: 'hub23-deploy-scn'
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: 'az account show --subscription Turing-BinderHub --query state --output tsv'
+      script: 'curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash'
 
-- job: checkSubscriptionStatus
-  dependsOn: getSubscriptionStatus
-  variables:
-    subStatus: $[ dependencies.getSubscriptionStatus.outputs['subStatus'] ]
-  steps:
-  - task: Bash@3
-    displayName: 'Check subscription status'
+  - task: CmdLine@2
+    displayName: 'Check subscription Status'
     inputs:
-      targetType: 'inline'
       script: |
-        echo 'The subscription is $(subStatus)'
+        az login --service-principal --username $(appId) --password $(appKey) --tenant $(tenantId)
+        subStatus=$(az account show --subscription Turing-BinderHub --query state --output tsv)
+        echo "The subscription is ${subStatus}"
         [[ $subStatus == 'Enabled' ]]
