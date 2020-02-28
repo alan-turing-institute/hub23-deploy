@@ -20,7 +20,7 @@ jobs:
   - task: CmdLine@2
     inputs:
       script: |
-        az login --service-principal --username $APPID --password $APPKEY --tenant $TENANTID
+        az login --service-principal --username $(appId) --password $(appKey) --tenant $(tenantId)
         subStatus=$(az account show --subscription Turing-BinderHub --query state --output tsv)
         echo "The subscription is ${subStatus}"
         [[ $subStatus == 'Enabled' ]]
