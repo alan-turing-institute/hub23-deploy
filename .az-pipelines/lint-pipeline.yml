@@ -15,32 +15,20 @@ jobs:
     inputs:
       helmVersionToInstall: '2.15.0'
 
-  - task: HelmDeploy@0
-    displayName: 'Step 2: Initialise helm'
-    inputs:
-      connectionType: 'Azure Resource Manager'
-      azureSubscription: 'hub23-deploy-scn'
-      azureResourceGroup: 'Hub23'
-      kubernetesCluster: 'hub23cluster'
-      namespace: 'hub23'
-      command: 'init'
-      arguments: '--client-only'
-      tillerNamespace: 'kube-system'
-
   - task: UsePythonVersion@0
-    displayName: 'Step 3: Install Python 3.7'
+    displayName: 'Step 2: Install Python 3.7'
     inputs:
       versionSpec: '3.7'
       addToPath: true
 
   - script: python -m pip install --upgrade pip setuptools wheel
-    displayName: 'Step 4: Install Python tools'
+    displayName: 'Step 3: Install Python tools'
 
   - script: python -m pip install -r tests/requirements.txt
-    displayName: 'Step 5: Install Python requirements'
+    displayName: 'Step 4: Install Python requirements'
 
   - task: Bash@3
-    displayName: 'Step 6: Install kubeval'
+    displayName: 'Step 5: Install kubeval'
     inputs:
       targetType: 'inline'
       script: |
@@ -51,8 +39,21 @@ jobs:
 - job: LintAndValidateHelmChart
   dependsOn: Installation
   steps:
+
+  - task: HelmDeploy@0
+    displayName: 'Step 1: Initialise helm'
+    inputs:
+      connectionType: 'Azure Resource Manager'
+      azureSubscription: 'hub23-deploy-scn'
+      azureResourceGroup: 'Hub23'
+      kubernetesCluster: 'hub23cluster'
+      namespace: 'hub23'
+      command: 'init'
+      arguments: '--client-only'
+      tillerNamespace: 'kube-system'
+
   - task: Bash@3
-    displayName: 'Step 1: Add helm chart repos'
+    displayName: 'Step 2: Add helm chart repos'
     inputs:
       targetType: 'inline'
       script: |
@@ -62,14 +63,14 @@ jobs:
         helm repo update
 
   - task: Bash@3
-    displayName: 'Step 2: Update local helm chart'
+    displayName: 'Step 3: Update local helm chart'
     inputs:
       targetType: 'inline'
       script: |
         cd hub23-chart && helm dep up && cd ..
 
   - task: PythonScript@0
-    displayName: 'Step 3: Lint and validate hub23-chart'
+    displayName: 'Step 4: Lint and validate hub23-chart'
     inputs:
       scriptSource: 'filePath'
       scriptPath: 'tests/lint-and-validate.py'
