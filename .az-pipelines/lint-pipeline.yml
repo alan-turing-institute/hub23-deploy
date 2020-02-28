@@ -67,6 +67,7 @@ jobs:
       targetType: 'inline'
       script: |
         cd hub23-chart && helm dep up && cd ..
+        python --version
 
   - task: PythonScript@0
     displayName: 'Step 3: Lint and validate hub23-chart'
