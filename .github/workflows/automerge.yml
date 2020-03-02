@@ -1,19 +1,22 @@
-name: Automerge
+name: MergePal
 
 on:
+  status: {}
+  push:
+    branches-ignore:
+      - master
+  pull_request_review:
+    types:
+      - submitted
   pull_request:
     types:
       - labeled
-  status: {}
 
 jobs:
-  automerge:
+  mergepal:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: automerge
-        uses: "pascalgn/automerge-action@v0.7.5"
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_ACTION_TOKEN }}"
-          MERGE_LABELS: "automerge,!wip"
+      - uses: actions/checkout@v1
+      - uses: maxkomarychev/merge-pal-action@v0.5.1
+        with:
+          token: ${{ secrets.GITHUB_ACTION_TOKEN }}
