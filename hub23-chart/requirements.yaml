@@ -4,7 +4,7 @@ dependencies:
   version: 0.2.0-n132.h1a8ce62
 - name: nginx-ingress
   repository: https://kubernetes-charts.storage.googleapis.com
-  version: 1.33.1
+  version: 1.33.3
 - name: cert-manager
   repository: https://charts.jetstack.io
   version: v0.10.0
