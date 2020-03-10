@@ -12,7 +12,7 @@ jobs:
   - task: KubectlInstaller@0
     displayName: 'Stage 1 Step 1: Install kubectl'
     inputs:
-      kubectlVersion: '1.14.8'
+      kubectlVersion: '1.15.5'
 
   - task: AzureCLI@1
     displayName: 'Stage 1 Step 2: Merge kubectl config'
@@ -64,7 +64,6 @@ jobs:
         -e "s/{github_client_id}/$(github-client-id)/" \
         -e "s/{github_client_secret}/$(github-client-secret)/" \
         deploy/prod-template.yaml > .secret/prod.yaml
-        cat .secret/prod.yaml
 
   - task: Bash@3
     displayName: 'Stage 2 Step 4: Add helm chart repos'
