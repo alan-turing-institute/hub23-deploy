@@ -11,6 +11,8 @@
 
 ## :purple_heart: Code of Conduct
 
+Everyone participating in this project is expecting to abide by and uphold our [Code of Conduct](CODE_OF_CONDUCT.md).
+
 ## :question: What do I need to know?
 
 ## :gift: How can I contribute?
