@@ -106,6 +106,5 @@ jobs:
       chartType: 'FilePath'
       chartPath: $(HELM_CHART_NAME)
       releaseName: $(HELM_RELEASE_NAME)
-      valueFile: 'deploy/prod.yaml .secret/prod.yaml'
       waitForExecution: false
-      arguments: '--timeout 600 --cleanup-on-fail'
+      arguments: '-f deploy/prod.yaml -f .secret/prod.yaml --timeout 600 --cleanup-on-fail'
