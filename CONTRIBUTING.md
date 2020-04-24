@@ -19,6 +19,9 @@ Use your best judgement and feel free to propose changes to this document in a P
   - [:book: Documentation](#book-documentation)
   - [:sparkles: Extras](#sparkles-extras)
 - [:gift: How can I contribute?](#gift-how-can-i-contribute)
+  - [:bug: Bug Reports](#bug-bug-reports)
+  - [:rocket: Feature Requests](#rocket-feature-requests)
+  - [:twisted_rightwards_arrows: Pull Requests](#twisted_rightwards_arrows-pull-requests)
 - [:art: Styleguides](#art-styleguides)
 
 ---
@@ -37,7 +40,7 @@ BinderHub is computational infrastructure that makes sharing reproducible comput
 Sarah has given [many talks](https://sgibson91.github.io/speaking/) on what Binder/BinderHub/[mybinder.org](https://mybinder.org) is and how it works, so for the sake of brevity we'll just focus on Hub23 here.
 
 Hub23 was set up to provide members of the Turing with an alternative to the public BinderHub, [mybinder.org](https://mybinder.org), which allows for authenticating users.
-Eventually we also hope to support, private code repositories and datasets.
+Eventually we also hope to support private code repositories and datasets.
 
 Hub23 got it's name as a derivative of the [Research Engineering team's](https://www.turing.ac.uk/research/research-programmes/research-engineering) nickname Hut23, which derives from the [hut that housed the engineering team at Bletchley Park](https://en.wikipedia.org/wiki/Bletchley_Park#Huts) during World War Two.
 This, of course, was where Alan Turing and his team cracked the German Enigma code.
@@ -114,5 +117,46 @@ These are then rendered using [Jekyll](https://jekyllrb.com/) and [GitHub Pages]
   If the subscription runs out of funds, a [request for more credits](https://turingcomplete.topdesk.net/tas/public/ssp/content/serviceflow?unid=b6672711a411404482aedce2fcc981be&openedFromService=true) should be filed on Turing Complete (TopDesk).
 
 ## :gift: How can I contribute?
+
+### :bug: Bug Reports
+
+If something doesn't work the way you expect it to, please check it hasn't already been reported in the repository's [issue tracker](https://github.com/alan-turing-institute/hub23-deploy/issues).
+Bug reports should have the [bug label]([is:issue is:open label:bug ](https://github.com/alan-turing-institute/hub23-deploy/issues?q=is%3Aissue+is%3Aopen+label%3Abug)), or have a title beginning with [`[BUG]`](https://github.com/alan-turing-institute/hub23-deploy/issues?q=is%3Aissue+is%3Aopen+%5BBUG%5D).
+
+If you can't find an issue already reporting your bug, then please feel free to [open a new issue](https://github.com/alan-turing-institute/hub23-deploy/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D).
+This repository has a [bug report template](.github/ISSUE_TEMPLATE/bug_report.md) to reports be as descriptive as possible so we can squash that bug! :muscle:
+
+### :rocket: Feature Requests
+
+If there is something extra you wish Hub23 could do, please check that the feature hasn't already been requested in the project's [issue tracker](https://github.com/alan-turing-institute/hub23-deploy/issues).
+Feature requests should have the [enhancement label](https://github.com/alan-turing-institute/hub23-deploy/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement).
+Please also check the [closed issues](https://github.com/alan-turing-institute/hub23-deploy/issues?q=is%3Aissue+is%3Aclosed) to make sure the feature has not already been requested but the project maintainers decided against developing it.
+
+If you find an open issue describing the feature you wish for, you can "+1" the issue by giving a thumbs up reaction on the top comment.
+You may also leave any thoughts or offers for support as new comments on the issue.
+
+If you don't find an issue describing your feature, please [open a feature request](https://github.com/alan-turing-institute/hub23-deploy/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFEATURE%5D).
+This repository has a [feature request template](.github/ISSUE_TEMPLATE/feature_request.md) to help map out the feature you'd like.
+
+### :twisted_rightwards_arrows: Pull Requests
+
+A Pull Request is a means for [people to collaboratively review and work on changes](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) before they are introduced into the base branch of the code base.
+
+To prepare your contribution for review, please follow these steps:
+
+1. [Fork this repository](https://help.github.com/en/github/getting-started-with-github/fork-a-repo)
+2. [Create a new branch](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-and-deleting-branches-within-your-repository) on your fork
+   1. Where possible and appropriate, please use the following convention when naming your branch: `<type>/<issue-number>/<short-description>`.
+      For example, if your contribution is fixing a a typo that was flagged in issue number 11, your branch name would be as follows: `fix/11/typo`.
+3. Edit files or add new ones!
+4. [Open your Pull Request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork)
+   1. This repository has a [pull request template](.github/PULL_REQUEST_TEMPLATE.md) which will help you summarise your contribution and help reviewers know where to focus their feedback.
+      Please complete it where possible and appropriate.
+
+Congratulations! :tada:
+You are now a Hub23 developer! :space_invader:
+
+The project maintainers will then review your Pull Request and may ask for some changes.
+Once you and the maintainers are happy, your contribution will be merged!
 
 ## :art: Styleguides
