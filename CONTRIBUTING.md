@@ -25,6 +25,8 @@ Use your best judgement and feel free to propose changes to this document in a P
 - [:art: Styleguides](#art-styleguides)
   - [:snake: Python Styleguide](#snake-python-styleguide)
   - [:pencil: Markdown styleguide](#pencil-markdown-styleguide)
+- [:notebook: Additional Notes](#notebook-additional-notes)
+  - [:label: Issue and Pull Request Labels](#label-issue-and-pull-request-labels)
 
 ---
 
@@ -193,3 +195,21 @@ When writing Markdown, it is recommended to start a new sentence on a new line a
 (Check out the raw version of this file for an example!)
 While the sentences will render as a single paragraph; when suggestions are made on Pull Requests, the GitHub User Interface will only highlight the affected sentence - not the whole paragraph.
 This makes reviews much easier to read!
+
+## :notebook: Additional Notes
+
+### :label: Issue and Pull Request Labels
+
+Issues and Pull Requests can have labels assigned to them which indicate at a glance what aspects of the project they describe.
+It is also possible to [sort issues by label](https://help.github.com/en/github/managing-your-work-on-github/filtering-issues-and-pull-requests-by-labels) making it easier to track down specific issues.
+Below is a table with the currently used labels in the repo.
+
+| Label | Description |
+| :--- | :--- |
+| `bug` | Something isn't working |
+| `documentation` | Improvements or additions to the documentation |
+| `enhancement` | New feature or request |
+| `good first issue` | Good for newcomers |
+| `help wanted` | Extra attention is needed |
+| `question` | Looking for input on a topic |
+| `wip` | Work in progress |
