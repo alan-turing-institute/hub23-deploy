@@ -24,6 +24,7 @@ Use your best judgement and feel free to propose changes to this document in a P
   - [:twisted_rightwards_arrows: Pull Requests](#twisted_rightwards_arrows-pull-requests)
 - [:art: Styleguides](#art-styleguides)
   - [:snake: Python Styleguide](#snake-python-styleguide)
+  - [:pencil: Markdown styleguide](#pencil-markdown-styleguide)
 
 ---
 
@@ -171,7 +172,7 @@ These tools are used as the maintainers believe this makes the code easier to re
 While flake8 commands can be [disabled](https://flake8.pycqa.org/en/latest/user/violations.html), we only recommend doing this for [specific lines](https://flake8.pycqa.org/en/latest/user/violations.html#in-line-ignoring-errors) in such cases where reformatting would produce "ugly code".
 The maintainers retain final say on what is "ugly code" on a case-by-case basis.
 
-This repository also contained configuration files to install a [pre-commit hook](https://githooks.com/) that will run black and flake8 on each commit so you don't have to worry!
+This repository also contains configuration files to install a [pre-commit hook](https://githooks.com/) that will run black and flake8 on each commit so you don't have to worry!
 To install the pre-commit hook, do the following:
 
 ```bash
@@ -183,3 +184,12 @@ pre-commit install
 ```
 
 And you're good to go! :tada:
+
+### :pencil: Markdown Styleguide
+
+Documentation files are written in [Markdown](https://guides.github.com/features/mastering-markdown/).
+
+When writing Markdown, it is recommended to start a new sentence on a new line and define a new paragraph by leaving a single blank line.
+(Check out the raw version of this file for an example!)
+While the sentences will render as a single paragraph; when suggestions are made on Pull Requests, the GitHub User Interface will only highlight the affected sentence - not the whole paragraph.
+This makes reviews much easier to read!
