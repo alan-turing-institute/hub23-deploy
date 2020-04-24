@@ -13,6 +13,7 @@ Use your best judgement and feel free to propose changes to this document in a P
   - [:zap: Hub23](#zap-hub23)
   - [:wheel_of_dharma: Kubernetes and Helm](#wheel_of_dharma-kubernetes-and-helm)
   - [:globe_with_meridians: Website](#globe_with_meridians-website)
+  - [:recycle: Continuous Deployment](#recycle-continuous-deployment)
 - [:gift: How can I contribute?](#gift-how-can-i-contribute)
 - [:art: Styleguides](#art-styleguides)
 
@@ -52,6 +53,15 @@ The front page of the Hub23 site is described by HTML stored in the [`templates`
 Any additional images (such as logos) are kept in the [`static`](./static) directory.
 
 These templates extend the [BinderHub web framework](https://github.com/jupyterhub/binderhub/tree/master/binderhub/templates) that ships with the BinderHub Helm chart.
+
+### :recycle: Continuous Deployment
+
+This repository uses an [Azure Pipeline](https://docs.microsoft.com/en-gb/azure/devops/pipelines/?view=azure-devops) to keep the Hub23 deployment up-to-date with the master branch of this repository.
+Any push to the master branch (such as merging a Pull Request) will [trigger the pipeline and upgrade the deployment](.az-pipelines/cd-pipeline.yml) with any changes implemented in the Helm chart.
+
+:rotating_light: It is therefore strongly recommended that developers avoid manually upgrading the deployment.
+Instead, please use a Pull Request that can be reverted if needed.
+This will help maintain a consistent state of the deployment. :rotating_light:
 
 ## :gift: How can I contribute?
 
