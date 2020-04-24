@@ -23,6 +23,7 @@ Use your best judgement and feel free to propose changes to this document in a P
   - [:rocket: Feature Requests](#rocket-feature-requests)
   - [:twisted_rightwards_arrows: Pull Requests](#twisted_rightwards_arrows-pull-requests)
 - [:art: Styleguides](#art-styleguides)
+  - [:snake: Python Styleguide](#snake-python-styleguide)
 
 ---
 
@@ -160,3 +161,25 @@ The project maintainers will then review your Pull Request and may ask for some 
 Once you and the maintainers are happy, your contribution will be merged!
 
 ## :art: Styleguides
+
+### :snake: Python Styleguide
+
+When writing Python scripts for this repository, it is recommended that contributors use [black](https://github.com/psf/black) and [flake8](https://flake8.pycqa.org/en/latest/) for formatting and linting styles.
+The repository has [GitHub Actions to check files are conforming to this styleguide](#white_check_mark-tests), though not doing so will not prevent your contribution from being merged.
+These tools are used as the maintainers believe this makes the code easier to read and keeps consistent formatting as more people contribute to the project.
+
+While flake8 commands can be [disabled](https://flake8.pycqa.org/en/latest/user/violations.html), we only recommend doing this for [specific lines](https://flake8.pycqa.org/en/latest/user/violations.html#in-line-ignoring-errors) in such cases where reformatting would produce "ugly code".
+The maintainers retain final say on what is "ugly code" on a case-by-case basis.
+
+This repository also contained configuration files to install a [pre-commit hook](https://githooks.com/) that will run black and flake8 on each commit so you don't have to worry!
+To install the pre-commit hook, do the following:
+
+```bash
+# Install the development requirements
+pip install -r dev-requirements.txt
+
+# Install the pre-commit configuration
+pre-commit install
+```
+
+And you're good to go! :tada:
