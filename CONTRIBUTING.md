@@ -16,6 +16,8 @@ Use your best judgement and feel free to propose changes to this document in a P
   - [:globe_with_meridians: Website](#globe_with_meridians-website)
   - [:recycle: Continuous Deployment](#recycle-continuous-deployment)
   - [:white_check_mark: Tests](#white_check_mark-tests)
+  - [:book: Documentation](#book-documentation)
+  - [:sparkles: Extras](#sparkles-extras)
 - [:gift: How can I contribute?](#gift-how-can-i-contribute)
 - [:art: Styleguides](#art-styleguides)
 
@@ -47,7 +49,7 @@ This allows for effective and efficient scaling in response to demand.
 
 This repository (<https://github.com/alan-turing-institute/hub23-deploy>) houses the [Helm chart](https://helm.sh/docs/topics/charts/), a YAML formatted set of instructions to Kubernetes on how to deploy and configure the resources and services to run BinderHub.
 
-This chart is located in the [`hub23-chart`](./hub23-chart) folder.
+This chart is located in the [`hub23-chart`](./hub23-chart) folder and the deployment configuration is stored in [`deploy`](./deploy).
 
 ### :robot: HelmUpgradeBot - Managing Dependencies
 
@@ -98,6 +100,18 @@ The configurations for these tests can be found in the [`.github/workflows`](.gi
 
 Lastly, another Azure Pipeline runs a nightly check to see if the deployment [subscription is still active](.az-pipelines/subscription-test.yml).
 The most likely cause for the subscription to be disabled is lack of funds and all resources will be unreachable during this time.
+
+### :book: Documentation
+
+The Hub23 Deployment Guide is written in Markdown files kept in the [`docs/_posts`](./docs/_posts) folder.
+These are then rendered using [Jekyll](https://jekyllrb.com/) and [GitHub Pages](https://help.github.com/en/github/working-with-github-pages/about-github-pages) and served at [alan-turing-instutite.github.io/hub23-deploy](https://alan-turing-instutite.github.io/hub23-deploy), using the [So Simple theme](https://github.com/mmistakes/so-simple-theme).
+
+### :sparkles: Extras
+
+- **CLI tool:** There is a command line interface tool called [`hub-manager`](./cli-tool) that can make interacting with Hub23 easier.
+  Please read the [README](cli-tool/README.md).
+- **Billing:** There is a Python script under [`billing`](./billing) that helps calculate running costs for the deployment.
+  If the subscription runs out of funds, a [request for more credits](https://turingcomplete.topdesk.net/tas/public/ssp/content/serviceflow?unid=b6672711a411404482aedce2fcc981be&openedFromService=true) should be filed on Turing Complete (TopDesk).
 
 ## :gift: How can I contribute?
 
