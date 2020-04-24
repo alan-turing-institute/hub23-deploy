@@ -14,6 +14,7 @@ Use your best judgement and feel free to propose changes to this document in a P
   - [:wheel_of_dharma: Kubernetes and Helm](#wheel_of_dharma-kubernetes-and-helm)
   - [:globe_with_meridians: Website](#globe_with_meridians-website)
   - [:recycle: Continuous Deployment](#recycle-continuous-deployment)
+  - [:white_check_mark: Tests](#white_check_mark-tests)
 - [:gift: How can I contribute?](#gift-how-can-i-contribute)
 - [:art: Styleguides](#art-styleguides)
 
@@ -62,6 +63,25 @@ Any push to the master branch (such as merging a Pull Request) will [trigger the
 :rotating_light: It is therefore strongly recommended that developers avoid manually upgrading the deployment.
 Instead, please use a Pull Request that can be reverted if needed.
 This will help maintain a consistent state of the deployment. :rotating_light:
+
+### :white_check_mark: Tests
+
+Kubernetes resources and Helm charts are compromised of YAML files.
+Unfortunately, Helm is sensitive to malformed YAML files but fails silently during an upgrade if such a file is found.
+
+Therefore, there is a [linting and validation pipeline](.az-pipelines/lint-pipeline.yml) implemented on the repository which runs in all Pull Requests to master branch.
+This verifies that the helm chart is well-formed and can be understood by Kubernetes and Helm when applied.
+
+The pipeline uses [YAMLlint](https://github.com/adrienverge/yamllint), [`helm lint`](https://helm.sh/docs/helm/helm_lint/), [`helm template`](https://helm.sh/docs/helm/helm_template/), and [`kubeval`](https://github.com/instrumenta/kubeval).
+
+:rotating_light: This linting and validation test is a [Required Status Check](https://help.github.com/en/github/administering-a-repository/about-required-status-checks) and must pass before a Pull Request can be merged into master.
+Again, this is to help us maintain a consistent state of the deployment. :rotating_light:
+
+There are also two [GitHub Actions](https://help.github.com/en/actions) that check any Python code in the repository conforms to [`black`](https://github.com/psf/black) and [`flake8`](https://flake8.pycqa.org/en/latest/) conventions.
+The configurations for these tests can be found in the [`.github/workflows`](.github/workflows) folder.
+
+Lastly, another Azure Pipeline runs a nightly check to see if the deployment [subscription is still active](.az-pipelines/subscription-test.yml).
+The most likely cause for the subscription to be disabled is lack of funds and all resources will be unreachable during this time.
 
 ## :gift: How can I contribute?
 
