@@ -12,6 +12,7 @@ Use your best judgement and feel free to propose changes to this document in a P
 - [:question: What do I need to know?](#question-what-do-i-need-to-know)
   - [:zap: Hub23](#zap-hub23)
   - [:wheel_of_dharma: Kubernetes and Helm](#wheel_of_dharma-kubernetes-and-helm)
+  - [:robot: HelmUpgradeBot - Managing Dependencies](#robot-helmupgradebot---managing-dependencies)
   - [:globe_with_meridians: Website](#globe_with_meridians-website)
   - [:recycle: Continuous Deployment](#recycle-continuous-deployment)
   - [:white_check_mark: Tests](#white_check_mark-tests)
@@ -47,6 +48,21 @@ This allows for effective and efficient scaling in response to demand.
 This repository (<https://github.com/alan-turing-institute/hub23-deploy>) houses the [Helm chart](https://helm.sh/docs/topics/charts/), a YAML formatted set of instructions to Kubernetes on how to deploy and configure the resources and services to run BinderHub.
 
 This chart is located in the [`hub23-chart`](./hub23-chart) folder.
+
+### :robot: HelmUpgradeBot - Managing Dependencies
+
+The Hub23 Helm chart is dependent on a range of other published Helm charts:
+
+- **BinderHub:** The main software
+- **`nginx-ingress`:** To monitor traffic from the internet and outside sources
+- **`cert-manager`:** To automatically request HTTPS certificates from Let's Encrypt for our internet-facing endpoints
+
+These charts are also under active development and regularly updated, so how do we make sure Hub23 is running the latest version?
+With a bot of course!
+
+[HelmUpgradeBot](https://github.com/HelmUpgradeBot/hub23-deploy-upgrades) regularly checks the Helm chart version we're running against the published versions.
+If it finds a newer version, the bot will open a Pull Request updating Hub23's [`requirements.yaml`](hub23-chart/requirements.yaml) file with the most up-to-date versions.
+Providing the [tests](#white_check_mark-tests) pass on the Pull Request, these are generally safe to merge.
 
 ### :globe_with_meridians: Website
 
