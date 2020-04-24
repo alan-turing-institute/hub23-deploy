@@ -12,6 +12,7 @@ Use your best judgement and feel free to propose changes to this document in a P
 - [:question: What do I need to know?](#question-what-do-i-need-to-know)
   - [:zap: Hub23](#zap-hub23)
   - [:wheel_of_dharma: Kubernetes and Helm](#wheel_of_dharma-kubernetes-and-helm)
+  - [:globe_with_meridians: Website](#globe_with_meridians-website)
 - [:gift: How can I contribute?](#gift-how-can-i-contribute)
 - [:art: Styleguides](#art-styleguides)
 
@@ -44,6 +45,13 @@ This allows for effective and efficient scaling in response to demand.
 This repository (<https://github.com/alan-turing-institute/hub23-deploy>) houses the [Helm chart](https://helm.sh/docs/topics/charts/), a YAML formatted set of instructions to Kubernetes on how to deploy and configure the resources and services to run BinderHub.
 
 This chart is located in the [`hub23-chart`](./hub23-chart) folder.
+
+### :globe_with_meridians: Website
+
+The front page of the Hub23 site is described by HTML stored in the [`templates`](./templates) directory.
+Any additional images (such as logos) are kept in the [`static`](./static) directory.
+
+These templates extend the [BinderHub web framework](https://github.com/jupyterhub/binderhub/tree/master/binderhub/templates) that ships with the BinderHub Helm chart.
 
 ## :gift: How can I contribute?
 
