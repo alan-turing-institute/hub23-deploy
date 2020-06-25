@@ -3,7 +3,7 @@ schedules:
   displayName: Hourly subscription test
   branches:
     include:
-    - master
+    - main
   always: true
 
 pr: none
