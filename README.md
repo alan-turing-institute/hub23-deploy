@@ -22,6 +22,7 @@ A repository to manage the private Turing BinderHub instance, Hub23.
   - [:dizzy: Restarting the JupyterHub](#dizzy-restarting-the-jupyterhub)
   - [:leftwards_arrow_with_hook: Pre-Commit Hook](#leftwards_arrow_with_hook-pre-commit-hook)
   - [:money_with_wings: Billing](#money_with_wings-billing)
+- [:books: Documentation](#books-documentation)
 
 ---
 
@@ -155,3 +156,7 @@ pre-commit install
 ### :money_with_wings: Billing
 
 The [`billing`](./billing) subdir contains resources for calculating running costs of Hub23.
+
+## :books: Documentation
+
+You can find documentation for Hub23 on the [`gh-pages` branch](https://github.com/alan-turing-institute/hub23-deploy/tree/gh-pages) of this repository.
