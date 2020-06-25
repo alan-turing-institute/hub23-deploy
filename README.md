@@ -4,9 +4,9 @@ A repository to manage the private Turing BinderHub instance, Hub23.
 
 | | :recycle: CI Status |
 | --- | --- |
-| :money_with_wings: Subscription | [![Build Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Azure%20Subscription%20Status?branchName=master)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=5&branchName=master) |
-| :rocket: Deployment | [![Deploy Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Deploy%20upgrade%20to%20Hub23?branchName=master)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=1&branchName=master) |
-| :wheel_of_dharma: Helm Chart | [![Lint Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Lint%20and%20Validate%20Helm%20Chart?branchName=master)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=4&branchName=master) |
+| :money_with_wings: Subscription | [![Build Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Azure%20Subscription%20Status?branchName=main)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=5&branchName=main) |
+| :rocket: Deployment | [![Deploy Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Deploy%20upgrade%20to%20Hub23?branchName=main)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=1&branchName=main) |
+| :wheel_of_dharma: Helm Chart | [![Lint Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Lint%20and%20Validate%20Helm%20Chart?branchName=main)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=4&branchName=main) |
 | :snake: Python Scripts | ![GitHub Actions - Black](https://github.com/alan-turing-institute/hub23-deploy/workflows/Black/badge.svg) ![GitHub Actions - Flake8](https://github.com/alan-turing-institute/hub23-deploy/workflows/Flake8/badge.svg) |
 
 **Table of Contents:**

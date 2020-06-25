@@ -82,7 +82,7 @@ These templates extend the [BinderHub web framework](https://github.com/jupyterh
 
 ### :recycle: Continuous Deployment
 
-This repository uses an [Azure Pipeline](https://docs.microsoft.com/en-gb/azure/devops/pipelines/?view=azure-devops) to keep the Hub23 deployment up-to-date with the master branch of this repository.
+This repository uses an [Azure Pipeline](https://docs.microsoft.com/en-gb/azure/devops/pipelines/?view=azure-devops) to keep the Hub23 deployment up-to-date with the main branch of this repository.
 Any push to the master branch (such as merging a Pull Request) will [trigger the pipeline and upgrade the deployment](.az-pipelines/cd-pipeline.yml) with any changes implemented in the Helm chart.
 
 :rotating_light: It is therefore strongly recommended that developers avoid manually upgrading the deployment.
@@ -94,12 +94,12 @@ This will help maintain a consistent state of the deployment. :rotating_light:
 Kubernetes resources and Helm charts are compromised of YAML files.
 Unfortunately, Helm is sensitive to malformed YAML files but fails silently during an upgrade if such a file is found.
 
-Therefore, there is a [linting and validation pipeline](.az-pipelines/lint-pipeline.yml) implemented on the repository which runs in all Pull Requests to master branch.
+Therefore, there is a [linting and validation pipeline](.az-pipelines/lint-pipeline.yml) implemented on the repository which runs in all Pull Requests to main branch.
 This verifies that the helm chart is well-formed and can be understood by Kubernetes and Helm when applied.
 
 The pipeline uses [YAMLlint](https://github.com/adrienverge/yamllint), [`helm lint`](https://helm.sh/docs/helm/helm_lint/), [`helm template`](https://helm.sh/docs/helm/helm_template/), and [`kubeval`](https://github.com/instrumenta/kubeval).
 
-:rotating_light: This linting and validation test is a [Required Status Check](https://help.github.com/en/github/administering-a-repository/about-required-status-checks) and must pass before a Pull Request can be merged into master.
+:rotating_light: This linting and validation test is a [Required Status Check](https://help.github.com/en/github/administering-a-repository/about-required-status-checks) and must pass before a Pull Request can be merged into main.
 Again, this is to help us maintain a consistent state of the deployment. :rotating_light:
 
 There are also two [GitHub Actions](https://help.github.com/en/actions) that check any Python code in the repository conforms to [`black`](https://github.com/psf/black) and [`flake8`](https://flake8.pycqa.org/en/latest/) conventions.
