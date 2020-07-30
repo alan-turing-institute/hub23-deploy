@@ -24,5 +24,4 @@ jobs:
           pip install black
       - name: Lint with black
         run: |
-          black --check cli-tool/
-          black --check tests/
+          black --check .
