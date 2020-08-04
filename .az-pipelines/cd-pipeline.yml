@@ -9,7 +9,7 @@ pool:
 variables:
   helm_chart_name: 'hub23-chart'
   helm_release_name: 'hub23'
-  helm_version: '2.15.0'
+  helm_version: '2.16.9'
   kubernetes_cluster_name: 'hub23cluster'
   kubernetes_namespace: 'hub23'
   kubernetes_version: '1.18.0'
