@@ -68,6 +68,6 @@ binderhub:
       scopes:
         - "read:user"
 
-# cert-manager:
-#   ingressShim:
-#     defaultIssuerName: "prod"
+cert-manager:
+  ingressShim:
+    defaultIssuerName: "prod"
