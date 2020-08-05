@@ -10,6 +10,7 @@ variables:
   helm_chart_name: 'hub23-chart'
   helm_release_name: 'hub23'
   helm_version: '2.16.9'
+  keyvault_name: 'hub23-keyvault'
   kubernetes_cluster_name: 'hub23cluster'
   kubernetes_namespace: 'hub23'
   kubernetes_version: '1.18.0'
@@ -53,8 +54,9 @@ jobs:
     displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
     inputs:
       azureSubscription: $(SERVICE_CONNECTION)
-      KeyVaultName: 'hub23-keyvault'
+      KeyVaultName: $(KEYVAULT_NAME)
       SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key, binderhub-access-token'
+      RunAsPreJob: false
 
   - task: Bash@3
     displayName: 'Stage 2 Step 2: Make .secret folder'
@@ -111,6 +113,14 @@ jobs:
 
 - job: TestHub23
   steps:
+    - task: AzureKeyVault@1
+      displayName: "Pull CI key from Key Vault"
+      inputs:
+        azureSubscription: $(SERVICE_CONNECTION)
+        KeyVaultName: $(KEYVAULT_NAME)
+        SecretsFilter: 'hub23-ci-key'
+        RunAsPreJob: false
+
     - task: UsePythonVersion@0
       displayName: 'Install Python 3.7'
       inputs:
