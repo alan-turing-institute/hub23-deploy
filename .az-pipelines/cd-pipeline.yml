@@ -133,5 +133,7 @@ jobs:
       displayName: "Install dependencies"
 
     - script: |
-        python -m pytest -vx -n 2 --binder-url=https://binder.hub23.turing.ac.uk --hub-url=https://hub.hub23.turing.ac.uk
+        python -m pytest -vx -n 2 \
+          --binder-url=https://binder.hub23.turing.ac.uk \
+          --hub-url=https://hub.hub23.turing.ac.uk
       displayName: "Run tests"
