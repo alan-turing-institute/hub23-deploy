@@ -108,3 +108,20 @@ jobs:
       releaseName: $(HELM_RELEASE_NAME)
       waitForExecution: false
       arguments: '-f deploy/prod.yaml -f .secret/prod.yaml --timeout 600 --cleanup-on-fail'
+
+- job: TestHub23
+  steps:
+    - task: UsePythonVersion@0
+      displayName: 'Install Python 3.7'
+      inputs:
+        versionSpec: '3.7'
+        addToPath: true
+
+    - script: |
+        python -m pip install -U pip
+        python -m pip install -r tests/requirements.txt
+      displayName: "Install dependencies"
+
+    - script: |
+        python -m pytest -vx -n 2 --binder-url=https://binder.hub23.turing.ac.uk --hub-url=https://hub.hub23.turing.ac.uk
+      displayName: "Run tests"
