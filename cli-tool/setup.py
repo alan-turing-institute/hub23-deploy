@@ -1,7 +1,4 @@
 from setuptools import setup, find_packages
-import os
-import os.path as op
-from glob import glob
 from hub_manager import __version__
 
 # Source dependencies from requirements.txt file.
