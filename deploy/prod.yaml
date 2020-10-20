@@ -3,21 +3,22 @@ projectName: hub23
 binderhub:
   config:
     BinderHub:
-      image_prefix: hub23registry.azurecr.io/hub23/binder-dev-
-      hub_url: https://hub.hub23.turing.ac.uk
+      image_prefix: "hub23registry.azurecr.io/hub23/binder-dev-"
+      hub_url: "https://hub.hub23.turing.ac.uk"
       use_named_servers: true
 
     DockerRegistry:
-      token_url: https://hub23registry.azurecr.io/oauth2/token?service=hub23registry.azurecr.io
+      token_url: "https://hub23registry.azurecr.io/oauth2/token?service=hub23registry.azurecr.io"
 
   registry:
-    url: https://hub23registry.azurecr.io
+    url: "https://hub23registry.azurecr.io"
 
   jupyterhub:
     cull:
       every: 660
       timeout: 600
-      maxAge: 21600  # maxAge is 6 hours: 6 * 3600 = 21600
+      # maxAge is 6 hours: 6 * 3600 = 21600
+      maxAge: 21600
 
     custom:
       binderauth_enabled: true
@@ -33,7 +34,7 @@ binderhub:
           oauth_client_id: "binder-oauth-client-test"
 
     singleuser:
-      cmd: jupyterhub-singleuser
+      cmd: "jupyterhub-singleuser"
       memory:
         limit: 1G
         guarantee: 1G
@@ -67,7 +68,3 @@ binderhub:
           - "binderhub-test-org"
       scopes:
         - "read:user"
-
-cert-manager:
-  ingressShim:
-    defaultIssuerName: "prod"

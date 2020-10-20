@@ -54,7 +54,7 @@ def parse_args():
     )
     parser.add_argument(
         "--kubernetes-version",
-        default="1.14.6",
+        default="1.16.4",
         help="Version of Kubernetes to validate against",
     )
     parser.add_argument(
@@ -122,6 +122,7 @@ def lint(
                     "--kubernetes-version",
                     kubernetes_version,
                     "--strict",
+                    "--ignore-missing-schemas",
                 ]
             )
 
