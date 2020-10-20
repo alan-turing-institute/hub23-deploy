@@ -16,7 +16,6 @@ We assume you have the following CLIs installed:
 - [Setup](#setup)
 - [Download the required secrets](#download-the-required-secrets)
 - [Enable Network Policies](#enable-network-policies)
-- [Setup for Multiple Nodepools](#setup-for-multiple-nodepools)
 - [Create the Kubernetes cluster](#create-the-kubernetes-cluster)
 
 ---
@@ -176,45 +175,6 @@ SUBNET_ID=$(
 )
 ```
 
-## Setup for Multiple Nodepools
-
-See the following docs:
-
-- <https://docs.microsoft.com/en-gb/azure/aks/use-multiple-node-pools>
-- <https://docs.microsoft.com/en-us/cli/azure/ext/aks-preview/aks/nodepool?view=azure-cli-latest>
-
-#### 1. Install aks-preview CLI extension
-
-```bash
-az extension add --name aks-preview
-```
-
-#### 2. Register the Multiple Nodepool feature
-
-```bash
-az feature register \
-    --name MultiAgentpoolPreview \
-    --namespace Microsoft.ContainerService
-```
-
-This can take a long time to register.
-Check on the status with the following command:
-
-```bash
-az feature show \
-    --name MultiAgentpoolPreview \
-    --namespace Microsoft.ContainerService \
-    --output table
-```
-
-#### 3. Register with the provider
-
-When the previous feature has registered, we now need to register it with the provider.
-
-```bash
-az provider register --namespace Microsoft.ContainerService
-```
-
 ## Create the Kubernetes cluster
 
 **NOTE:** These commands can also be used in conjunction with those in ["Deploy an Autoscaling Kubernetes Cluster"]({{ site.baseurl }}{% post_url 2010-01-03-deploy-autoscaling-k8s-cluster %}) to create autoscaling nodepools.
@@ -242,6 +202,7 @@ az aks create \
     --service-cidr 10.0.0.0/16 \
     --vnet-subnet-id $SUBNET_ID \
     --nodepool-name core \
+    --nodepool-labels hub.jupyter.org/node-purpose=core \
     --output table
 ```
 
@@ -284,6 +245,7 @@ az aks nodepool add \
     --enable-cluster-autoscaler \
     --min-count MINIMUM_NODE_NUMBER \
     --max-count MAXIMUM_NODE_NUMBER \
+    --labels hub.jupyter.org/node-purpose=user \
     --output table
 ```
 

@@ -16,7 +16,6 @@ We assume you have the following CLIs installed:
 - [Setup](#setup)
 - [Download the required secrets](#download-the-required-secrets)
 - [Enable Network Policies](#enable-network-policies)
-- [Set up for Autoscaling](#set-up-for-autoscaling)
 - [Create the Kubernetes cluster](#create-the-kubernetes-cluster)
 - [Enabling Autoscaling](#enabling-autoscaling)
 
@@ -177,41 +176,6 @@ SUBNET_ID=$(
 )
 ```
 
-## Set up for Autoscaling
-
-See the following docs:
-
-- <https://docs.microsoft.com/en-us/azure/aks/cluster-autoscaler>
-- <https://docs.microsoft.com/en-us/azure/aks/upgrade-cluster>
-
-#### 1. Install aks-preview CLI extension
-
-```bash
-az extension add --name aks-preview
-```
-
-#### 2. Register scale set feature provider
-
-```bash
-az feature register --name VMSSPreview --namespace Microsoft.ContainerService
-```
-
-This will take a while to register.
-Run the following command to check the status.
-
-```bash
-az feature show \
-    --name VMSSPreview \
-    --namespace Microsoft.ContainerService \
-    --output table
-```
-
-#### 3. Refresh the registration
-
-```bash
-az provider register --namespace Microsoft.ContainerService
-```
-
 ## Create the Kubernetes cluster
 
 #### 1. Create the AKS cluster
@@ -234,7 +198,6 @@ az aks create \
     --network-policy azure \
     --service-cidr 10.0.0.0/16 \
     --vnet-subnet-id $SUBNET_ID \
-    --enable-vmss \
     --enable-cluster-autoscaler \
     --min-count 3 \
     --max-count 6 \

@@ -183,7 +183,8 @@ The following command will deploy a Kubernetes cluster into the Hub23 resource g
 This command has been known to take between 7 and 30 minutes to execute depending on resource availability in the location we set when creating the resource group.
 
 ```bash
-az aks create --name hub23cluster \
+az aks create \
+    --name hub23cluster \
     --resource-group Hub23 \
     --kubernetes-version 1.16.15 \
     --ssh-key-value .secret/ssh-key-hub23cluster.pub \
