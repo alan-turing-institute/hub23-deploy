@@ -7,7 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  certmanager_version: '1.0.3'
+  certmanager_version: 'v1.0.3'
   helm_chart_name: 'hub23-chart'
   helm_release_name: 'hub23'
   helm_version: '3.3.4'
@@ -76,14 +76,14 @@ jobs:
         helm repo update
 
   - task: Bash@3
-    displayName: 'Stage 2 Step 5: Install cert-manager v$(CERTMANAGER_VERSION) CRDs'
+    displayName: 'Stage 2 Step 5: Install cert-manager $(CERTMANAGER_VERSION) CRDs'
     inputs:
       targetType: 'inline'
       script: |
-        kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v$(CERTMANAGER_VERSION)/cert-manager.crds.yaml
+        kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/$(CERTMANAGER_VERSION)/cert-manager.crds.yaml
 
   - task: HelmDeploy@0
-    displayName: 'Stage 2 Step 6: Install cert-manager v$(CERTMANAGER_VERSION'
+    displayName: 'Stage 2 Step 6: Install cert-manager $(CERTMANAGER_VERSION'
     inputs:
       connectionType: 'Azure Resource Manager'
       azureSubscription: '$(SERVICE_CONNECTION)'
@@ -93,7 +93,7 @@ jobs:
       command: 'upgrade'
       chartType: 'Name'
       chartName: 'jetstack/cert-manager'
-      chartVersion: 'v$(CERTMANAGER_VERSION)'
+      chartVersion: '$(CERTMANAGER_VERSION)'
       releaseName: 'cert-manager'
       valueFile: 'deploy/cert-manager.yaml'
       arguments: '--create-namespace --timeout 10m0s --cleanup-on-fail'
