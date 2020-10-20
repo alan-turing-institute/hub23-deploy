@@ -16,7 +16,6 @@ We assume you have the following CLIs installed:
 - [Setup](#setup)
 - [Download the required secrets](#download-the-required-secrets)
 - [Enable Network Policies](#enable-network-policies)
-- [Set up for Autoscaling](#set-up-for-autoscaling)
 - [Create the Kubernetes cluster](#create-the-kubernetes-cluster)
 - [Enabling Autoscaling](#enabling-autoscaling)
 
@@ -177,41 +176,6 @@ SUBNET_ID=$(
 )
 ```
 
-## Set up for Autoscaling
-
-See the following docs:
-
-- <https://docs.microsoft.com/en-us/azure/aks/cluster-autoscaler>
-- <https://docs.microsoft.com/en-us/azure/aks/upgrade-cluster>
-
-#### 1. Install aks-preview CLI extension
-
-```bash
-az extension add --name aks-preview
-```
-
-#### 2. Register scale set feature provider
-
-```bash
-az feature register --name VMSSPreview --namespace Microsoft.ContainerService
-```
-
-This will take a while to register.
-Run the following command to check the status.
-
-```bash
-az feature show \
-    --name VMSSPreview \
-    --namespace Microsoft.ContainerService \
-    --output table
-```
-
-#### 3. Refresh the registration
-
-```bash
-az provider register --namespace Microsoft.ContainerService
-```
-
 ## Create the Kubernetes cluster
 
 #### 1. Create the AKS cluster
@@ -222,14 +186,10 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 ```bash
 az aks create \
     --resource-group Hub23 \
-    --name hub23cluster \
-    --kubernetes-version 1.14.8 \
-    --node-count 3 \
-    --enable-vmss \
-    --enable-cluster-autoscaler \
-    --min-count 3 \
-    --max-count 6 \
+    --kubernetes-version 1.16.15 \
     --ssh-key-value .secret/ssh-key-hub23cluster.pub \
+    --node-count 3
+    --node-vm-size Standard_D2s_v3 \
     --service-principal $(cat .secret/appID.txt) \
     --client-secret $(cat .secret/key.txt) \
     --dns-service-ip 10.0.0.10 \
@@ -238,6 +198,9 @@ az aks create \
     --network-policy azure \
     --service-cidr 10.0.0.0/16 \
     --vnet-subnet-id $SUBNET_ID \
+    --enable-cluster-autoscaler \
+    --min-count 3 \
+    --max-count 6 \
     --output table
 ```
 
@@ -285,50 +248,3 @@ kubectl get node
 ```
 
 All three nodes should have `STATUS` as `Ready`.
-
-## Enabling Autoscaling
-
-We need to enforce an autoscaling rule in the [Azure Portal](https://portal.azure.com/).
-
-#### 1. Registering Subscription with Microsoft.Insights
-
-On the first attempt to configure an autoscaling rule for the Virtual Machine Scale Set, it was denied as the active subscription was not registed to use "Microsoft.Insights"
-This allows use of the "Monitoring" options in Azure - most usefully the Metrics so we can watch how much CPU etc. the BinderHub is using.
-
-The following command will register Microsoft.Insights for use on the active subscription.
-
-```bash
-az provider register --namespace Microsoft.Insights
-```
-
-To check the status of the registration, run the following command.
-
-```bash
-az provider show -n Microsoft.Insights
-```
-
-#### 2. Setting an Autoscaling Rule
-
-Under "Resources" on the "Turing-BinderHub" subscription blade, select the Virtual Machine Scale Set.
-It should be named something like `aks-nodepool1-<random-number>-vmss`.
-
-<img src="../images/select-vmss.png" alt="select-vmss">
-
-
-From the left hand side menu, select "Scaling".
-
-<img src="../images/select-scaling.png" alt="select-scaling">
-
-Click the blue "Enable autoscaling" button and an auto-generated form will appear.
-We will add a rule that will add 1 new instance (or node) when the average CPU usage over a 10 minute period is greater than 70%.
-
-Make sure the "Scale based on metric" option is selected and then select "+ Add new rule".
-This will pop up a pre-filled rule form for 70% average CPU usage over a 10 minute period.
-Double check this form, but I didn't change any of the defaults.
-
-We then need to add a rule to scale the cluster back.
-Select "+ Add new rule" again and change the fields so that when average CPU usage over 10 minutes is less than 5%, the instance count is decreased by 1.
-
-Save and configure this rule.
-
-<img src="../images/set-autoscaling-rule.png" alt="set-autoscaling-rule">

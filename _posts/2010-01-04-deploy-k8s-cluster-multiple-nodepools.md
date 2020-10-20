@@ -16,7 +16,6 @@ We assume you have the following CLIs installed:
 - [Setup](#setup)
 - [Download the required secrets](#download-the-required-secrets)
 - [Enable Network Policies](#enable-network-policies)
-- [Setup for Multiple Nodepools](#setup-for-multiple-nodepools)
 - [Create the Kubernetes cluster](#create-the-kubernetes-cluster)
 
 ---
@@ -176,45 +175,6 @@ SUBNET_ID=$(
 )
 ```
 
-## Setup for Multiple Nodepools
-
-See the following docs:
-
-- <https://docs.microsoft.com/en-gb/azure/aks/use-multiple-node-pools>
-- <https://docs.microsoft.com/en-us/cli/azure/ext/aks-preview/aks/nodepool?view=azure-cli-latest>
-
-#### 1. Install aks-preview CLI extension
-
-```bash
-az extension add --name aks-preview
-```
-
-#### 2. Register the Multiple Nodepool feature
-
-```bash
-az feature register \
-    --name MultiAgentpoolPreview \
-    --namespace Microsoft.ContainerService
-```
-
-This can take a long time to register.
-Check on the status with the following command:
-
-```bash
-az feature show \
-    --name MultiAgentpoolPreview \
-    --namespace Microsoft.ContainerService \
-    --output table
-```
-
-#### 3. Register with the provider
-
-When the previous feature has registered, we now need to register it with the provider.
-
-```bash
-az provider register --namespace Microsoft.ContainerService
-```
-
 ## Create the Kubernetes cluster
 
 **NOTE:** These commands can also be used in conjunction with those in ["Deploy an Autoscaling Kubernetes Cluster"]({{ site.baseurl }}{% post_url 2010-01-03-deploy-autoscaling-k8s-cluster %}) to create autoscaling nodepools.
@@ -229,19 +189,20 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 az aks create \
     --resource-group Hub23 \
     --name hub23cluster \
-    --kubernetes-version 1.14.8 \
-    --node-count 3 \
+    --kubernetes-version 1.16.15 \
+    --ssh-key-value .secret/ssh-key-hub23cluster.pub \
+    --node-count 3
     --node-vm-size Standard_D2s_v3 \
-    --nodepool-name default \
     --service-principal $(cat .secret/appID.txt) \
     --client-secret $(cat .secret/key.txt) \
-    --ssh-key-value .secret/ssh-key-hub23cluster.pub \
     --dns-service-ip 10.0.0.10 \
     --docker-bridge-address 172.17.0.1/16 \
     --network-plugin azure \
     --network-policy azure \
     --service-cidr 10.0.0.0/16 \
     --vnet-subnet-id $SUBNET_ID \
+    --nodepool-name core \
+    --nodepool-labels hub.jupyter.org/node-purpose=core \
     --output table
 ```
 
@@ -275,34 +236,21 @@ To add another nodepool to the cluster, run the following (e.g. adding a `core` 
 ```bash
 az aks nodepool add \
     --cluster-name hub23cluster \
-    --name core \
+    --name user \
     --resource-group Hub23 \
-    --kubernetes-version 1.14.8 \
-    --node-count 1 \
+    --kubernetes-version 1.16.15 \
+    --node-count 3 \
     --node-vm-size Standard_D2s_v3 \
     --vnet-subnet-id $SUBNET_ID \
     --enable-cluster-autoscaler \
     --min-count MINIMUM_NODE_NUMBER \
-    --max-count MAXIMUM_NODE_NUMBER
+    --max-count MAXIMUM_NODE_NUMBER \
+    --labels hub.jupyter.org/node-purpose=user \
+    --output table
 ```
 
 **NOTE:** The flags to enable autoscaling can also be used here.
 {: .notice--info}
-
-The same command can be run to create a `user` nodepool.
-I would recommend a `--node-count 2`.
-
-#### Scaling the `default` nodepool back
-
-I would recommend scaling the `default` nodepool down to 1 node as we will most likely use node affinities to preferentially assign core pods to the core pool and user pods to the user pool (see ["Optimizing the JupyterHub for Autoscaling"]({{ site.baseurl }}{% post_url 2010-01-13-optimising-autoscaling %})).
-
-```bash
-az aks nodepool scale \
-    --cluster-name hub23cluster \
-    --name default \
-    --resource-group Hub23 \
-    --node-count 1
-```
 
 #### 3. Get credentials for `kubectl`
 
