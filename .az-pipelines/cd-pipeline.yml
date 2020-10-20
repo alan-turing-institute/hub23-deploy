@@ -7,12 +7,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+  certmanager_version: '1.0.3'
   helm_chart_name: 'hub23-chart'
   helm_release_name: 'hub23'
   helm_version: '3.3.4'
   kubernetes_cluster_name: 'hub23cluster'
   kubernetes_namespace: 'hub23'
-  kubernetes_version: '1.16.10'
+  kubernetes_version: '1.16.15'
   resource_group_name: 'Hub23'
   service_connection: 'hub23-deploy-scn'
 
@@ -37,17 +38,12 @@ jobs:
     inputs:
       helmVersionToInstall: $(HELM_VERSION)
 
-  - task: HelmDeploy@0
-    displayName: 'Stage 1 Step 4: Initialise helm'
+  - task: Bash@3
+    displayName: Install cert-manager v$(CERTMANAGER_VERSION)
     inputs:
-      connectionType: 'Azure Resource Manager'
-      azureSubscription: $(SERVICE_CONNECTION)
-      azureResourceGroup: $(RESOURCE_GROUP_NAME)
-      kubernetesCluster: $(KUBERNETES_CLUSTER_NAME)
-      namespace: $(KUBERNETES_NAMESPACE)
-      command: 'init'
-      arguments: '--client-only'
-      tillerNamespace: 'kube-system'
+      targetType: 'inline'
+      script: |
+        kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v$(CERTMANAGER_VERSION)/cert-manager.crds.yaml
 
   - task: AzureKeyVault@1
     displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
@@ -83,9 +79,7 @@ jobs:
       script: |
         helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
         helm repo add nginx-ingress https://kubernetes-charts.storage.googleapis.com
-        helm repo add cert-manager https://charts.jetstack.io
         helm repo update
-        kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.10/deploy/manifests/00-crds.yaml
 
   - task: Bash@3
     displayName: 'Stage 2 Step 5: Update local helm chart'
@@ -107,4 +101,4 @@ jobs:
       chartPath: $(HELM_CHART_NAME)
       releaseName: $(HELM_RELEASE_NAME)
       waitForExecution: false
-      arguments: '-f deploy/prod.yaml -f .secret/prod.yaml --timeout 600 --cleanup-on-fail'
+      arguments: '-f deploy/prod.yaml -f .secret/prod.yaml --timeout 10m0s --cleanup-on-fail'
