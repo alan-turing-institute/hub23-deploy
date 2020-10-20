@@ -222,14 +222,10 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 ```bash
 az aks create \
     --resource-group Hub23 \
-    --name hub23cluster \
-    --kubernetes-version 1.14.8 \
-    --node-count 3 \
-    --enable-vmss \
-    --enable-cluster-autoscaler \
-    --min-count 3 \
-    --max-count 6 \
+    --kubernetes-version 1.16.15 \
     --ssh-key-value .secret/ssh-key-hub23cluster.pub \
+    --node-count 3
+    --node-vm-size Standard_D2s_v3 \
     --service-principal $(cat .secret/appID.txt) \
     --client-secret $(cat .secret/key.txt) \
     --dns-service-ip 10.0.0.10 \
@@ -238,6 +234,10 @@ az aks create \
     --network-policy azure \
     --service-cidr 10.0.0.0/16 \
     --vnet-subnet-id $SUBNET_ID \
+    --enable-vmss \
+    --enable-cluster-autoscaler \
+    --min-count 3 \
+    --max-count 6 \
     --output table
 ```
 

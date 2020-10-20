@@ -229,19 +229,19 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 az aks create \
     --resource-group Hub23 \
     --name hub23cluster \
-    --kubernetes-version 1.14.8 \
-    --node-count 3 \
+    --kubernetes-version 1.16.15 \
+    --ssh-key-value .secret/ssh-key-hub23cluster.pub \
+    --node-count 3
     --node-vm-size Standard_D2s_v3 \
-    --nodepool-name default \
     --service-principal $(cat .secret/appID.txt) \
     --client-secret $(cat .secret/key.txt) \
-    --ssh-key-value .secret/ssh-key-hub23cluster.pub \
     --dns-service-ip 10.0.0.10 \
     --docker-bridge-address 172.17.0.1/16 \
     --network-plugin azure \
     --network-policy azure \
     --service-cidr 10.0.0.0/16 \
     --vnet-subnet-id $SUBNET_ID \
+    --nodepool-name core \
     --output table
 ```
 
@@ -275,34 +275,20 @@ To add another nodepool to the cluster, run the following (e.g. adding a `core` 
 ```bash
 az aks nodepool add \
     --cluster-name hub23cluster \
-    --name core \
+    --name user \
     --resource-group Hub23 \
-    --kubernetes-version 1.14.8 \
-    --node-count 1 \
+    --kubernetes-version 1.16.15 \
+    --node-count 3 \
     --node-vm-size Standard_D2s_v3 \
     --vnet-subnet-id $SUBNET_ID \
     --enable-cluster-autoscaler \
     --min-count MINIMUM_NODE_NUMBER \
-    --max-count MAXIMUM_NODE_NUMBER
+    --max-count MAXIMUM_NODE_NUMBER \
+    --output table
 ```
 
 **NOTE:** The flags to enable autoscaling can also be used here.
 {: .notice--info}
-
-The same command can be run to create a `user` nodepool.
-I would recommend a `--node-count 2`.
-
-#### Scaling the `default` nodepool back
-
-I would recommend scaling the `default` nodepool down to 1 node as we will most likely use node affinities to preferentially assign core pods to the core pool and user pods to the user pool (see ["Optimizing the JupyterHub for Autoscaling"]({{ site.baseurl }}{% post_url 2010-01-13-optimising-autoscaling %})).
-
-```bash
-az aks nodepool scale \
-    --cluster-name hub23cluster \
-    --name default \
-    --resource-group Hub23 \
-    --node-count 1
-```
 
 #### 3. Get credentials for `kubectl`
 
