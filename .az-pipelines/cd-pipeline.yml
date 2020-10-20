@@ -92,13 +92,15 @@ jobs:
     displayName: 'Stage 2 Step 6: Perform helm upgrade'
     inputs:
       connectionType: 'Azure Resource Manager'
-      azureSubscription: $(SERVICE_CONNECTION)
-      azureResourceGroup: $(RESOURCE_GROUP_NAME)
-      kubernetesCluster: $(KUBERNETES_CLUSTER_NAME)
-      namespace: $(KUBERNETES_NAMESPACE)
+  - task: HelmDeploy@0
+    inputs:
+      connectionType: 'Azure Resource Manager'
+      azureSubscription: '$(SERVICE_CONNECTION)'
+      azureResourceGroup: '$(RESOURCE_GROUP_NAME)'
+      kubernetesCluster: '$(KUBERNETES_CLUSTER_NAME)'
+      namespace: '$(KUBERNETES_NAMESPACE)'
       command: 'upgrade'
       chartType: 'FilePath'
-      chartPath: $(HELM_CHART_NAME)
-      releaseName: $(HELM_RELEASE_NAME)
-      waitForExecution: false
-      arguments: '-f deploy/prod.yaml -f .secret/prod.yaml --timeout 10m0s --cleanup-on-fail'
+      chartPath: '$(HELM_CHART_NAME)'
+      releaseName: '$(HELM_RELEASE_NAME)'
+      arguments: '-f deploy/prod.yaml -f .secret/prod.yaml --timeout 10m0s --cleanup-on-fail --create-namespace'
