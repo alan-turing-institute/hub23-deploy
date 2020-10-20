@@ -82,6 +82,21 @@ jobs:
       script: |
         kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v$(CERTMANAGER_VERSION)/cert-manager.crds.yaml
 
+  - task: HelmDeploy@0
+    displayName: 'Stage 2 Step 6: Install cert-manager v$(CERTMANAGER_VERSION'
+    inputs:
+      connectionType: 'Azure Resource Manager'
+      azureSubscription: '$(SERVICE_CONNECTION)'
+      azureResourceGroup: '$(RESOURCE_GROUP_NAME)'
+      kubernetesCluster: '$(KUBERNETES_CLUSTER_NAME)'
+      namespace: 'cert-manager'
+      command: 'upgrade'
+      chartType: 'Name'
+      chartName: 'jetstack/cert-manager'
+      chartVersion: 'v$(CERTMANAGER_VERSION)'
+      releaseName: 'cert-manager'
+      valueFile: 'deploy/cert-manager.yaml'
+      arguments: '--create-namespace --timeout 10m0s --cleanup-on-fail'
 
   - task: Bash@3
     displayName: 'Stage 2 Step 6: Update local helm chart'
@@ -90,10 +105,6 @@ jobs:
       script: |
         cd $(HELM_CHART_NAME) && helm dep up && cd ..
 
-  - task: HelmDeploy@0
-    displayName: 'Stage 2 Step 7: Perform helm upgrade'
-    inputs:
-      connectionType: 'Azure Resource Manager'
   - task: HelmDeploy@0
     inputs:
       connectionType: 'Azure Resource Manager'
