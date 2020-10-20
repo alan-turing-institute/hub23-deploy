@@ -16,19 +16,19 @@ jobs:
       helmVersionToInstall: '3.3.4'
 
   - task: UsePythonVersion@0
-    displayName: 'Stage 1 Step 3: Install Python 3.7'
+    displayName: 'Stage 1 Step 2: Install Python 3.7'
     inputs:
       versionSpec: '3.7'
       addToPath: true
 
   - script: python -m pip install --upgrade pip setuptools wheel
-    displayName: 'Stage 1 Step 4: Install Python tools'
+    displayName: 'Stage 1 Step 3: Install Python tools'
 
   - script: python -m pip install -r tests/requirements.txt
-    displayName: 'Stage 1 Step 5: Install Python requirements'
+    displayName: 'Stage 1 Step 4: Install Python requirements'
 
   - task: Bash@3
-    displayName: 'Stage 1 Step 6: Install kubeval'
+    displayName: 'Stage 1 Step 5: Install kubeval'
     inputs:
       targetType: 'inline'
       script: |
