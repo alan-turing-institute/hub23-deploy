@@ -122,6 +122,7 @@ def lint(
                     "--kubernetes-version",
                     kubernetes_version,
                     "--strict",
+                    "--ignore-missing-schemas",
                 ]
             )
 
