@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Creating an Azure Container Registry and connecting to the Kubernetes Cluster"
----
+# Creating an Azure Container Registry and connecting to the Kubernetes Cluster
 
 This document walks through the creation of an Azure Container Registry for the Turing BinderHub (Hub23) and how to connect it to the BinderHub/Kubernetes cluster.
 

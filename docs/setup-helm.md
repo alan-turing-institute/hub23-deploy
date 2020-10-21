@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Setup Helm"
----
+# Setup Helm
 
 This documentation will walk through setting up Helm on the Kubernetes cluster.
 

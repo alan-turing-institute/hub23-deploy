@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Deploy a Kubernetes Cluster with Multiple Nodepools"
----
+# Deploy a Kubernetes Cluster with Multiple Nodepools
 
 This document walks through the steps required to deploy a Kubernetes cluster with multiple nodepools onto the Turing's Azure subscription.
 

@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Customising the JupyterHub"
----
+# Customising the JupyterHub
 
 Certain customisations can be made to the JupyterHub supporting Hub23 to provide a more tailored user experience.
 

@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Optimizing the JupyterHub for Autoscaling"
----
+# Optimizing the JupyterHub for Autoscaling
 
 See the following docs:
 

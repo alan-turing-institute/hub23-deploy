@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Installing BinderHub"
----
+# Installing BinderHub
 
 This document walks through the steps required to install Hub23 (the Turing hosted BinderHub).
 

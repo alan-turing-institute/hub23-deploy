@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Deploy an Autoscaling Kubernetes Cluster"
----
+# Deploy an Autoscaling Kubernetes Cluster
 
 This document walks through the steps required to deploy an autoscaling Kubernetes cluster onto the Turing's Azure subscription.
 

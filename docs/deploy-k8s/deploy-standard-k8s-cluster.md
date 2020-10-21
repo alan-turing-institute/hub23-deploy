@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Deploy a standard Kubernetes Cluster"
----
+# Deploy a standard Kubernetes Cluster
 
 This document walks through the steps required to deploy a standard Kubernetes cluster onto the Turing's Azure subscription.
 

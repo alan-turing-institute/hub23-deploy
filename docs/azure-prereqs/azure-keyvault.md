@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Creating an Azure Key Vault for Hub23"
----
+# Creating an Azure Key Vault for Hub23
 
 This document walks through the creation of a key vault for the Turing BinderHub (Hub23) and how to save and extract secrets from it.
 

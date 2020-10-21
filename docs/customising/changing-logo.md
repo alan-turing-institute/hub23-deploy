@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Changing the logo on the Binder page"
----
+# Changing the logo on the Binder page
 
 See these docs:
 

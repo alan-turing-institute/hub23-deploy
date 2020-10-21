@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Enabling Page Redirection"
----
+# Enabling Page Redirection
 
 These docs will walk through how to create a DNS at which the Binder page and JupyterHub are found.
 

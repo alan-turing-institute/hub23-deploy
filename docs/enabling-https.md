@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Enabling HTTPS using `cert-manager`"
----
+# Enabling HTTPS using `cert-manager`
 
 This document will walk through the steps required to enable HTTPS on Hub23 using [`cert-manager`](https://docs.cert-manager.io/en/latest/).
 It assumes you have deployed Hub23 using a local helm chart as outlined in ["Installing BinderHub with a Local Helm Chart"]({{ site.baseurl }}{% post_url 2010-01-07-installing-binderhub-local-helm-chart %}) and created a subdomain as per ["Enabling Page Redirection"]({{ site.baseurl }}{% post_url 2010-01-12-enabling-page-redirection %}).

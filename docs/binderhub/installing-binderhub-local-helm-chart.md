@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Installing BinderHub with a Local Helm Chart"
----
+# Installing BinderHub with a Local Helm Chart
 
 This documentation walks through the steps required to install a BinderHub using a local helm chart.
 

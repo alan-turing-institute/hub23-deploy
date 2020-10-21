@@ -1,8 +1,4 @@
----
-layout: page
-share: false
-title: "Enabling Authentication"
----
+# Enabling Authentication
 
 See the following docs:
 
