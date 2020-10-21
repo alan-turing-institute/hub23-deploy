@@ -25,7 +25,13 @@ sections:
   sections:
   - file: setup-helm/install
   - file: setup-helm/setup-helm
-- file: enabling-https
+- file: cert-manager/index
+  sections:
+  - file: cert-manager/install
+  - file: cert-manager/context
+  - file: cert-manager/create-files
+  - file: cert-manager/deployment
+  - file: cert-manager/refs
 - file: binderhub/index
   sections:
   - file: binderhub/installing-binderhub-local-helm-chart
