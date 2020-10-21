@@ -1,3 +1,4 @@
+(content:key-vault:add-secrets)=
 # Adding secrets to the Key Vault
 
 Hub23 requires some secrets, passwords, tokens etc. for functionality.

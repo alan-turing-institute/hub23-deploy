@@ -30,7 +30,7 @@ az group create --name Hub23 --location westeurope
 
 ```{note}
 This step can be skipped if the Resource Group already exists.
-```{: .notice--info}```
+```
 
 ## Create an ACR
 

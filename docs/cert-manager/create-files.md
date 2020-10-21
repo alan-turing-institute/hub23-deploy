@@ -16,7 +16,7 @@ hub23-chart/
 |-values.yaml
 ```
 
-We will have already created `Chart.yaml`, `requirements.yaml` and `values.yaml` in ["Installing BinderHub with a Local Helm Chart"]({{ site.baseurl }}{% post_url 2010-01-07-installing-binderhub-local-helm-chart %}).
+We will have already created `Chart.yaml`, `requirements.yaml` and `values.yaml` in {ref}`content:binderhub:local-chart`.
 
 ## Create `templates/cluster-issuer.yaml`
 

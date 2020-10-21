@@ -34,6 +34,7 @@ az aks create \
 - `--service-cidr`: A CIDR notation IP range from which to assign service cluster IPs.
 - `--vnet-subnet-id`: The ID of a subnet in an existing VNet into which to deploy the cluster.
 
+(content:az-aks-create:autoscale)=
 ### Enable Autoscaling
 
 To enable autoscaling on the cluster, add the following flags to the above `az aks create` command.
@@ -47,6 +48,7 @@ To enable autoscaling on the cluster, add the following flags to the above `az a
 - `--enable-cluster-autoscaler` enables the Kubernetes autoscaler
 - `--min-count`/`--max-count` defines the minimum and maximum number of nodes to be spun up/down
 
+(content:az-aks-create:nodepools)=
 ### Create multiple nodepools
 
 To create multiple nodepools within your Kubernetes cluster, add the following flags to the above `az aks create` command.

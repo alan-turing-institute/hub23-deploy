@@ -1,3 +1,4 @@
+(content:binderhub:local-chart)=
 # Installing BinderHub with a Local Helm Chart
 
 This documentation walks through the steps required to install a BinderHub using a local helm chart.
