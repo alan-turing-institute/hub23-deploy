@@ -35,6 +35,7 @@ jobs:
         with:
           directory: "./docs/_build/html"
           arguments: --assume-extension --disable-external --only_4xx
+        continue-on-error: true
 
       - name: Publish book
         if: github.event_name == 'push' && github.ref == 'refs/head/main'
