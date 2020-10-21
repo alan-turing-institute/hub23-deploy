@@ -1,3 +1,4 @@
+(content:customising:logo)=
 # Changing the logo on the Binder page
 
 The html content must be publicly hosted so the repo must remain public.

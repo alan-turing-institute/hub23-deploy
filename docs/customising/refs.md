@@ -1,3 +1,4 @@
+(content:customising:refs)=
 # References
 
 - BinderHub Template Customisation

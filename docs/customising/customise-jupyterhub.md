@@ -1,3 +1,4 @@
+(content:customising:user-resources)=
 # Customising User Resources
 
 The most import customisation to the JupyterHub will be the compute resources each user pod has access to.
