@@ -3,18 +3,6 @@
 
 All config code snippets should be added to `deploy/config.yaml` or `deploy/prod.yaml`.
 
-## Table of Contents
-
-- [Culling user pods](#culling-user-pods)
-- [Efficient Cluster Autoscaling](#efficient-cluster-autoscaling)
-  - [Scaling up in time (user placeholders)](#scaling-up-in-time-user-placeholders)
-  - [Scaling down efficiently](#scaling-down-efficiently)
-    - [Labelling nodes for core purpose](#labelling-nodes-for-core-purpose)
-- [Using available nodes efficiently (user scheduler)](#using-available-nodes-efficiently-user-scheduler)
-- [Pre-Pulling images](#pre-pulling-images)
-
----
-
 ## Culling user pods
 
 JupyterHub will automatically delete any user pods that have no activity for a period of time.
