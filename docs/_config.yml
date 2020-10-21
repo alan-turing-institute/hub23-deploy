@@ -1,0 +1,11 @@
+# Book settings
+title                       : Hub23 Deployment Guide  # The title of the book. Will be placed in the left navbar.
+author                      : Sarah Gibson  # The author of the book
+copyright                   : "2020"  # Copyright year to be placed in the footer
+logo                        : ""  # A path to the book logo
+email                       : ""
+exclude_patterns            : ["README.md"]  # Patterns to skip when building the book. Can be glob-style (for example "*skip.ipynb")
+
+repository:
+  url                       : https://github.com/alan-turing-institute/hub23-deploy  # The URL to your book's repository
+  path_to_book              : "docs"  # A path to your book's folder, relative to the repository root.
