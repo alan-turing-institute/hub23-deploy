@@ -15,9 +15,12 @@ sections:
     - file: azure-prereqs/container-registry/create-acr
 - file: deploy-k8s/index
   sections:
-  - file: deploy-k8s/deploy-autoscaling-k8s-cluster
-  - file: deploy-k8s/deploy-k8s-cluster-multiple-nodepools
-  - file: deploy-k8s/deploy-standard-k8s-cluster
+  - file: deploy-k8s/install
+  - file: deploy-k8s/setup
+  - file: deploy-k8s/download-secrets
+  - file: deploy-k8s/network-policies
+  - file: deploy-k8s/az-aks-create
+  - file: deploy-k8s/refs
 - file: setup-helm
 - file: enabling-https
 - file: binderhub/index
