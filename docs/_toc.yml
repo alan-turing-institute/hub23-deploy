@@ -34,8 +34,11 @@ sections:
   - file: cert-manager/refs
 - file: binderhub/index
   sections:
-  - file: binderhub/installing-binderhub-local-helm-chart
+  - file: binderhub/install
   - file: binderhub/installing-binderhub
+  - file: binderhub/installing-binderhub-local-helm-chart
+  - file: binderhub/connect-container-registry
+  - file: binderhub/github-api-limit
 - file: customising/index
   sections:
   - file: customising/changing-logo
