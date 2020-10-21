@@ -21,7 +21,10 @@ sections:
   - file: deploy-k8s/network-policies
   - file: deploy-k8s/az-aks-create
   - file: deploy-k8s/refs
-- file: setup-helm
+- file: setup-helm/index
+  sections:
+  - file: setup-helm/install
+  - file: setup-helm/setup-helm
 - file: enabling-https
 - file: binderhub/index
   sections:
