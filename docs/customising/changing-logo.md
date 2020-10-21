@@ -1,24 +1,12 @@
 # Changing the logo on the Binder page
 
-See these docs:
-
-- <https://binderhub.readthedocs.io/en/latest/customizing.html#template-customization>
-
 The html content must be publicly hosted so the repo must remain public.
 
-## Table of Contents
-
-- [Changing the Logo](#changing-the-logo)
-
----
-
-## Changing the Logo
-
-#### 1. Add the logo image file to the `static` folder
+## Add the logo image file to the `static` folder
 
 This can be any valid image file.
 
-#### 2. Extend `templates/page.html`
+## Extend `templates/page.html`
 
 In `templates/page.html`, change the name of the image to match that of your chosen file.
 
@@ -26,9 +14,9 @@ The line should look as follows.
 
 <script src="https://gist.github.com/sgibson91/c2201608c3d1ecb40a891a8b921c3a9b.js"></script>
 
-#### 3. Update `deploy/config.yaml`
+## Update `deploy/config.yaml` or `deploy/prod.yaml`
 
-Add the following to `deploy/config.yaml`.
+Add the following to your config file.
 
 ```yaml
 config:
@@ -63,23 +51,10 @@ extraVolumeMounts:
     mountPath: /etc/binderhub/custom
 ```
 
-**NOTE:** If you are testing the logo on a branch of this repo, you will need to update the `--branch` argument to match.
-{: .notice--info}
-
-#### 4. Upgrade the BinderHub deployment and visit the Binder page!
-
-Upgrade the Chart with the following command.
-The most recent commit-hash used should be logged in the Changelog section of the root README.
-
-```bash
-helm upgrade hub23 jupyterhub/binderhub \
-    --version=0.2.0-<commit=hash> \
-    -f .secret/secret.yaml \
-    -f deploy/config.yaml
+```{note}
+If you are testing the logo on a branch of this repo, you will need to update the `--branch` argument to match.
 ```
 
-Get the IP address of the Binder page with the following command.
+## Upgrade the BinderHub deployment and visit the Binder page!
 
-```bash
-kubectl get svc binder --namespace hub23
-```
+Upgrade the chart and visit the Binder page to see your updated homepage!

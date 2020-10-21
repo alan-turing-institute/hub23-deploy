@@ -43,6 +43,7 @@ sections:
   sections:
   - file: customising/changing-logo
   - file: customising/customise-jupyterhub
+  - file: customising/refs
 - file: advanced/index
   sections:
   - file: advanced/enabling-page-redirection
