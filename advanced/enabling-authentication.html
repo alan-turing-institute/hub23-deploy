@@ -1,0 +1,501 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enabling Authentication &#8212; Hub23 Deployment Guide</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.2d2078699c18a0efb88233928e1cf6ed.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.be0a4a0c39cd630af62a2fcf693f3f06.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Enabling Page Redirection" href="enabling-page-redirection.html" />
+    <link rel="prev" title="Advanced Configurations" href="index.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">Hub23 Deployment Guide</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../index.html">
+   Hub23 Deployment Guide
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../azure-prereqs/index.html">
+   Azure Resources
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../deploy-k8s/index.html">
+   Deploy a Kubernetes Cluster with AKS
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../setup-helm/index.html">
+   Setup Helm
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../cert-manager/index.html">
+   Enabling HTTPS using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     cert-manager
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../binderhub/index.html">
+   Installing BinderHub
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../customising/index.html">
+   Customising your Deployment
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="reference internal" href="index.html">
+   Advanced Configurations
+  </a>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Enabling Authentication
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="enabling-page-redirection.html">
+     Enabling Page Redirection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="optimising-jupyterhub.html">
+     Optimising the JupyterHub
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="refs.html">
+     References
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/advanced/enabling-authentication.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#enabling-authentication-using-jupyterhub-as-an-oauth-provider">
+   Enabling Authentication using JupyterHub as an OAuth provider
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#update-deploy-config-yaml-or-deploy-prod-yaml-with-the-following-configuration">
+     Update
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       deploy/config.yaml
+      </span>
+     </code>
+     or
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       deploy/prod.yaml
+      </span>
+     </code>
+     with the following configuration
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#oauth-with-github">
+   OAuth with GitHub
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#modify-the-auth-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following">
+     Modify the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       auth:
+      </span>
+     </code>
+     section of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       deploy/config.yaml
+      </span>
+     </code>
+     or
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       deploy/prod.yaml
+      </span>
+     </code>
+     to include the following
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#modify-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following">
+     Modify
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       deploy/secret-template.yaml
+      </span>
+     </code>
+     or
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       deploy/prod-template.yaml
+      </span>
+     </code>
+     with the following
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-an-oauth-app-on-github">
+     Create an OAuth app on GitHub
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#giving-access-to-github-organisations">
+       Giving access to GitHub organisations
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#enabling-named-servers">
+   Enabling Named Servers
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="enabling-authentication">
+<span id="content-advanced-config-enabling-auth"></span><h1>Enabling Authentication<a class="headerlink" href="#enabling-authentication" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="enabling-authentication-using-jupyterhub-as-an-oauth-provider">
+<h2>Enabling Authentication using JupyterHub as an OAuth provider<a class="headerlink" href="#enabling-authentication-using-jupyterhub-as-an-oauth-provider" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="update-deploy-config-yaml-or-deploy-prod-yaml-with-the-following-configuration">
+<h3>Update <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> with the following configuration<a class="headerlink" href="#update-deploy-config-yaml-or-deploy-prod-yaml-with-the-following-configuration" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">BinderHub</span><span class="p">:</span>
+    <span class="nt">auth_enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">jupyterhub</span><span class="p">:</span>
+  <span class="nt">cull</span><span class="p">:</span>
+    <span class="c1"># don&#39;t cull authenticated users</span>
+    <span class="nt">users</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+
+  <span class="nt">custom</span><span class="p">:</span>
+    <span class="nt">binderauth_enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+  <span class="nt">hub</span><span class="p">:</span>
+    <span class="nt">redirectToServer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+    <span class="nt">services</span><span class="p">:</span>
+      <span class="nt">binder</span><span class="p">:</span>
+        <span class="nt">oauth_redirect_uri</span><span class="p">:</span> <span class="s">&quot;http://&lt;binder-ip&gt;/oauth_callback&quot;</span>
+        <span class="nt">oauth_client_id</span><span class="p">:</span> <span class="s">&quot;binder-oauth-client-test&quot;</span>
+
+  <span class="nt">singleuser</span><span class="p">:</span>
+    <span class="c1"># to make notebook servers aware of hub</span>
+    <span class="nt">cmd</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub-singleuser</span>
+
+  <span class="nt">auth</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+</pre></div>
+</div>
+<p>This will set up the redirection to the JupyterHub for login and spin-up user servers.</p>
+</div>
+</div>
+<div class="section" id="oauth-with-github">
+<h2>OAuth with GitHub<a class="headerlink" href="#oauth-with-github" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="modify-the-auth-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following">
+<h3>Modify the <code class="docutils literal notranslate"><span class="pre">auth:</span></code> section of <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> to include the following<a class="headerlink" href="#modify-the-auth-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+  <span class="nt">github</span><span class="p">:</span>
+    <span class="nt">callbackUrl</span><span class="p">:</span> <span class="s">&quot;http://&lt;jupyter-ip&gt;/hub/oauth_callback&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="modify-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following">
+<h3>Modify <code class="docutils literal notranslate"><span class="pre">deploy/secret-template.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod-template.yaml</span></code> with the following<a class="headerlink" href="#modify-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">github</span><span class="p">:</span>
+    <span class="nt">clientId</span><span class="p">:</span> <span class="s">&quot;{github-client-id}&quot;</span>
+    <span class="nt">clientSecret</span><span class="p">:</span> <span class="s">&quot;{github-client-secret}&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Don’t worry about <code class="docutils literal notranslate"><span class="pre">clientId</span></code> and <code class="docutils literal notranslate"><span class="pre">clientSecret</span></code> yet as we will generate these on GitHub.</p>
+</div>
+</div>
+<div class="section" id="create-an-oauth-app-on-github">
+<h3>Create an OAuth app on GitHub<a class="headerlink" href="#create-an-oauth-app-on-github" title="Permalink to this headline">¶</a></h3>
+<p>Go to the <code class="docutils literal notranslate"><span class="pre">binderhub-test-org</span></code> organisation on <code class="docutils literal notranslate"><span class="pre">github.com</span></code>.
+Under Settings -&gt; Developer Settings -&gt; OAuth Apps, click New OAuth App.
+Fill in the form as per the image below and click Register Application:</p>
+<div class="figure align-default" id="github-oauth-setup">
+<a class="reference internal image-reference" href="../_images/github_oauth_setup.png"><img alt="../_images/github_oauth_setup.png" src="../_images/github_oauth_setup.png" style="height: 500px;" /></a>
+</div>
+<p>This will create an OAuth app owned by <code class="docutils literal notranslate"><span class="pre">binderhub-test-org</span></code> that will allow anyone with a valid GitHub account to login to Hub23.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">clientId</span></code> and <code class="docutils literal notranslate"><span class="pre">clientSecret</span></code> values will be generated.
+Add these values to the key vault (see <a class="reference internal" href="../azure-prereqs/key-vault/add-secrets.html#content-key-vault-add-secrets"><span class="std std-ref">Adding secrets to the Key Vault</span></a>) and create a <code class="docutils literal notranslate"><span class="pre">sed</span></code> command to populate <code class="docutils literal notranslate"><span class="pre">deploy/secret-template.yaml</span></code>.</p>
+<div class="section" id="giving-access-to-github-organisations">
+<h4>Giving access to GitHub organisations<a class="headerlink" href="#giving-access-to-github-organisations" title="Permalink to this headline">¶</a></h4>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This section of the docs is a work in progress and needs improvement.</p>
+</div>
+<p>Update <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code>  or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> to include the following under <code class="docutils literal notranslate"><span class="pre">auth</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+  <span class="nt">github</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+    <span class="nt">orgWhitelist</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;binderhub-test-org&quot;</span>
+  <span class="nt">scopes</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;read:user&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">read:user</span></code> scope will read a user’s organisation/team memberships and look for <code class="docutils literal notranslate"><span class="pre">binderhub-test-org</span></code>.
+If the membership is not found, they will be forbidden from accessing Hub23.
+<strong>This scope requires a user’s membership of <code class="docutils literal notranslate"><span class="pre">binderhub-test-org</span></code> to be public.</strong></p>
+</div>
+</div>
+</div>
+<div class="section" id="enabling-named-servers">
+<h2>Enabling Named Servers<a class="headerlink" href="#enabling-named-servers" title="Permalink to this headline">¶</a></h2>
+<p>With authentication enabled, BinderHub automatically launches new pods with the username of the authenticated person in the pod name.
+This can cause errors such as <code class="docutils literal notranslate"><span class="pre">Launch</span> <span class="pre">failed.</span> <span class="pre">User</span> <span class="pre">already</span> <span class="pre">has</span> <span class="pre">a</span> <span class="pre">running</span> <span class="pre">server.</span></code>
+To avoid this, we can used <a class="reference external" href="https://blog.jupyter.org/announcing-jupyterhub-1-0-8fff78acad7f">named servers</a>.
+To enable this feature, add the following to <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">BinderHub</span><span class="p">:</span>
+    <span class="nt">use_named_servers</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">jupyterhub</span><span class="p">:</span>
+    <span class="nt">hub</span><span class="p">:</span>
+      <span class="nt">allowNamedServers</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>The number of named servers a user is allowed can be controlled as in the following example.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">jupyterhub</span><span class="p">:</span>
+  <span class="nt">hub</span><span class="p">:</span>
+    <span class="nt">namedServerLimitPerUser</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./advanced"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">Advanced Configurations</a>
+    <a class='right-next' id="next-link" href="enabling-page-redirection.html" title="next page">Enabling Page Redirection</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Sarah Gibson<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

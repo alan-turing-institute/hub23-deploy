@@ -1,0 +1,471 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Optimising the JupyterHub &#8212; Hub23 Deployment Guide</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.2d2078699c18a0efb88233928e1cf6ed.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.be0a4a0c39cd630af62a2fcf693f3f06.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="References" href="refs.html" />
+    <link rel="prev" title="Enabling Page Redirection" href="enabling-page-redirection.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">Hub23 Deployment Guide</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../index.html">
+   Hub23 Deployment Guide
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../azure-prereqs/index.html">
+   Azure Resources
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../deploy-k8s/index.html">
+   Deploy a Kubernetes Cluster with AKS
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../setup-helm/index.html">
+   Setup Helm
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../cert-manager/index.html">
+   Enabling HTTPS using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     cert-manager
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../binderhub/index.html">
+   Installing BinderHub
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../customising/index.html">
+   Customising your Deployment
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="reference internal" href="index.html">
+   Advanced Configurations
+  </a>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="enabling-authentication.html">
+     Enabling Authentication
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="enabling-page-redirection.html">
+     Enabling Page Redirection
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Optimising the JupyterHub
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="refs.html">
+     References
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+
+ <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        <div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/advanced/optimising-jupyterhub.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+    
+</div>
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#culling-user-pods">
+   Culling user pods
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#efficient-cluster-autoscaling">
+   Efficient Cluster Autoscaling
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scaling-up-in-time-user-placeholders">
+     Scaling up in time (user placeholders)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scaling-down-efficiently">
+     Scaling down efficiently
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#labelling-nodes-for-core-purpose">
+       Labelling nodes for core purpose
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-available-nodes-efficiently-user-scheduler">
+   Using available nodes efficiently (user scheduler)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pre-pulling-images">
+   Pre-Pulling images
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="optimising-the-jupyterhub">
+<span id="content-advanced-config-optimising-jupyterhub"></span><h1>Optimising the JupyterHub<a class="headerlink" href="#optimising-the-jupyterhub" title="Permalink to this headline">¶</a></h1>
+<p>All config code snippets should be added to <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code>.</p>
+<div class="section" id="culling-user-pods">
+<h2>Culling user pods<a class="headerlink" href="#culling-user-pods" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub will automatically delete any user pods that have no activity for a period of time.
+This helps free up computational resources and keeps costs down if you are using an autoscaling cluster.</p>
+<p>In JupyterHub, “inactivity” is defined as no response from the user’s browser.
+JupyterHub constantly pings the user’s JupyterHub browser session to check whether it is open.
+This means that leaving the computer running with the JupyterHub window open will <strong>not</strong> be treated as inactivity.</p>
+<p>By default, JupyterHub will run the culling process every ten minutes and will cull any user pods that have been inactive for more than one hour.
+You can configure this behavior in your config file with the following code snippet.
+The culler can also be configured to cull pods that have existed for over a given length of time via the <code class="docutils literal notranslate"><span class="pre">maxAge</span></code> argument.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cull</span><span class="p">:</span>
+  <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;max-idle-seconds-before-user-pod-is-deleted&gt;</span>
+  <span class="nt">every</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-this-check-is-done&gt;</span>
+  <span class="nt">maxAge</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-the-pods-has-been-active&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="efficient-cluster-autoscaling">
+<h2>Efficient Cluster Autoscaling<a class="headerlink" href="#efficient-cluster-autoscaling" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference external" href="https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler">Cluster Autoscaler (CA)</a> will help add and remove nodes from the cluster.
+It needs to scale up before users arrive and scale down nodes aggressively enough without disrupting users.</p>
+<div class="section" id="scaling-up-in-time-user-placeholders">
+<h3>Scaling up in time (user placeholders)<a class="headerlink" href="#scaling-up-in-time-user-placeholders" title="Permalink to this headline">¶</a></h3>
+<p>A CA will add nodes when pods don’t fit on the available nodes but would fit if another node is added.
+But this can lead to a long waiting time for the user as a pod is spun up.</p>
+<p>Kubernetes 1.11+ (and Helm 2.11+) introduced <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/">Pod Priority and Preemption</a>.
+Pods with higher priority can preempt/evict pods with lower priority if that would help the higher priority pod fit on a node.</p>
+<p>Hence dummy users or <em>user-placeholders</em> with low priority can be added to take up resources until a real user (with higher priority) requires it.
+The lower priority pod will be preempted to make room for the higher priority pod.
+The now evicted user-placeholder will signal the CA that it needs to scale up.</p>
+<p>User-placeholders will have the same resource requests as the default user.
+Therefore, if you have 3 user placeholders running, real users will only need to wait for a scale up if more than 3 users arrive in a time interval less than it takes to make a node ready for use.</p>
+<p>Add the following code snippet to use 3 user-placeholders.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">jupyterhub</span><span class="p">:</span>
+  <span class="nt">scheduling</span><span class="p">:</span>
+    <span class="nt">podPriority</span><span class="p">:</span>
+      <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">userPlaceholder</span><span class="p">:</span>
+      <span class="c1"># Specify three dummy user pods will be used as placeholders</span>
+      <span class="nt">replicas</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="scaling-down-efficiently">
+<h3>Scaling down efficiently<a class="headerlink" href="#scaling-down-efficiently" title="Permalink to this headline">¶</a></h3>
+<p>To scale down, <a class="reference external" href="https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node">certain technical criteria</a> need to be met.
+Most importantly for a node to be scaled down, it must be free from pods that are not allowed to be disrupted.
+Such pods are for example real user pods, important system pods, and some JupyterHub pods.</p>
+<p>Consider the following scenario.
+Many users arrive to the JupyterHub during the day causing new nodes to be added by the CA.
+Some system pods end up on the new nodes with user pods.
+At night, when the <em>culler</em> has removed many inactive pods, the nodes are now free from user pods but cannot be removing since there is a single system pod remaining.</p>
+<p>We setup a node affinity for core pods to remain on the 3 nodes that were deployed.
+See <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content-az-aks-create-autoscale"><span class="std std-ref">Enable Autoscaling</span></a>.</p>
+<div class="section" id="labelling-nodes-for-core-purpose">
+<h4>Labelling nodes for core purpose<a class="headerlink" href="#labelling-nodes-for-core-purpose" title="Permalink to this headline">¶</a></h4>
+<p>Add a <code class="docutils literal notranslate"><span class="pre">core</span></code> label to all the nodes in the node pool.</p>
+<ol>
+<li><p>Setup a node pool (with autoscaling (see <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content-az-aks-create-autoscale"><span class="std std-ref">Enable Autoscaling</span></a>) and/or nodepools (see <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content-az-aks-create-nodepools"><span class="std std-ref">Create multiple nodepools</span></a>)) and a certain label.</p>
+<ol>
+<li><p>The label: <code class="docutils literal notranslate"><span class="pre">hub.jupyter.org/node-purpose=core</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl label nodes &lt;node-name&gt; hub.jupyter.org/node-purpose<span class="o">=</span>core
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">nodes</span></code> to ascertain <code class="docutils literal notranslate"><span class="pre">&lt;node-name&gt;</span></code>.</p>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you used <code class="docutils literal notranslate"><span class="pre">--nodepool-labels</span></code> when deploying the Kubernetes cluster, you can skip this step.</p>
+</div>
+</li>
+<li><p>Make core pods require to be scheduled on the node pool setup above.</p>
+<p>The default setting is to make core pods <em>prefer</em> to be scheduled on nodes with the <code class="docutils literal notranslate"><span class="pre">hub.jupyter.org/node-purpose=core</span></code> label, but we can make it a <em>requirement</em> by using the code snippet below.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">jupyterhub</span><span class="p">:</span>
+    <span class="nt">scheduling</span><span class="p">:</span>
+      <span class="nt">corePods</span><span class="p">:</span>
+        <span class="nt">nodeAffinity</span><span class="p">:</span>
+          <span class="c1"># matchNodePurpose valid options:</span>
+          <span class="c1"># - ignore</span>
+          <span class="c1"># - prefer (the default)</span>
+          <span class="c1"># - require</span>
+          <span class="nt">matchNodePurpose</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">require</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>This process can be repeated for a <code class="docutils literal notranslate"><span class="pre">user</span></code> label.</p>
+</div>
+</div>
+</div>
+<div class="section" id="using-available-nodes-efficiently-user-scheduler">
+<h2>Using available nodes efficiently (user scheduler)<a class="headerlink" href="#using-available-nodes-efficiently-user-scheduler" title="Permalink to this headline">¶</a></h2>
+<p>If you have users starting new servers while the total number of active users is decreasing, how will you free up a node so it can be scaled down?</p>
+<p>This is what the <em>user scheduler</em> is for.
+It’s only task is to schedule new user pods to the <em>most utilised node</em>.
+This can be compared to the <em>default scheduler</em> that instead always tries to schedule pods so the <em>least utilised node</em>.
+Only the user scheduler would allow the underutilised nodes to free up over time as the total amount of users decrease but a few users still arrive.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you don’t want to scale down, it makes more sense to let users spread out and utilise all available nodes. Only activate the user scheduler if you have an autoscaling node pool.</p>
+</div>
+<p>Enable the user scheduler with the following code snippet:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">jupyterhub</span><span class="p">:</span>
+    <span class="nt">scheduling</span><span class="p">:</span>
+      <span class="nt">userScheduler</span><span class="p">:</span>
+        <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pre-pulling-images">
+<h2>Pre-Pulling images<a class="headerlink" href="#pre-pulling-images" title="Permalink to this headline">¶</a></h2>
+<p>A user will have to wait for a requested Docker image if it isn’t already pulled onto that node.
+If the image is large, this can be a long wait!</p>
+<p>In the case when a new node is added (Cluster Autoscaler), the <em>continuous-image-puller</em> will pull a user’s container.
+This uses a daemonset to force Kubernetes to pull the user image on all nodes as soon as a node is present.</p>
+<p>The continuous-image-puller is disabled by default and the following snippet is added to <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> to enable it.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">jupyterhub</span><span class="p">:</span>
+    <span class="nt">hub</span><span class="p">:</span>
+      <span class="nt">prePuller</span><span class="p">:</span>
+        <span class="nt">continuous</span><span class="p">:</span>
+          <span class="c1"># NOTE: if used with a Cluster Autoscaler, also add user-placeholders</span>
+          <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./advanced"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="enabling-page-redirection.html" title="previous page">Enabling Page Redirection</a>
+    <a class='right-next' id="next-link" href="refs.html" title="next page">References</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Sarah Gibson<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>
