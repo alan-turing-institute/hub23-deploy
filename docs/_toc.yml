@@ -1,0 +1,26 @@
+file: index
+sections:
+- file: azure-prereqs/index
+  sections:
+  - file: azure-prereqs/azure-keyvault
+  - file: azure-prereqs/create-azure-container-registry
+- file: deploy-k8s/index
+  sections:
+  - file: deploy-k8s/deploy-autoscaling-k8s-cluster
+  - file: deploy-k8s/deploy-k8s-cluster-multiple-nodepools
+  - file: deploy-k8s/deploy-standard-k8s-cluster
+- file: setup-helm
+- file: enabling-https
+- file: binderhub/index
+  sections:
+  - file: binderhub/installing-binderhub-local-helm-chart
+  - file: binderhub/installing-binderhub
+- file: customising/index
+  sections:
+  - file: customising/changing-logo
+  - file: customising/customise-jupyterhub
+- file: advanced/index
+  sections:
+  - file: advanced/enabling-page-redirection
+  - file: advanced/optimising-autoscaling
+  - file: advanced/enabling-authentication
