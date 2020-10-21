@@ -1,3 +1,4 @@
+(content:advanced-config:refs)=
 # References
 
 - JupyterHub Authentication

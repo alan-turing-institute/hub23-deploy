@@ -1,3 +1,4 @@
+(content:advanced-config:optimising-jupyterhub)=
 # Optimising the JupyterHub
 
 All config code snippets should be added to `deploy/config.yaml` or `deploy/prod.yaml`.

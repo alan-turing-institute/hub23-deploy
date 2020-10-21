@@ -1,3 +1,4 @@
+(content:advanced-config:enabling-auth)=
 # Enabling Authentication
 
 ## Enabling Authentication using JupyterHub as an OAuth provider

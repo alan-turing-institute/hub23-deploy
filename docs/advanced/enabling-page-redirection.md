@@ -1,3 +1,4 @@
+(content:advanced-config:enabling-page-redirection)=
 # Enabling Page Redirection
 
 These docs will walk through how to create a DNS at which the Binder page and JupyterHub are found.
