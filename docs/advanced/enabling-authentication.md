@@ -64,7 +64,12 @@ Go to the `binderhub-test-org` organisation on `github.com`.
 Under Settings -> Developer Settings -> OAuth Apps, click New OAuth App.
 Fill in the form as per the image below and click Register Application:
 
-<img src="../images/github_oauth_setup.png" alt="github-oauth-setup">
+```{figure} ../images/github_oauth_setup.png
+---
+height: 500px
+name: github-oauth-setup
+---
+```
 
 This will create an OAuth app owned by `binderhub-test-org` that will allow anyone with a valid GitHub account to login to Hub23.
 
