@@ -6,7 +6,7 @@ We can download the secrets and save them to files like so.
 They should be downloaded into the `.secret/` folder so that they are git-ignored.
 We will need certain secrets in order to create the `config.yaml` and `secret.yaml` files to deploy and upgrade Hub23.
 
-1. Download the SSH keys
+## Download the SSH keys
 
 Download the private key:
 
@@ -26,7 +26,7 @@ az keyvault secret download \
     --file .secret/ssh-key-hub23cluster.pub
 ```
 
-2. Download the API and secret tokens
+### Download the API and secret tokens
 
 Download the API token:
 

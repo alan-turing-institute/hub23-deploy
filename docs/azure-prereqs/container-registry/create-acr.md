@@ -1,6 +1,6 @@
 # Create an Azure Container Registry
 
-1. Login to Azure
+## Login to Azure
 
 ```bash
 az login --username YOUR_TURING_EMAIL --output none
@@ -8,7 +8,7 @@ az login --username YOUR_TURING_EMAIL --output none
 
 Login with your Turing account.
 
-1. Set subscription
+## Set subscription
 
 To see a list of your subscriptions, run the following command.
 
@@ -22,7 +22,7 @@ Activate the BinderHub subscription with the following command.
 az account set --subscription Turing-BinderHub
 ```
 
-1. Create Resource Group
+## Create Resource Group
 
 ```bash
 az group create --name Hub23 --location westeurope
@@ -32,7 +32,7 @@ az group create --name Hub23 --location westeurope
 This step can be skipped if the Resource Group already exists.
 ```{: .notice--info}```
 
-4. Create an ACR
+## Create an ACR
 
 The ACR name must be globally unique and consist of only lowercase alphanumeric characters, between 5 and 50 characters long.
 This can be checked using: `az acr check-name --name <ACR-NAME>`.
@@ -41,25 +41,25 @@ This can be checked using: `az acr check-name --name <ACR-NAME>`.
 az acr create --name hub23registry --resource-group Hub23 --sku Standard
 ```
 
-5. Login to the ACR
+## Login to the ACR
 
 ```bash
 az acr login --name hub23registry
 ```
 
-6. Save the login server to a variable
+## Save the login server to a variable
 
 ```bash
 LOGIN_SERVER=$(az acr show --name hub23-registry --query loginServer --output tsv)
 ```
 
-7. Save the registry ID to a variable
+## Save the registry ID to a variable
 
 ```bash
 ACR_ID=$(az acr show --name hub23-registry --query id --output tsv)
 ```
 
-8. Assign AcrPush role to the Service Principal
+## Assign AcrPush role to the Service Principal
 
 The Service Principal needs an AcrPush role so that it is permitted to both push and pull images to/from the registry.
 Without this, BinderHub won't be able to store the images it generates.
@@ -77,7 +77,7 @@ az key-vault secret download --vault-name hub23-keyvault --name SP-appID --file 
 az role assignment create --assignee $(cat .secret/sp-appID.txt) --scope $ACR_ID --role AcrPush
 ```
 
-9. Update `secret.yaml`
+## Update `secret.yaml`
 
 Now we provide the BinderHub with the Service Principal so that it can login to the ACR.
 
@@ -101,7 +101,7 @@ In `deploy/secret-template.yaml`, `{username}` and `{password}` will be replaced
 Don't forget to delete the local copies of the Service Principal once you're finished with them.
 ```
 
-10. Update `config.yaml`
+## Update `config.yaml`
 
 Add the following to `deploy/config.yaml`:
 
@@ -114,7 +114,7 @@ config:
     token_url: "https://hub23-registry.azurecr.io/oauth2/token?service=hub23-registry.azurecr.io"
 ```
 
-11. Upgrade the BinderHub deployment
+## Upgrade the BinderHub deployment
 
 ```bash
 helm upgrade hub23 jupyterhub/binderhub \

@@ -1,6 +1,6 @@
 # Setup and Create the Key Vault
 
-1. Login to Azure
+## Login to Azure
 
 ```bash
 az login --username YOUR_TURING_EMAIL --output none
@@ -8,7 +8,7 @@ az login --username YOUR_TURING_EMAIL --output none
 
 Login with your Turing account.
 
-2. Activate the Subscription
+## Activate the Subscription
 
 Hub23 has its own subscription and so we have to activate that.
 
@@ -27,7 +27,7 @@ To activate the subscription, run the following:
 az account set --subscription Turing-BinderHub
 ```
 
-3. Create a Resource Group
+## Create a Resource Group
 
 Azure groups related resources together by assigning them to a Resource Group.
 We need to create one for Hub23.
@@ -46,7 +46,7 @@ If the resource group already exists, this step can be skipped.
 Test if the resource group exists by running the following: `az group exists --name Hub23`
 ```
 
-4. Create the key vault
+## Create the key vault
 
 ```{note}
 Key vault names must be lower case and/or numerical and may only include hyphens (`-`), no underscores (`_`) or other non-alphanumeric characters. They must also be unique.

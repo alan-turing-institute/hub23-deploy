@@ -4,6 +4,7 @@ This document walks through the creation of a key vault for the Turing BinderHub
 
 ## Table of Contents
 
+- Installation
 - Setup and Create the Key Vault
 - Adding secrets to the Key Vault
 - Downloading the secrets

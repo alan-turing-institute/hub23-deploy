@@ -4,4 +4,5 @@ This document walks through the creation of an Azure Container Registry for the 
 
 ## Table of Contents
 
+- Installation
 - Create an Azure Container Registry
