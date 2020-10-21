@@ -2,13 +2,6 @@
 
 These docs will walk through how to create a DNS at which the Binder page and JupyterHub are found.
 
-## Table of Contents
-
-- [Creating a new DNS Zone](#creating-a-new-dns-zone)
-- [Creating A records](#creating-a-records)
-
----
-
 ## Creating a new DNS Zone
 
 First we must create a DNS zone to handle the redirection of the pages.
@@ -41,6 +34,6 @@ We will now set A records that point to the IP addresses of the JupyterHub and B
 
 ## Update `deploy/config.yaml`
 
-Make sure to update `deploy/config.yaml` to include the new DNS's, instead of the raw IP addresses.
+Make sure to update `deploy/config.yaml` or `deploy/prod.yaml` to include the new DNS's, instead of the raw IP addresses.
 If you have GitHub OAuth enabled, the DNS names will have to be inserted instead of the IP addresses in the OAuth app as well.
 This shouldn't generate a new Client ID or Secret.

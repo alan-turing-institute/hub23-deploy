@@ -1,13 +1,6 @@
-# Optimizing the JupyterHub for Autoscaling
+# Optimising the JupyterHub
 
-See the following docs:
-
-- <https://zero-to-jupyterhub.readthedocs.io/en/latest/user-management.html#culling-user-pods>
-- <https://zero-to-jupyterhub.readthedocs.io/en/latest/optimization.html>
-- <https://discourse.jupyter.org/t/planning-placeholders-with-jupyterhub-helm-chart-0-8-tested-on-mybinder-org/213>
-- <https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html>
-
-All config code snippets should be added to `deploy/config.yaml`.
+All config code snippets should be added to `deploy/config.yaml` or `deploy/prod.yaml`.
 
 ## Table of Contents
 
@@ -31,7 +24,7 @@ JupyterHub constantly pings the user’s JupyterHub browser session to check whe
 This means that leaving the computer running with the JupyterHub window open will **not** be treated as inactivity.
 
 By default, JupyterHub will run the culling process every ten minutes and will cull any user pods that have been inactive for more than one hour.
-You can configure this behavior in your `config.yaml` file with the following code snippet.
+You can configure this behavior in your config file with the following code snippet.
 The culler can also be configured to cull pods that have existed for over a given length of time via the `maxAge` argument.
 
 ```yaml
@@ -102,6 +95,10 @@ Add a `core` label to all the nodes in the node pool.
 
       Use `kubectl get nodes` to ascertain `<node-name>`.
 
+   ```{note}
+   If you used `--nodepool-labels` when deploying the Kubernetes cluster, you can skip this step.
+   ```
+
 2. Make core pods require to be scheduled on the node pool setup above.
 
    The default setting is to make core pods _prefer_ to be scheduled on nodes with the `hub.jupyter.org/node-purpose=core` label, but we can make it a _requirement_ by using the code snippet below.
@@ -130,8 +127,9 @@ It's only task is to schedule new user pods to the _most utilised node_.
 This can be compared to the _default scheduler_ that instead always tries to schedule pods so the _least utilised node_.
 Only the user scheduler would allow the underutilised nodes to free up over time as the total amount of users decrease but a few users still arrive.
 
-**NOTE:** If you don't want to scale down, it makes more sense to let users spread out and utilise all available nodes. Only activate the user scheduler if you have an autoscaling node pool.
-{: .notice--info}
+```{note}
+If you don't want to scale down, it makes more sense to let users spread out and utilise all available nodes. Only activate the user scheduler if you have an autoscaling node pool.
+```
 
 Enable the user scheduler with the following code snippet:
 

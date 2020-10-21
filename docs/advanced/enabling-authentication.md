@@ -1,21 +1,8 @@
 # Enabling Authentication
 
-See the following docs:
-
-- <https://binderhub.readthedocs.io/en/latest/authentication.html>
-- <https://zero-to-jupyterhub.readthedocs.io/en/stable/authentication.html>
-
-## Table of Contents
-
-- [Enabling Authentication using JupyterHub as an OAuth provider](#enabling-authentication-using-jupyterhub-as-an-oauth-provider)
-- [OAuth with GitHub](#oauth-with-github)
-- [Enabling Named Servers](#enabling-named-servers)
-
----
-
 ## Enabling Authentication using JupyterHub as an OAuth provider
 
-#### Update `deploy/config.yaml` with the following configuration
+### Update `deploy/config.yaml` or `deploy/prod.yaml` with the following configuration
 
 ```yaml
 config:
@@ -44,11 +31,11 @@ jupyterhub:
   auth: {}
 ```
 
-This will set up the redirection to the JupyterHub for login and spin up user servers.
+This will set up the redirection to the JupyterHub for login and spin-up user servers.
 
 ## OAuth with GitHub
 
-#### Modify the `auth:` section of `deploy/config.yaml` to include the following
+### Modify the `auth:` section of `deploy/config.yaml` or `deploy/prod.yaml` to include the following
 
 ```yaml
 auth:
@@ -57,7 +44,7 @@ auth:
     callbackUrl: "http://<jupyter-ip>/hub/oauth_callback"
 ```
 
-#### Modify `deploy/secret-template.yaml` with the following
+### Modify `deploy/secret-template.yaml` or `deploy/prod-template.yaml` with the following
 
 ```yaml
 auth:
@@ -66,9 +53,11 @@ auth:
     clientSecret: "{github-client-secret}"
 ```
 
+```{note}
 Don't worry about `clientId` and `clientSecret` yet as we will generate these on GitHub.
+```
 
-#### Create an OAuth app on GitHub
+### Create an OAuth app on GitHub
 
 Go to the `binderhub-test-org` organisation on `github.com`.
 Under Settings -> Developer Settings -> OAuth Apps, click New OAuth App.
@@ -83,10 +72,11 @@ Add these values to the key vault (see ["Creating an Azure Key Vault for Hub23"]
 
 #### Giving access to GitHub organisations
 
-**WARNING:** This section of the docs is a work in progress and needs improvement.
-{: .notice--warning}
+```{warning}
+This section of the docs is a work in progress and needs improvement.
+```
 
-Update `deploy/config.yaml` to include the following under `auth`:
+Update `deploy/config.yaml`  or `deploy/prod.yaml` to include the following under `auth`:
 
 ```yaml
 auth:
@@ -108,7 +98,7 @@ If the membership is not found, they will be forbidden from accessing Hub23.
 With authentication enabled, BinderHub automatically launches new pods with the username of the authenticated person in the pod name.
 This can cause errors such as `Launch failed. User already has a running server.`
 To avoid this, we can used [named servers](https://blog.jupyter.org/announcing-jupyterhub-1-0-8fff78acad7f).
-To enable this feature, add the following to `deploy/config.yaml`.
+To enable this feature, add the following to `deploy/config.yaml` or `deploy/prod.yaml`.
 
 ```yaml
 config:

@@ -46,6 +46,7 @@ sections:
   - file: customising/refs
 - file: advanced/index
   sections:
-  - file: advanced/enabling-page-redirection
-  - file: advanced/optimising-autoscaling
   - file: advanced/enabling-authentication
+  - file: advanced/enabling-page-redirection
+  - file: advanced/optimising-jupyterhub
+  - file: advanced/refs
