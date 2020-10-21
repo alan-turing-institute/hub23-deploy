@@ -1,3 +1,4 @@
+(content:k8s:download-secrets)=
 # Download the required secrets
 
 We will require some info from the key vault in order to deploy the Kubernetes cluster and the BinderHub.

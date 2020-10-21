@@ -1,3 +1,4 @@
+(content:k8s:net-pols)=
 # Enable Network Policies
 
 The BinderHub helm chart contains network policies designed to restrict access to pods and the JupyterHub.

@@ -1,3 +1,4 @@
+(content:k8s:setup)=
 # Setup
 
 ## Login to Azure

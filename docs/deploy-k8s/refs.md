@@ -1,3 +1,4 @@
+(content:k8s:refs)=
 # References
 
 - Enabling Network Policies for Kubernetes Clusters

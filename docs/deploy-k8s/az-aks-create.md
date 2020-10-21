@@ -1,3 +1,4 @@
+(content:k8s:create)=
 # Deploy the Kubernetes cluster
 
 ## Create the AKS cluster
