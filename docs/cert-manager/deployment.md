@@ -1,3 +1,4 @@
+(content:cert-manager:deploy)=
 # Deploying `cert-manager`
 
 ## Create a namespace for `cert-manager`

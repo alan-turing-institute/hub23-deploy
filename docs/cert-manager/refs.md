@@ -1,3 +1,4 @@
+(content:cert-manager:refs)=
 # References
 
 - `cert-manager`

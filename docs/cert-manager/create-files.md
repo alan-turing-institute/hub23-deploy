@@ -1,3 +1,4 @@
+(content:cert-manager:create-files)=
 # Creating files
 
 Some extra files are required which we will outline below.

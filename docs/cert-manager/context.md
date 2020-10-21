@@ -1,3 +1,4 @@
+(content:cert-manager:context)=
 # Context
 
 To setup secure HTTPS communication, we need to have a _certificate_ associated with our _domain_ from a _Certificate Authority_ (CA).
