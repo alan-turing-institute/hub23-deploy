@@ -1,0 +1,16 @@
+# Enabling HTTPS using `cert-manager`
+
+This document will walk through the steps required to enable HTTPS for deployments in your Kubernetes cluster using [`cert-manager`](https://docs.cert-manager.io/en/latest/).
+
+Some of the following documentation is based on [this WIP documentation](https://discourse.jupyter.org/t/wip-documentation-about-cert-manager/2068).
+
+## Table of Contents
+
+- Installation
+- Context
+  - How `cert-manager` works
+- Creating files
+  - Create `templates/cluster-issuer.yaml`
+  - Create `deploy/cert-manager.yaml`
+- Deploying `cert-manager`
+- References
