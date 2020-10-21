@@ -1,3 +1,4 @@
+(content:binderhub:github-api-limit)=
 # Increasing GitHub API limit
 
 ```{note}

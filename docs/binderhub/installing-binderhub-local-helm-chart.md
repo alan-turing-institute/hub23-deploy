@@ -93,7 +93,7 @@ binderhub:
 ```
 
 ```{note}
-See {ref}`content:connect-container-registry` for how to connect your registry in this file.
+See {ref}`content:binderhub:connect-container-registry` for how to connect your registry in this file.
 ```
 
 ### Create `deploy/prod-template.yaml`

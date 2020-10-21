@@ -1,3 +1,4 @@
+(content:binderhub)=
 # Installing BinderHub
 
 This section covers installing BinderHub onto the Kubernetes cluster.
@@ -5,8 +6,8 @@ Instructions to deploy the BinderHub chart directly or as a dependency of a meta
 
 ## Table of Contents
 
-- Installation
-- Installing BinderHub directly from the Helm Chart
-- Installing BinderHub with a Local Helm Chart
-- Connect a Container Registry
-- Increase the GitHub API limit
+- {ref}`content:binderhub:install`
+- {ref}`content:binderhub:direct-chart`
+- {ref}`content:binderhub:local-chart`
+- {ref}`content:binderhub:connect-container-registry`
+- {ref}`content:binderhub:github-api-limit`

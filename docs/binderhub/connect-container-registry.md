@@ -1,4 +1,4 @@
-(content:connect-container-registry)=
+(content:binderhub:connect-container-registry)=
 # Connect a Container Registry
 
 This section explains how to connect a container registry (either Docker Hub or Azure Container Registry) to BinderHub.

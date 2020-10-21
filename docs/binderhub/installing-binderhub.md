@@ -1,3 +1,4 @@
+(content:binderhub:direct-chart)=
 # Installing BinderHub directly from the Helm Chart
 
 ## Downloading the Required Secrets
@@ -46,7 +47,7 @@ rm .secret/secretToken.txt
 ## Connect a Container Registry
 
 We need to attach a Container Registry to the BinderHub so that it has a place to push built images to.
-See {ref}`content:connect-container-registry` for how to do that.
+See {ref}`content:binderhub:connect-container-registry` for how to do that.
 
 ## Create a `config.yaml` file
 
