@@ -1,3 +1,4 @@
+(content:key-vault:create)=
 # Setup and Create the Key Vault
 
 ## Login to Azure

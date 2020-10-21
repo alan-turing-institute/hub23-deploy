@@ -1,3 +1,4 @@
+(content:container-registry:create)=
 # Create an Azure Container Registry
 
 ## Login to Azure

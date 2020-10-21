@@ -1,3 +1,4 @@
+(content:key-vault:service-principals)=
 # Service Principal
 
 When deploying a Kubernetes cluster onto Azure, a Service Principal is required.

@@ -1,3 +1,4 @@
+(content:container-registry:install)=
 # Installation
 
 To complete this section, you will need the following tools installed:
