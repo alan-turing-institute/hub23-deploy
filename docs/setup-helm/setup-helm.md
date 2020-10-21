@@ -1,3 +1,4 @@
+(content:helm:setup)=
 # Setting up Helm
 
 Helm is a package manager for Kubernetes and is used for installing, managing and upgrading applications on the cluster.

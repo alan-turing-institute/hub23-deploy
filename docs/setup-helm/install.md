@@ -1,3 +1,4 @@
+(content:helm:install)=
 # Installation
 
 To complete this section, you will need the following tools installed:
