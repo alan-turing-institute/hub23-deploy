@@ -2,8 +2,17 @@ file: index
 sections:
 - file: azure-prereqs/index
   sections:
-  - file: azure-prereqs/azure-keyvault
-  - file: azure-prereqs/create-azure-container-registry
+  - file: azure-prereqs/key-vault/index
+    sections:
+    - file: azure-prereqs/key-vault/install
+    - file: azure-prereqs/key-vault/create-key-vault
+    - file: azure-prereqs/key-vault/add-secrets
+    - file: azure-prereqs/key-vault/download-secrets
+    - file: azure-prereqs/key-vault/service-principals
+  - file: azure-prereqs/container-registry/index
+    sections:
+    - file: azure-prereqs/container-registry/install
+    - file: azure-prereqs/container-registry/create-acr
 - file: deploy-k8s/index
   sections:
   - file: deploy-k8s/deploy-autoscaling-k8s-cluster
