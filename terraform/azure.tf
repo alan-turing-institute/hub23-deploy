@@ -19,6 +19,27 @@ resource "azurerm_container_registry" "acr" {
     location            = azurerm_resource_group.rg.location
     sku                 = "Basic"
     admin_enabled       = true
+# DNS Zone
+resource "azurerm_dns_zone" "dns" {
+    name                = "hub23.turing.ac.uk"
+    resource_group_name = azurerm_resource_group.rg.name
+}
+
+# A Records in DNS Zone
+resource "azurerm_dns_a_record" "binder_a_rec" {
+    name                = "binder"
+    zone_name           = azurerm_dns_zone.dns.name
+    resource_group_name = azurerm_resource_group.rg.name
+    ttl                 = 300
+    target_resource_id  = "/subscriptions/ecaf0411-6ab5-4b62-8357-113228d6a259/resourceGroups/mc_hub23_hub23cluster_westeurope/providers/Microsoft.Network/publicIPAddresses/kubernetes-a5bd8ff872541442ca741cad811020fb"
+}
+
+resource "azurerm_dns_a_record" "hub_a_rec" {
+    name                = "hub"
+    zone_name           = azurerm_dns_zone.dns.name
+    resource_group_name = azurerm_resource_group.rg.name
+    ttl                 = 300
+    target_resource_id  = "/subscriptions/ecaf0411-6ab5-4b62-8357-113228d6a259/resourceGroups/mc_hub23_hub23cluster_westeurope/providers/Microsoft.Network/publicIPAddresses/kubernetes-a5bd8ff872541442ca741cad811020fb"
 }
 
 # Key Vault
