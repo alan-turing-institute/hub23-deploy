@@ -3,10 +3,24 @@ provider "azurerm" {
     features {}
 }
 
+# Get info about currently activated subscription
+data "azurerm_subscription" "current" {}
+
 # Resource Group
 resource "azurerm_resource_group" "rg" {
     name     = "Hub23"
     location = "westeurope"
+}
+
+# Key Vault
+resource "azurerm_key_vault" "keyvault" {
+    name                       = "hub23-keyvault"
+    location                   = azurerm_resource_group.rg.location
+    resource_group_name        = azurerm_resource_group.rg.name
+    sku_name                   = "standard"
+    tenant_id                  = data.azurerm_subscription.current.tenant_id
+    soft_delete_enabled        = true
+    soft_delete_retention_days = 90
 }
 
 # Virtual Network
