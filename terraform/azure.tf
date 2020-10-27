@@ -17,8 +17,9 @@ resource "azurerm_container_registry" "acr" {
     name                = "hub23registry"
     resource_group_name = azurerm_resource_group.rg.name
     location            = azurerm_resource_group.rg.location
-    sku                 = "Basic"
-    admin_enabled       = true
+    sku                 = "Standard"
+}
+
 # DNS Zone
 resource "azurerm_dns_zone" "dns" {
     name                = "hub23.turing.ac.uk"
