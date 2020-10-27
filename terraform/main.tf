@@ -89,3 +89,29 @@ resource "azurerm_subnet" "subnet" {
     address_prefixes     = ["10.240.0.0/16"]
 }
 
+# Extract secrets from the vault
+data "external" "appId" {
+    program = ["az", "keyvault", "secret", "show", "--vault-name", azurerm_key_vault.keyvault.name, "--name", "SP-appId", "--query", "{value: value}"]
+}
+output "appId" {
+    description = "ID of the service principal used by the Kubernetes cluster"
+    value       = data.external.appId.result.value
+    sensitive   = true
+}
+
+data "external" "appKey" {
+    program = ["az", "keyvault", "secret", "show", "--vault-name", azurerm_key_vault.keyvault.name, "--name", "SP-key", "--query", "{value: value}"]
+}
+output "appKey" {
+    description = "Client key of the service principal used by the Kubernetes cluster"
+    value       = data.external.appKey.result.value
+    sensitive   = true
+}
+
+data "external" "sshKey" {
+    program = ["az", "keyvault", "secret", "show", "--vault-name", azurerm_key_vault.keyvault.name, "--name", "ssh-key-Hub23cluster-public", "--query", "{value: value}"]
+}
+output "sshKey" {
+    description = "Public ssh key used by the Kubernetes cluster"
+    value       = data.external.sshKey.result.value
+}
