@@ -12,6 +12,15 @@ resource "azurerm_resource_group" "rg" {
     location = "westeurope"
 }
 
+# Container Registry
+resource "azurerm_container_registry" "acr" {
+    name                = "hub23registry"
+    resource_group_name = azurerm_resource_group.rg.name
+    location            = azurerm_resource_group.rg.location
+    sku                 = "Basic"
+    admin_enabled       = true
+}
+
 # Key Vault
 resource "azurerm_key_vault" "keyvault" {
     name                       = "hub23-keyvault"
