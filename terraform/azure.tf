@@ -33,8 +33,17 @@ resource "azurerm_virtual_network" "vnet" {
 
 # Virtual Network Subnet
 resource "azurerm_subnet" "subnet" {
-    name = "hub23-subnet"
-    resource_group_name = azurerm_resource_group.rg.name
+    name                 = "hub23-subnet"
+    resource_group_name  = azurerm_resource_group.rg.name
     virtual_network_name = azurerm_virtual_network.vnet.name
-    address_prefixes = ["10.240.0.0/16"]
+    address_prefixes     = ["10.240.0.0/16"]
+}
+
+# Define Outputs
+output "resource_group_name" {
+    value = azurerm_resource_group.rg.name
+}
+
+output "location" {
+    value = azurerm_resource_group.rg.location
 }
