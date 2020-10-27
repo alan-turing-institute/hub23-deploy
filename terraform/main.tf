@@ -6,16 +6,20 @@ terraform {
             source  = "hashicorp/azurerm"
             version = "2.25.0"
         }
-        # kubernetes = {
-        #     source  = "hashicorp/kubernetes"
-        #     version = "1.13.2"
-        # }
+        external = {
+            source  = "hashicorp/external"
+            version = "1.2.0"
+        }
     }
 }
 
 provider "azurerm" {
     version = "~> 2.0"
     features {}
+}
+
+provider "external" {
+  version = "~> 1.2"
 }
 
 # Get info about currently activated subscription
