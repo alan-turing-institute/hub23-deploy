@@ -85,19 +85,3 @@ resource "azurerm_subnet" "subnet" {
     address_prefixes     = ["10.240.0.0/16"]
 }
 
-# Define Outputs
-output "resource_group_name" {
-    value = azurerm_resource_group.rg.name
-}
-
-output "location" {
-    value = azurerm_resource_group.rg.location
-}
-
-output "acr_login_server" {
-    value = azurerm_container_registry.acr.login_server
-}
-
-output "key_vault_name" {
-    value = azurerm_key_vault.keyvault.name
-}
