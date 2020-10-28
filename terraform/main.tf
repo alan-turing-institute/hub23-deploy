@@ -121,6 +121,21 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     }
 }
 
+# Add second nodepool to Kubernetes cluster
+resource "azurerm_kubernetes_cluster_node_pool" "k8s_np" {
+    name                  = "user"
+    kubernetes_cluster_id = azurerm_kubernetes_cluster.k8s.id
+    vm_size               = "Standard_D2s_v3"
+    enable_auto_scaling   = true
+    node_labels           = {"hub.jupyter.org/node-purpose" = "user"}
+    orchestrator_version  = "1.16.15"
+    os_disk_size_gb       = 128
+    vnet_subnet_id        = azurerm_subnet.subnet.id
+    node_count            = 2
+    min_count             = 2
+    max_count             = 6
+}
+
 # Virtual Network
 resource "azurerm_virtual_network" "vnet" {
     name                = "hub23-vnet"
