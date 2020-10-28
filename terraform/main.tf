@@ -73,6 +73,54 @@ resource "azurerm_key_vault" "keyvault" {
     soft_delete_retention_days = 90
 }
 
+# Kubernetes Cluster
+resource "azurerm_kubernetes_cluster" "k8s" {
+    name                = "hub23cluster"
+    kubernetes_version  = "1.16.15"
+    location            = azurerm_resource_group.rg.location
+    resource_group_name = azurerm_resource_group.rg.name
+    dns_prefix          = "hub23clust-Hub23-ecaf04"
+    node_resource_group = "MC_${azurerm_resource_group.rg.name}_hub23cluster_${azurerm_resource_group.rg.location}"
+
+    default_node_pool {
+        name                  = "core"
+        enable_auto_scaling   = true
+        node_count            = 1
+        min_count             = 1
+        max_count             = 2
+        os_disk_size_gb       = 128
+        orchestrator_version  = "1.16.15"
+        vm_size               = "Standard_D2s_v3"
+        vnet_subnet_id        = azurerm_subnet.subnet.id
+        node_labels           = {"hub.jupyter.org/node-purpose" = "core"}
+    }
+
+    linux_profile {
+        admin_username = "azureuser"
+
+        ssh_key {
+            key_data = local.sshKey
+        }
+    }
+
+    network_profile {
+        network_plugin     = "azure"
+        network_policy     = "azure"
+        dns_service_ip     = "10.0.0.10"
+        docker_bridge_cidr = "172.17.0.1/16"
+        service_cidr       = "10.0.0.0/16"
+    }
+
+    role_based_access_control {
+        enabled = true
+    }
+
+    service_principal {
+        client_id     = local.appId
+        client_secret = local.appKey
+    }
+}
+
 # Virtual Network
 resource "azurerm_virtual_network" "vnet" {
     name                = "hub23-vnet"
@@ -93,25 +141,17 @@ resource "azurerm_subnet" "subnet" {
 data "external" "appId" {
     program = ["az", "keyvault", "secret", "show", "--vault-name", azurerm_key_vault.keyvault.name, "--name", "SP-appId", "--query", "{value: value}"]
 }
-output "appId" {
-    description = "ID of the service principal used by the Kubernetes cluster"
-    value       = data.external.appId.result.value
-    sensitive   = true
-}
 
 data "external" "appKey" {
     program = ["az", "keyvault", "secret", "show", "--vault-name", azurerm_key_vault.keyvault.name, "--name", "SP-key", "--query", "{value: value}"]
-}
-output "appKey" {
-    description = "Client key of the service principal used by the Kubernetes cluster"
-    value       = data.external.appKey.result.value
-    sensitive   = true
 }
 
 data "external" "sshKey" {
     program = ["az", "keyvault", "secret", "show", "--vault-name", azurerm_key_vault.keyvault.name, "--name", "ssh-key-Hub23cluster-public", "--query", "{value: value}"]
 }
-output "sshKey" {
-    description = "Public ssh key used by the Kubernetes cluster"
-    value       = data.external.sshKey.result.value
+
+locals {
+    appId = data.external.appId.result.value
+    appKey = data.external.appKey.result.value
+    sshKey = data.external.sshKey.result.value
 }
