@@ -51,7 +51,7 @@ resource "azurerm_dns_a_record" "binder_a_rec" {
     zone_name           = azurerm_dns_zone.dns.name
     resource_group_name = azurerm_resource_group.rg.name
     ttl                 = 300
-    target_resource_id  = "/subscriptions/ecaf0411-6ab5-4b62-8357-113228d6a259/resourceGroups/mc_hub23_hub23cluster_westeurope/providers/Microsoft.Network/publicIPAddresses/kubernetes-a5bd8ff872541442ca741cad811020fb"
+    target_resource_id  = azurerm_public_ip.ipaddr.id
 }
 
 resource "azurerm_dns_a_record" "hub_a_rec" {
@@ -59,7 +59,21 @@ resource "azurerm_dns_a_record" "hub_a_rec" {
     zone_name           = azurerm_dns_zone.dns.name
     resource_group_name = azurerm_resource_group.rg.name
     ttl                 = 300
-    target_resource_id  = "/subscriptions/ecaf0411-6ab5-4b62-8357-113228d6a259/resourceGroups/mc_hub23_hub23cluster_westeurope/providers/Microsoft.Network/publicIPAddresses/kubernetes-a5bd8ff872541442ca741cad811020fb"
+    target_resource_id  = azurerm_public_ip.ipaddr.id
+}
+
+# IP Address
+resource "azurerm_public_ip" "ipaddr" {
+    name                = "kubernetes-a5bd8ff872541442ca741cad811020fb"
+    resource_group_name = azurerm_kubernetes_cluster.k8s.node_resource_group
+    location            = azurerm_resource_group.rg.location
+    allocation_method   = "Static"
+    sku                 = "Standard"
+
+    tags = {
+        kubernetes-cluster-name = "kubernetes"
+        service                 = "hub23/hub23-nginx-ingress-controller"
+    }
 }
 
 # Key Vault
