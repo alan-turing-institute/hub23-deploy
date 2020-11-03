@@ -48,83 +48,83 @@ jobs:
         sudo apt-get update && sudo apt-get install terraform
         terraform -help
 
-  - task: AzureKeyVault@1
-    displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
-    inputs:
-      azureSubscription: $(SERVICE_CONNECTION)
-      KeyVaultName: 'hub23-keyvault'
-      SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key, binderhub-access-token'
+  # - task: AzureKeyVault@1
+  #   displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
+  #   inputs:
+  #     azureSubscription: $(SERVICE_CONNECTION)
+  #     KeyVaultName: 'hub23-keyvault'
+  #     SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key, binderhub-access-token'
 
-  - task: Bash@3
-    displayName: 'Stage 2 Step 2: Make .secret folder'
-    inputs:
-      targetType: 'inline'
-      script: 'mkdir -p .secret'
+  # - task: Bash@3
+  #   displayName: 'Stage 2 Step 2: Make .secret folder'
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: 'mkdir -p .secret'
 
-  - task: Bash@3
-    displayName: "Stage 2 Step 3: Generate .secret/prod.yaml"
-    inputs:
-      targetType: 'inline'
-      script: |
-        sed -e "s/{binderhub_access_token}/$(binderhub-access-token)/" \
-        -e "s/{username}/$(SP-appID)/" \
-        -e "s/{password}/$(SP-key)/" \
-        -e "s/{apiToken}/$(apiToken)/" \
-        -e "s/{secretToken}/$(secretToken)/" \
-        -e "s/{github_client_id}/$(github-client-id)/" \
-        -e "s/{github_client_secret}/$(github-client-secret)/" \
-        deploy/prod-template.yaml > .secret/prod.yaml
+  # - task: Bash@3
+  #   displayName: "Stage 2 Step 3: Generate .secret/prod.yaml"
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: |
+  #       sed -e "s/{binderhub_access_token}/$(binderhub-access-token)/" \
+  #       -e "s/{username}/$(SP-appID)/" \
+  #       -e "s/{password}/$(SP-key)/" \
+  #       -e "s/{apiToken}/$(apiToken)/" \
+  #       -e "s/{secretToken}/$(secretToken)/" \
+  #       -e "s/{github_client_id}/$(github-client-id)/" \
+  #       -e "s/{github_client_secret}/$(github-client-secret)/" \
+  #       deploy/prod-template.yaml > .secret/prod.yaml
 
-  - task: Bash@3
-    displayName: 'Stage 2 Step 4: Add helm chart repos'
-    inputs:
-      targetType: 'inline'
-      script: |
-        helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-        helm repo add nginx-ingress https://kubernetes-charts.storage.googleapis.com
-        helm repo add jetstack https://charts.jetstack.io
-        helm repo update
+  # - task: Bash@3
+  #   displayName: 'Stage 2 Step 4: Add helm chart repos'
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: |
+  #       helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
+  #       helm repo add nginx-ingress https://kubernetes-charts.storage.googleapis.com
+  #       helm repo add jetstack https://charts.jetstack.io
+  #       helm repo update
 
-  - task: Bash@3
-    displayName: 'Stage 2 Step 5: Install cert-manager $(CERTMANAGER_VERSION) CRDs'
-    inputs:
-      targetType: 'inline'
-      script: |
-        kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/$(CERTMANAGER_VERSION)/cert-manager.crds.yaml
+  # - task: Bash@3
+  #   displayName: 'Stage 2 Step 5: Install cert-manager $(CERTMANAGER_VERSION) CRDs'
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: |
+  #       kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/$(CERTMANAGER_VERSION)/cert-manager.crds.yaml
 
-  - task: HelmDeploy@0
-    displayName: 'Stage 2 Step 6: Install cert-manager $(CERTMANAGER_VERSION'
-    inputs:
-      connectionType: 'Azure Resource Manager'
-      azureSubscription: '$(SERVICE_CONNECTION)'
-      azureResourceGroup: '$(RESOURCE_GROUP_NAME)'
-      kubernetesCluster: '$(KUBERNETES_CLUSTER_NAME)'
-      namespace: 'cert-manager'
-      command: 'upgrade'
-      chartType: 'Name'
-      chartName: 'jetstack/cert-manager'
-      chartVersion: '$(CERTMANAGER_VERSION)'
-      releaseName: 'cert-manager'
-      valueFile: 'deploy/cert-manager.yaml'
-      arguments: '--create-namespace --timeout 10m0s --cleanup-on-fail'
+  # - task: HelmDeploy@0
+  #   displayName: 'Stage 2 Step 6: Install cert-manager $(CERTMANAGER_VERSION'
+  #   inputs:
+  #     connectionType: 'Azure Resource Manager'
+  #     azureSubscription: '$(SERVICE_CONNECTION)'
+  #     azureResourceGroup: '$(RESOURCE_GROUP_NAME)'
+  #     kubernetesCluster: '$(KUBERNETES_CLUSTER_NAME)'
+  #     namespace: 'cert-manager'
+  #     command: 'upgrade'
+  #     chartType: 'Name'
+  #     chartName: 'jetstack/cert-manager'
+  #     chartVersion: '$(CERTMANAGER_VERSION)'
+  #     releaseName: 'cert-manager'
+  #     valueFile: 'deploy/cert-manager.yaml'
+  #     arguments: '--create-namespace --timeout 10m0s --cleanup-on-fail'
 
-  - task: Bash@3
-    displayName: 'Stage 2 Step 7: Update local helm chart'
-    inputs:
-      targetType: 'inline'
-      script: |
-        cd $(HELM_CHART_NAME) && helm dep up && cd ..
+  # - task: Bash@3
+  #   displayName: 'Stage 2 Step 7: Update local helm chart'
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: |
+  #       cd $(HELM_CHART_NAME) && helm dep up && cd ..
 
-  - task: HelmDeploy@0
-    displayName: 'Stage 2 Step 8: Perform helm upgrade'
-    inputs:
-      connectionType: 'Azure Resource Manager'
-      azureSubscription: '$(SERVICE_CONNECTION)'
-      azureResourceGroup: '$(RESOURCE_GROUP_NAME)'
-      kubernetesCluster: '$(KUBERNETES_CLUSTER_NAME)'
-      namespace: '$(KUBERNETES_NAMESPACE)'
-      command: 'upgrade'
-      chartType: 'FilePath'
-      chartPath: '$(HELM_CHART_NAME)'
-      releaseName: '$(HELM_RELEASE_NAME)'
-      arguments: '-f deploy/prod.yaml -f .secret/prod.yaml --timeout 10m0s --cleanup-on-fail --create-namespace'
+  # - task: HelmDeploy@0
+  #   displayName: 'Stage 2 Step 8: Perform helm upgrade'
+  #   inputs:
+  #     connectionType: 'Azure Resource Manager'
+  #     azureSubscription: '$(SERVICE_CONNECTION)'
+  #     azureResourceGroup: '$(RESOURCE_GROUP_NAME)'
+  #     kubernetesCluster: '$(KUBERNETES_CLUSTER_NAME)'
+  #     namespace: '$(KUBERNETES_NAMESPACE)'
+  #     command: 'upgrade'
+  #     chartType: 'FilePath'
+  #     chartPath: '$(HELM_CHART_NAME)'
+  #     releaseName: '$(HELM_RELEASE_NAME)'
+  #     arguments: '-f deploy/prod.yaml -f .secret/prod.yaml --timeout 10m0s --cleanup-on-fail --create-namespace'
