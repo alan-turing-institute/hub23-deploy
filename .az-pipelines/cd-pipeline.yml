@@ -44,9 +44,8 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        curl --silent https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip
-        sudo mv terraform /usr/local/bin/
-        terraform -help
+        curl --silent https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip --output terraform-v$(TERRAFROM_VERSION).tar.gz
+        ls
 
   - task: AzureKeyVault@1
     displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
