@@ -44,7 +44,8 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        curl --silent https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip --output terraform-v$(TERRAFROM_VERSION).tar.gz
+        curl --silent https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip --output terraform-v$(TERRAFORM_VERSION).tar.gz
+        tar -xzvf terraform-v$(TERRAFORM_VERSION).tar.gz
         ls
 
   - task: AzureKeyVault@1
