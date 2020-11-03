@@ -46,7 +46,13 @@ jobs:
         curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
         sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
         sudo apt-get update && sudo apt-get install terraform
-        terraform -help
+
+  - task: Bash@3
+    displayName: 'Stage 1 Step 5: Initialise terraform'
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd terraform && terraform init && cd ..
 
   # - task: AzureKeyVault@1
   #   displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
