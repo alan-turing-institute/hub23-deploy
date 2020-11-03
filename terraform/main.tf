@@ -22,6 +22,12 @@ provider "external" {
   version = "~> 1.2"
 }
 
+# Set Variables
+variable "kubernetes_version" {
+    default     = "1.17.13"
+    description = "The Kubernetes orchestrator version to install"
+}
+
 # Get info about currently activated subscription
 data "azurerm_subscription" "current" {}
 
@@ -90,7 +96,7 @@ resource "azurerm_key_vault" "keyvault" {
 # Kubernetes Cluster
 resource "azurerm_kubernetes_cluster" "k8s" {
     name                = "hub23cluster"
-    kubernetes_version  = "1.16.15"
+    kubernetes_version  = var.kubernetes_version
     location            = azurerm_resource_group.rg.location
     resource_group_name = azurerm_resource_group.rg.name
     dns_prefix          = "hub23clust-Hub23-ecaf04"
@@ -103,7 +109,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
         min_count             = 1
         max_count             = 2
         os_disk_size_gb       = 128
-        orchestrator_version  = "1.16.15"
+        orchestrator_version  = var.kubernetes_version
         vm_size               = "Standard_D2s_v3"
         vnet_subnet_id        = azurerm_subnet.subnet.id
         node_labels           = {"hub.jupyter.org/node-purpose" = "core"}
@@ -142,7 +148,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "k8s_np" {
     vm_size               = "Standard_D2s_v3"
     enable_auto_scaling   = true
     node_labels           = {"hub.jupyter.org/node-purpose" = "user"}
-    orchestrator_version  = "1.16.15"
+    orchestrator_version  = var.kubernetes_version
     os_disk_size_gb       = 128
     vnet_subnet_id        = azurerm_subnet.subnet.id
     node_count            = 2
