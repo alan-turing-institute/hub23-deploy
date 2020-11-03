@@ -16,12 +16,13 @@ variables:
   kubernetes_version: '1.16.15'
   resource_group_name: 'Hub23'
   service_connection: 'hub23-deploy-scn'
+  terraform_version: 'v0.13.5'
 
 jobs:
 - job: DeployUpgradetoHub23
   steps:
   - task: KubectlInstaller@0
-    displayName: 'Stage 1 Step 1: Install kubectl'
+    displayName: 'Stage 1 Step 1: Install kubectl $(KUBERNETES_VERSION)'
     inputs:
       kubectlVersion: $(KUBERNETES_VERSION)
 
@@ -34,9 +35,13 @@ jobs:
         az aks get-credentials -n $(KUBERNETES_CLUSTER_NAME) -g $(RESOURCE_GROUP_NAME)
 
   - task: HelmInstaller@1
-    displayName: 'Stage 1 Step 3: Install helm'
+    displayName: 'Stage 1 Step 3: Install helm $(HELM_VERSION)'
     inputs:
       helmVersionToInstall: $(HELM_VERSION)
+
+  - task: Bash@3
+    displayName: 'Stage 1 Step 4: Install terraform $(TERRAFORM_VERSION)'
+    
 
   - task: AzureKeyVault@1
     displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
