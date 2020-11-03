@@ -16,7 +16,7 @@ variables:
   kubernetes_version: '1.16.15'
   resource_group_name: 'Hub23'
   service_connection: 'hub23-deploy-scn'
-  terraform_version: 'v0.13.5'
+  terraform_version: '0.13.5'
 
 jobs:
 - job: DeployUpgradetoHub23
@@ -39,10 +39,12 @@ jobs:
     inputs:
       helmVersionToInstall: $(HELM_VERSION)
 
+  - task: Bash@3
+    displayName: 'Stage 1 Step 4: Install terraform v$(TERRAFORM_VERSION)'
     inputs:
       targetType: 'inline'
       script: |
-        curl -L https://releases.hashicorp.com/terraform/0.13.5/terraform_0.13.5_linux_amd64.zip | tar --directory ${HOME} --extract --gzip --file -
+        curl -L https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip | tar --directory ${HOME} --extract --gzip --file -
         ls ${HOME}
 
   - task: AzureKeyVault@1
