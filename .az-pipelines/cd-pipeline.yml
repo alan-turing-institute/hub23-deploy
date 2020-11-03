@@ -44,7 +44,7 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        curl -L https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip | tar --directory ${HOME} --extract --gzip --file -
+        curl -L https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip
         ls ${HOME}
 
   - task: AzureKeyVault@1
