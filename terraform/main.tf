@@ -70,11 +70,10 @@ resource "azurerm_dns_a_record" "hub_a_rec" {
 
 # IP Address
 resource "azurerm_public_ip" "ipaddr" {
-    name                = "kubernetes-a5bd8ff872541442ca741cad811020fb"
+    name                = "kubernetes-public-ip"
     resource_group_name = azurerm_kubernetes_cluster.k8s.node_resource_group
     location            = azurerm_resource_group.rg.location
-    allocation_method   = "Static"
-    sku                 = "Standard"
+    allocation_method   = "Dynamic"
 
     tags = {
         kubernetes-cluster-name = "kubernetes"
