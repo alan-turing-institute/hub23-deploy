@@ -54,7 +54,7 @@ def parse_args():
     )
     parser.add_argument(
         "--kubernetes-version",
-        default="1.16.4",
+        default="1.18.1",
         help="Version of Kubernetes to validate against",
     )
     parser.add_argument(
