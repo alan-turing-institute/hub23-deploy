@@ -24,7 +24,7 @@ provider "external" {
 
 # Set Variables
 variable "kubernetes_version" {
-    default     = "1.17.13"
+    default     = "1.18.10"
     description = "The Kubernetes orchestrator version to install"
 }
 
@@ -190,15 +190,15 @@ locals {
     sshKey = data.external.sshKey.result.value
 }
 
-# Role assignments
-resource "azurerm_role_assignment" "sp-aks-acrpush" {
-    scope                = azurerm_container_registry.acr.id
-    role_definition_name = "AcrPush"
-    principal_id         = local.appId
-}
+# # Role assignments
+# resource "azurerm_role_assignment" "sp-aks-acrpush" {
+#     scope                = azurerm_container_registry.acr.id
+#     role_definition_name = "AcrPush"
+#     principal_id         = local.appId
+# }
 
-resource "azurerm_role_assignment" "sp-vnet-contributor" {
-    scope                = azurerm_virtual_network.vnet.id
-    role_definition_name = "Contributor"
-    principal_id         = local.appId
-}
+# resource "azurerm_role_assignment" "sp-vnet-contributor" {
+#     scope                = azurerm_virtual_network.vnet.id
+#     role_definition_name = "Contributor"
+#     principal_id         = local.appId
+# }
