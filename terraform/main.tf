@@ -22,6 +22,12 @@ provider "external" {
   version = "~> 1.2"
 }
 
+# Set Variables
+variable "kubernetes_version" {
+    default     = "1.18.10"
+    description = "The Kubernetes orchestrator version to install"
+}
+
 # Get info about currently activated subscription
 data "azurerm_subscription" "current" {}
 
@@ -64,11 +70,10 @@ resource "azurerm_dns_a_record" "hub_a_rec" {
 
 # IP Address
 resource "azurerm_public_ip" "ipaddr" {
-    name                = "kubernetes-a5bd8ff872541442ca741cad811020fb"
+    name                = "kubernetes-public-ip"
     resource_group_name = azurerm_kubernetes_cluster.k8s.node_resource_group
     location            = azurerm_resource_group.rg.location
-    allocation_method   = "Static"
-    sku                 = "Standard"
+    allocation_method   = "Dynamic"
 
     tags = {
         kubernetes-cluster-name = "kubernetes"
@@ -90,7 +95,7 @@ resource "azurerm_key_vault" "keyvault" {
 # Kubernetes Cluster
 resource "azurerm_kubernetes_cluster" "k8s" {
     name                = "hub23cluster"
-    kubernetes_version  = "1.16.15"
+    kubernetes_version  = var.kubernetes_version
     location            = azurerm_resource_group.rg.location
     resource_group_name = azurerm_resource_group.rg.name
     dns_prefix          = "hub23clust-Hub23-ecaf04"
@@ -103,7 +108,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
         min_count             = 1
         max_count             = 2
         os_disk_size_gb       = 128
-        orchestrator_version  = "1.16.15"
+        orchestrator_version  = var.kubernetes_version
         vm_size               = "Standard_D2s_v3"
         vnet_subnet_id        = azurerm_subnet.subnet.id
         node_labels           = {"hub.jupyter.org/node-purpose" = "core"}
@@ -142,7 +147,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "k8s_np" {
     vm_size               = "Standard_D2s_v3"
     enable_auto_scaling   = true
     node_labels           = {"hub.jupyter.org/node-purpose" = "user"}
-    orchestrator_version  = "1.16.15"
+    orchestrator_version  = var.kubernetes_version
     os_disk_size_gb       = 128
     vnet_subnet_id        = azurerm_subnet.subnet.id
     node_count            = 2
@@ -185,15 +190,15 @@ locals {
     sshKey = data.external.sshKey.result.value
 }
 
-# Role assignments
-resource "azurerm_role_assignment" "sp-aks-acrpush" {
-    scope                = azurerm_container_registry.acr.id
-    role_definition_name = "AcrPush"
-    principal_id         = local.appId
-}
+# # Role assignments
+# resource "azurerm_role_assignment" "sp-aks-acrpush" {
+#     scope                = azurerm_container_registry.acr.id
+#     role_definition_name = "AcrPush"
+#     principal_id         = local.appId
+# }
 
-resource "azurerm_role_assignment" "sp-vnet-contributor" {
-    scope                = azurerm_virtual_network.vnet.id
-    role_definition_name = "Contributor"
-    principal_id         = local.appId
-}
+# resource "azurerm_role_assignment" "sp-vnet-contributor" {
+#     scope                = azurerm_virtual_network.vnet.id
+#     role_definition_name = "Contributor"
+#     principal_id         = local.appId
+# }
