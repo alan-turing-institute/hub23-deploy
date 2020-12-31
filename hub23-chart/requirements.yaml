@@ -4,4 +4,4 @@ dependencies:
   version: 0.2.0-n465.hb35ec4e
 - name: ingress-nginx
   repository: https://kubernetes.github.io/ingress-nginx
-  version: 3.18.0
+  version: 3.19.0
