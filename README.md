@@ -160,7 +160,5 @@ The [`billing`](./billing) subdir contains resources for calculating running cos
 
 ## :books: Documentation
 
-You can find documentation for Hub23 on the [`gh-pages` branch](https://github.com/alan-turing-institute/hub23-deploy/tree/gh-pages) of this repository.
-
 The Deployment Guide docs for Hub23 are stored in the [`docs`](./docs) folder.
 A [GitHub Action workflow](.github/workflows/build-docs.yml) renders the documentation using [Jupyter Book](https://jupyterbook.org) and publishes it to the `gh-pages` branch of the repo to be hosted at https://alan-turing-institute.github.io/hub23-deploy
