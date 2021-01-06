@@ -8,7 +8,7 @@ A repository to manage the private Turing BinderHub instance, Hub23.
 | :rocket: Deployment | [![Deploy Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Deploy%20upgrade%20to%20Hub23?branchName=main)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=1&branchName=main) |
 | :wheel_of_dharma: Helm Chart | [![Lint Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Lint%20and%20Validate%20Helm%20Chart?branchName=main)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=4&branchName=main) |
 | :snake: Python Scripts | [![Lint and Format Python files](https://github.com/alan-turing-institute/hub23-deploy/workflows/Lint%20and%20Format%20Python%20files/badge.svg)](https://github.com/alan-turing-institute/hub23-deploy/actions?query=workflow%3A%22Lint+and+Format+Python+files%22+branch%3Amain) |
-| :notebook: Docs | ![Build and Publish JupyterBook Docs](https://github.com/alan-turing-institute/hub23-deploy/workflows/Build%20and%20Publish%20JupyterBook%20Docs/badge.svg) |
+| :notebook: Docs | [![Build and Publish JupyterBook Docs](https://github.com/alan-turing-institute/hub23-deploy/workflows/Build%20and%20Publish%20JupyterBook%20Docs/badge.svg)](https://github.com/alan-turing-institute/hub23-deploy/actions?query=workflow%3A%22Build+and+Publish+JupyterBook+Docs%22+branch%3Amain) |
 
 **Table of Contents:**
 
