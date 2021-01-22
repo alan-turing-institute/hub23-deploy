@@ -12,7 +12,7 @@ We will create a subdomain in the Turing domain.
    - Click "+ Create a resource"
    - Search for "DNS zone"
    - Click "Create"
-2. Set the subscription to "Turing-BinderHub" and select the "Hub23" resource group.
+2. Set the subscription to "turingmybinder" and select the "Hub23" resource group.
    (Or use a different/new subscription and resource group.)
    Set the **Name** field to the desired URL, in our case: `hub23.turing.ac.uk`.
    - If you created a new resource group, you will have to set its location.
@@ -28,7 +28,7 @@ We will now set A records that point to the IP addresses of the JupyterHub and B
 1. When viewing the DNS zone on the Azure Portal, click "+ Record set"
 2. In the **Name** field, enter "binder" or "hub" (depending on which IP you choose to set a record for first, the process is the same for both).
 3. Set **Alias record set** to "Yes" and this will bring up some new options.
-4. Make sure the subscription is set to "Turing-BinderHub".
+4. Make sure the subscription is set to "turingmybinder".
    Under **Azure resource** select one of the two items under **Public IP Address**.
    If you view these resources (under the resource group beginning `MC_`), you will be able to see the IP addresses they refer to. Compare these with the output of `kubectl get svc --namespace hub23` in order to ascertain which one is Binder and which is JupyterHub.
 5. Click "OK" and repeat the process for the second IP address.

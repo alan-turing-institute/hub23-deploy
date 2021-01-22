@@ -20,7 +20,7 @@ az account list --refresh --output table
 Activate the BinderHub subscription with the following command.
 
 ```bash
-az account set --subscription Turing-BinderHub
+az account set --subscription turingmybinder
 ```
 
 ## Create Resource Group
@@ -66,7 +66,7 @@ The Service Principal needs an AcrPush role so that it is permitted to both push
 Without this, BinderHub won't be able to store the images it generates.
 
 ```{warning}
-You will only have permission to perform this step if you are an owner on the Turing-BinderHub Azure subscription.
+You will only have permission to perform this step if you are an owner on the turingmybinder Azure subscription.
 Otherwise, you should ask IT to assign this role to the Service Principal.
 ```
 

@@ -18,13 +18,13 @@ To check which subscriptions you have access to, run the following:
 az account list --refresh --output table
 ```
 
-You should see `Turing-BinderHub` listed as an option.
+You should see `turingmybinder` listed as an option.
 If not, request access by opening a TopDesk ticket.
 
 To activate the subscription, run the following:
 
 ```bash
-az account set --subscription Turing-BinderHub
+az account set --subscription turingmybinder
 ```
 
 ## Create a Resource Group
