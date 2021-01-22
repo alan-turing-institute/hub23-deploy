@@ -14,7 +14,7 @@ class HubManager:
         self.cluster_name = "hub23cluster"
         self.hub_name = "hub23"
         self.resource_group = "Hub23"
-        self.subscription = "Turing-BinderHub"
+        self.subscription = "turingmybinder"
         self.vault_name = "hub23-keyvault"
 
         for k, v in argsDict.items():
