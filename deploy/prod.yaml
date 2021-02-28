@@ -33,6 +33,17 @@ binderhub:
           oauth_redirect_uri: "https://binder.hub23.turing.ac.uk/oauth_callback"
           oauth_client_id: "binder-oauth-client-test"
 
+      config:
+        GitHubOAuthenticator:
+          allowed_organizations:
+            - "binderhub-test-org"
+          oauth_callback_url: "https://hub.hub23.turing.ac.uk/hub/oauth_callback"
+        JupyterHub:
+          authenticator_class: github
+        OAuthenticator:
+          scope:
+            - "read:user"
+
     singleuser:
       cmd: "jupyterhub-singleuser"
       memory:
@@ -59,12 +70,3 @@ binderhub:
       userPods:
         nodeAffinity:
           matchNodePurpose: prefer
-
-    auth:
-      type: github
-      github:
-        callbackUrl: "https://hub.hub23.turing.ac.uk/hub/oauth_callback"
-        orgWhitelist:
-          - "binderhub-test-org"
-      scopes:
-        - "read:user"
