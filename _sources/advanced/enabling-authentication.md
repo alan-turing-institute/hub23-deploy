@@ -28,30 +28,31 @@ jupyterhub:
   singleuser:
     # to make notebook servers aware of hub
     cmd: jupyterhub-singleuser
-
-  auth: {}
 ```
 
 This will set up the redirection to the JupyterHub for login and spin-up user servers.
 
 ## OAuth with GitHub
 
-### Modify the `auth:` section of `deploy/config.yaml` or `deploy/prod.yaml` to include the following
+### Modify the `hub` section of `deploy/config.yaml` or `deploy/prod.yaml` to include the following
 
 ```yaml
-auth:
-  type: github
-  github:
-    callbackUrl: "http://<jupyter-ip>/hub/oauth_callback"
+hub:
+  config:
+    GitHubOAuthenticator:
+      oauth_callback_url: "https://<hub-ip>/hub/oauth_callback"
+    JupyterHub:
+      authenticator_class: github
 ```
 
-### Modify `deploy/secret-template.yaml` or `deploy/prod-template.yaml` with the following
+### Modify the `jupyterhub.hub` section of `deploy/secret-template.yaml` or `deploy/prod-template.yaml` with the following
 
 ```yaml
-auth:
-  github:
-    clientId: "{github-client-id}"
-    clientSecret: "{github-client-secret}"
+hub:
+  config:
+    GitHubOAuthenticator:
+      client_id: "clientId"
+      client_secret: "clientSecret"
 ```
 
 ```{note}
@@ -82,17 +83,18 @@ Add these values to the key vault (see {ref}`content:key-vault:add-secrets`) and
 This section of the docs is a work in progress and needs improvement.
 ```
 
-Update `deploy/config.yaml`  or `deploy/prod.yaml` to include the following under `auth`:
+Update `deploy/config.yaml`  or `deploy/prod.yaml` to include the following under `hub.config`:
 
 ```yaml
-auth:
-  type: github
-  github:
-    # ...
-    orgWhitelist:
-      - "binderhub-test-org"
-  scopes:
-    - "read:user"
+hub:
+  config:
+    GitHubOAuthenticator:
+      allowed_organizations:
+        - "binderhub-test-org"
+    ...
+    OAuthenticator:
+      scope:
+        - "read:user"
 ```
 
 The `read:user` scope will read a user's organisation/team memberships and look for `binderhub-test-org`.

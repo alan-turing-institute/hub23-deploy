@@ -26,7 +26,7 @@
 
     
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.37f24b989f4638ff9c27c22dc7559d4f.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -44,7 +44,7 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script src="../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -359,21 +359,21 @@
           
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="row topbar fixed-top container-xl">
-    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
-    </div>
-    <div class="col pl-2 topbar-main">
-        
-        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-            <i class="fas fa-bars"></i>
-            <i class="fas fa-arrow-left"></i>
-            <i class="fas fa-arrow-up"></i>
-        </button>
-        
-        
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
             class="fas fa-download"></i></button>
@@ -391,22 +391,22 @@
     </div>
 </div>
 
-        <!-- Source interaction buttons -->
+            <!-- Source interaction buttons -->
 
 
-        <!-- Full screen (wrap in <a> to have style consistency -->
-        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                title="Fullscreen mode"><i
-                    class="fas fa-expand"></i></button></a>
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
 
-        <!-- Launch buttons -->
+            <!-- Launch buttons -->
 
-    </div>
+        </div>
 
-    <!-- Table of contents -->
-    <div class="d-none d-md-block col-md-2 bd-toc show">
-        
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
         <div class="tocsection onthispage pt-5 pb-3">
             <i class="fas fa-list"></i> Contents
         </div>
@@ -442,11 +442,11 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#modify-the-auth-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following">
+    <a class="reference internal nav-link" href="#modify-the-hub-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following">
      Modify the
      <code class="docutils literal notranslate">
       <span class="pre">
-       auth:
+       hub
       </span>
      </code>
      section of
@@ -465,8 +465,14 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#modify-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following">
-     Modify
+    <a class="reference internal nav-link" href="#modify-the-jupyterhub-hub-section-of-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following">
+     Modify the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       jupyterhub.hub
+      </span>
+     </code>
+     section of
      <code class="docutils literal notranslate">
       <span class="pre">
        deploy/secret-template.yaml
@@ -504,6 +510,7 @@
 
         </nav>
         
+        </div>
     </div>
 </div>
     <div id="main-content" class="row">
@@ -539,8 +546,6 @@
   <span class="nt">singleuser</span><span class="p">:</span>
     <span class="c1"># to make notebook servers aware of hub</span>
     <span class="nt">cmd</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub-singleuser</span>
-
-  <span class="nt">auth</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
 </pre></div>
 </div>
 <p>This will set up the redirection to the JupyterHub for login and spin-up user servers.</p>
@@ -548,21 +553,24 @@
 </div>
 <div class="section" id="oauth-with-github">
 <h2>OAuth with GitHub<a class="headerlink" href="#oauth-with-github" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="modify-the-auth-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following">
-<h3>Modify the <code class="docutils literal notranslate"><span class="pre">auth:</span></code> section of <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> to include the following<a class="headerlink" href="#modify-the-auth-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
-  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
-  <span class="nt">github</span><span class="p">:</span>
-    <span class="nt">callbackUrl</span><span class="p">:</span> <span class="s">&quot;http://&lt;jupyter-ip&gt;/hub/oauth_callback&quot;</span>
+<div class="section" id="modify-the-hub-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following">
+<h3>Modify the <code class="docutils literal notranslate"><span class="pre">hub</span></code> section of <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> to include the following<a class="headerlink" href="#modify-the-hub-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">config</span><span class="p">:</span>
+    <span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
+      <span class="nt">oauth_callback_url</span><span class="p">:</span> <span class="s">&quot;https://&lt;hub-ip&gt;/hub/oauth_callback&quot;</span>
+    <span class="nt">JupyterHub</span><span class="p">:</span>
+      <span class="nt">authenticator_class</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="modify-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following">
-<h3>Modify <code class="docutils literal notranslate"><span class="pre">deploy/secret-template.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod-template.yaml</span></code> with the following<a class="headerlink" href="#modify-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
-  <span class="nt">github</span><span class="p">:</span>
-    <span class="nt">clientId</span><span class="p">:</span> <span class="s">&quot;{github-client-id}&quot;</span>
-    <span class="nt">clientSecret</span><span class="p">:</span> <span class="s">&quot;{github-client-secret}&quot;</span>
+<div class="section" id="modify-the-jupyterhub-hub-section-of-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following">
+<h3>Modify the <code class="docutils literal notranslate"><span class="pre">jupyterhub.hub</span></code> section of <code class="docutils literal notranslate"><span class="pre">deploy/secret-template.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod-template.yaml</span></code> with the following<a class="headerlink" href="#modify-the-jupyterhub-hub-section-of-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">config</span><span class="p">:</span>
+    <span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
+      <span class="nt">client_id</span><span class="p">:</span> <span class="s">&quot;clientId&quot;</span>
+      <span class="nt">client_secret</span><span class="p">:</span> <span class="s">&quot;clientSecret&quot;</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -587,15 +595,16 @@ Add these values to the key vault (see <a class="reference internal" href="../az
 <p class="admonition-title">Warning</p>
 <p>This section of the docs is a work in progress and needs improvement.</p>
 </div>
-<p>Update <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code>  or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> to include the following under <code class="docutils literal notranslate"><span class="pre">auth</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
-  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
-  <span class="nt">github</span><span class="p">:</span>
-    <span class="c1"># ...</span>
-    <span class="nt">orgWhitelist</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="s">&quot;binderhub-test-org&quot;</span>
-  <span class="nt">scopes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="s">&quot;read:user&quot;</span>
+<p>Update <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code>  or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> to include the following under <code class="docutils literal notranslate"><span class="pre">hub.config</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">config</span><span class="p">:</span>
+    <span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
+      <span class="nt">allowed_organizations</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;binderhub-test-org&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">...</span>
+    <span class="nt">OAuthenticator</span><span class="p">:</span>
+      <span class="nt">scope</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&quot;read:user&quot;</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">read:user</span></code> scope will read a user’s organisation/team memberships and look for <code class="docutils literal notranslate"><span class="pre">binderhub-test-org</span></code>.
@@ -649,15 +658,15 @@ To enable this feature, add the following to <code class="docutils literal notra
 
               </div>
               
-        </div>
-    </div>
-    
-    
-    <div class='prev-next-bottom'>
         
+        <div class='prev-next-bottom'>
+            
     <a class='left-prev' id="prev-link" href="index.html" title="previous page">Advanced Configurations</a>
     <a class='right-next' id="next-link" href="enabling-page-redirection.html" title="next page">Enabling Page Redirection</a>
 
+        </div>
+        
+        </div>
     </div>
     <footer class="footer mt-5 mt-md-0">
     <div class="container">
