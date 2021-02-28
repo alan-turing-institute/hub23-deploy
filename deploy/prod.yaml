@@ -3,6 +3,7 @@ projectName: hub23
 binderhub:
   config:
     BinderHub:
+      auth_enabled: true
       image_prefix: "hub23registry.azurecr.io/hub23/binder-dev-"
       hub_url: "https://hub.hub23.turing.ac.uk"
       use_named_servers: true
