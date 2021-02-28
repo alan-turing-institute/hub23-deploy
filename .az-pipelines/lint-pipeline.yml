@@ -13,7 +13,7 @@ jobs:
   - task: HelmInstaller@1
     displayName: 'Stage 1 Step 1: Install helm'
     inputs:
-      helmVersionToInstall: '3.5.2'
+      helmVersionToInstall: '3.3.4'
 
   - task: UsePythonVersion@0
     displayName: 'Stage 1 Step 2: Install Python 3.8'
@@ -24,8 +24,8 @@ jobs:
   - script: python -m pip install --upgrade pip setuptools wheel
     displayName: 'Stage 1 Step 3: Install Python tools'
 
-  - script: python -m pip install yamllint
-    displayName: 'Stage 1 Step 4: Install yamllint'
+  - script: python -m pip install -r tests/requirements.txt
+    displayName: 'Stage 1 Step 4: Install Python requirements'
 
   - task: Bash@3
     displayName: 'Stage 1 Step 5: Install kubeval'
@@ -53,31 +53,9 @@ jobs:
       script: |
         cd hub23-chart && helm dep up && cd ..
 
-  - task: Bash@3
-    displayName: "Stage 3 Step 1: helm lint"
+  - task: PythonScript@0
+    displayName: 'Stage 2 Step 3: Lint and validate hub23-chart'
     inputs:
-      targetType: 'inline'
-      script: |
-        helm lint hub23-chart -f hub23-chart/values.yaml -f deploy/prod.yaml -f tests/test-values.yaml --debug
-
-  - task: Bash@3
-    displayName: "Stage 3 Step 2: helm template"
-    inputs:
-      targetType: 'inline'
-      script: |
-        mkdir rendered_templates
-        helm template hub23-chart --output-dir rendered_templates -f hub23-chart/values.yaml -f deploy/prod.yaml -f tests/test-values.yaml --debug
-
-  - task: Bash@3
-    displayName: "Stage 3 Step 3: yamllint"
-    inputs:
-      targetType: 'inline'
-      script: |
-        yamllint -c tests/yamllint-config.yaml rendered_templates
-
-  - task: Bash@3
-    displayName: "Stage 3 Step 4: kubeval"
-    inputs:
-      targetType: 'inline'
-      script: |
-        find rendered_templates -type f -name '*.yaml' -exec kubeval {} --kubernetes-version 1.18.1 --strict --ignore-missing-schemas ;
+      scriptSource: 'filePath'
+      scriptPath: 'tests/lint-and-validate.py'
+      arguments: '--values ../hub23-chart/values.yaml ../deploy/prod.yaml ../tests/test-values.yaml'
