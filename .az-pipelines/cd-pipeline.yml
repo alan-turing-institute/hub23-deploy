@@ -7,13 +7,14 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+  certmanager_version: 'v1.0.3'
   helm_chart_name: 'hub23-chart'
   helm_release_name: 'hub23'
-  helm_version: '2.16.9'
+  helm_version: '3.3.4'
   keyvault_name: 'hub23-keyvault'
   kubernetes_cluster_name: 'hub23cluster'
   kubernetes_namespace: 'hub23'
-  kubernetes_version: '1.18.0'
+  kubernetes_version: '1.16.15'
   resource_group_name: 'Hub23'
   service_connection: 'hub23-deploy-scn'
 
@@ -37,18 +38,6 @@ jobs:
     displayName: 'Stage 1 Step 3: Install helm'
     inputs:
       helmVersionToInstall: $(HELM_VERSION)
-
-  - task: HelmDeploy@0
-    displayName: 'Stage 1 Step 4: Initialise helm'
-    inputs:
-      connectionType: 'Azure Resource Manager'
-      azureSubscription: $(SERVICE_CONNECTION)
-      azureResourceGroup: $(RESOURCE_GROUP_NAME)
-      kubernetesCluster: $(KUBERNETES_CLUSTER_NAME)
-      namespace: $(KUBERNETES_NAMESPACE)
-      command: 'init'
-      arguments: '--client-only'
-      tillerNamespace: 'kube-system'
 
   - task: AzureKeyVault@1
     displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
@@ -83,27 +72,50 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
+        helm repo add stable https://kubernetes-charts.storage.googleapis.com
         helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-        helm repo add nginx-ingress https://kubernetes-charts.storage.googleapis.com
-        helm repo add cert-manager https://charts.jetstack.io
+        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+        helm repo add jetstack https://charts.jetstack.io
         helm repo update
-        kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.10/deploy/manifests/00-crds.yaml
 
   - task: Bash@3
-    displayName: 'Stage 2 Step 5: Update local helm chart'
+    displayName: 'Stage 2 Step 5: Install cert-manager $(CERTMANAGER_VERSION) CRDs'
+    inputs:
+      targetType: 'inline'
+      script: |
+        kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/$(CERTMANAGER_VERSION)/cert-manager.crds.yaml
+
+  - task: HelmDeploy@0
+    displayName: 'Stage 2 Step 6: Install cert-manager $(CERTMANAGER_VERSION'
+    inputs:
+      connectionType: 'Azure Resource Manager'
+      azureSubscription: '$(SERVICE_CONNECTION)'
+      azureResourceGroup: '$(RESOURCE_GROUP_NAME)'
+      kubernetesCluster: '$(KUBERNETES_CLUSTER_NAME)'
+      namespace: 'cert-manager'
+      command: 'upgrade'
+      chartType: 'Name'
+      chartName: 'jetstack/cert-manager'
+      chartVersion: '$(CERTMANAGER_VERSION)'
+      releaseName: 'cert-manager'
+      valueFile: 'deploy/cert-manager.yaml'
+      arguments: '--create-namespace --timeout 10m0s --cleanup-on-fail'
+
+  - task: Bash@3
+    displayName: 'Stage 2 Step 7: Update local helm chart'
     inputs:
       targetType: 'inline'
       script: |
         cd $(HELM_CHART_NAME) && helm dep up && cd ..
 
   - task: HelmDeploy@0
-    displayName: 'Stage 2 Step 6: Perform helm upgrade'
+    displayName: 'Stage 2 Step 8: Perform helm upgrade'
     inputs:
       connectionType: 'Azure Resource Manager'
-      azureSubscription: $(SERVICE_CONNECTION)
-      azureResourceGroup: $(RESOURCE_GROUP_NAME)
-      kubernetesCluster: $(KUBERNETES_CLUSTER_NAME)
-      namespace: $(KUBERNETES_NAMESPACE)
+      azureSubscription: '$(SERVICE_CONNECTION)'
+      azureResourceGroup: '$(RESOURCE_GROUP_NAME)'
+      kubernetesCluster: '$(KUBERNETES_CLUSTER_NAME)'
+      namespace: '$(KUBERNETES_NAMESPACE)'
       command: 'upgrade'
       chartType: 'FilePath'
       chartPath: $(HELM_CHART_NAME)

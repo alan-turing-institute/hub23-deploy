@@ -1,21 +1,28 @@
 binderhub:
   config:
     GitHubRepoProvider:
-      access_token: {binderhub_access_token}
+      access_token: "{binderhub_access_token}"
 
   registry:
-    username: {username}
-    password: {password}
+    username: "{username}"
+    password: "{password}"
 
   jupyterhub:
     hub:
       services:
         binder:
           apiToken: "{apiToken}"
+
+      config:
+        Authenticator:
+          admin_users:
+            - "sgibson91"
+        GitHubOAuthenticator:
+          client_id: "{github_client_id}"
+          client_secret: "{github_client_secret}"
+        JupyterHub:
+          admin_access:
+            - "sgibson91"
+
     proxy:
       secretToken: "{secretToken}"
-
-    auth:
-      github:
-        clientId: {github_client_id}
-        clientSecret: {github_client_secret}

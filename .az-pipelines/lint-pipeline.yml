@@ -13,34 +13,22 @@ jobs:
   - task: HelmInstaller@1
     displayName: 'Stage 1 Step 1: Install helm'
     inputs:
-      helmVersionToInstall: '2.15.0'
-
-  - task: HelmDeploy@0
-    displayName: 'Stage 1 Step 2: Initialise helm'
-    inputs:
-      connectionType: 'Azure Resource Manager'
-      azureSubscription: 'hub23-deploy-scn'
-      azureResourceGroup: 'Hub23'
-      kubernetesCluster: 'hub23cluster'
-      namespace: 'hub23'
-      command: 'init'
-      arguments: '--client-only'
-      tillerNamespace: 'kube-system'
+      helmVersionToInstall: '3.3.4'
 
   - task: UsePythonVersion@0
-    displayName: 'Stage 1 Step 3: Install Python 3.7'
+    displayName: 'Stage 1 Step 2: Install Python 3.8'
     inputs:
-      versionSpec: '3.7'
+      versionSpec: '3.8'
       addToPath: true
 
   - script: python -m pip install --upgrade pip setuptools wheel
-    displayName: 'Stage 1 Step 4: Install Python tools'
+    displayName: 'Stage 1 Step 3: Install Python tools'
 
   - script: python -m pip install -r tests/requirements.txt
-    displayName: 'Stage 1 Step 5: Install Python requirements'
+    displayName: 'Stage 1 Step 4: Install Python requirements'
 
   - task: Bash@3
-    displayName: 'Stage 1 Step 6: Install kubeval'
+    displayName: 'Stage 1 Step 5: Install kubeval'
     inputs:
       targetType: 'inline'
       script: |
@@ -53,9 +41,9 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
+        helm repo add stable https://kubernetes-charts.storage.googleapis.com
         helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-        helm repo add nginx-ingress https://kubernetes-charts.storage.googleapis.com
-        helm repo add cert-manager https://charts.jetstack.io
+        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
         helm repo update
 
   - task: Bash@3

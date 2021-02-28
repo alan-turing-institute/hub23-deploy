@@ -1,0 +1,52 @@
+file: index
+sections:
+- file: azure-prereqs/index
+  sections:
+  - file: azure-prereqs/key-vault/index
+    sections:
+    - file: azure-prereqs/key-vault/install
+    - file: azure-prereqs/key-vault/create-key-vault
+    - file: azure-prereqs/key-vault/add-secrets
+    - file: azure-prereqs/key-vault/download-secrets
+    - file: azure-prereqs/key-vault/service-principals
+  - file: azure-prereqs/container-registry/index
+    sections:
+    - file: azure-prereqs/container-registry/install
+    - file: azure-prereqs/container-registry/create-acr
+- file: deploy-k8s/index
+  sections:
+  - file: deploy-k8s/install
+  - file: deploy-k8s/setup
+  - file: deploy-k8s/download-secrets
+  - file: deploy-k8s/network-policies
+  - file: deploy-k8s/az-aks-create
+  - file: deploy-k8s/refs
+- file: setup-helm/index
+  sections:
+  - file: setup-helm/install
+  - file: setup-helm/setup-helm
+- file: cert-manager/index
+  sections:
+  - file: cert-manager/install
+  - file: cert-manager/context
+  - file: cert-manager/create-files
+  - file: cert-manager/deployment
+  - file: cert-manager/refs
+- file: binderhub/index
+  sections:
+  - file: binderhub/install
+  - file: binderhub/installing-binderhub
+  - file: binderhub/installing-binderhub-local-helm-chart
+  - file: binderhub/connect-container-registry
+  - file: binderhub/github-api-limit
+- file: customising/index
+  sections:
+  - file: customising/changing-logo
+  - file: customising/customise-jupyterhub
+  - file: customising/refs
+- file: advanced/index
+  sections:
+  - file: advanced/enabling-authentication
+  - file: advanced/enabling-page-redirection
+  - file: advanced/optimising-jupyterhub
+  - file: advanced/refs

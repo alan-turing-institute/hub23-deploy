@@ -1,0 +1,4 @@
+ingressShim:
+  # The default ClusterIssuer is in hub23-chart/templates/cluster-issuer.yaml
+  defaultIssuerName: letsencrypt-prod
+  defaultIssuerKind: ClusterIssuer
