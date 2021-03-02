@@ -14,10 +14,17 @@ binderhub:
       services:
         binder:
           apiToken: "f3f2b31a46b1141030cb9213594f99a3e3e9a2d7bf8e10e945fe8d96821de8cf"
+
+      config:
+        Authenticator:
+          admin_users:
+            - "admin_user"
+        GitHubOAuthenticator:
+          client_id: "6369759d02516e5b8a22bbc67809167867fbc5b62641ed0044ced17ce91aae91"
+          client_secret: "99663fbc1a3cf35e3665f1629c6d7c73ad41dd1601df48841c3a12a2fee485dc"
+        JupyterHub:
+          admin_access:
+            - "admin_user"
+
     proxy:
       secretToken: "f330bcc46b1d6256d39b8a855cf7933660e9688adb127b6b4ceec6070d56c6e6"
-
-    auth:
-      github:
-        clientId: "6369759d02516e5b8a22bbc67809167867fbc5b62641ed0044ced17ce91aae91"
-        clientSecret: "99663fbc1a3cf35e3665f1629c6d7c73ad41dd1601df48841c3a12a2fee485dc"

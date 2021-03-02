@@ -39,12 +39,6 @@ binderhub:
           - binder.hub23.turing.ac.uk
 
   jupyterhub:
-    auth:
-      admin:
-        access: true
-        users:
-          - "sgibson91"
-
     proxy:
       service:
         type: ClusterIP
