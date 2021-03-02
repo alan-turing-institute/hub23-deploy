@@ -12,7 +12,7 @@ variables:
   helm_version: '3.3.4'
   kubernetes_cluster_name: 'hub23cluster'
   kubernetes_namespace: 'hub23'
-  kubernetes_version: '1.16.15'
+  kubernetes_version: '1.18.1'
   resource_group_name: 'Hub23'
   service_connection: 'hub23-deploy-scn'
 
