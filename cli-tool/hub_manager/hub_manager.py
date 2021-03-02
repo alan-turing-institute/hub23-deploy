@@ -56,9 +56,7 @@ class HubManager:
 
             if self.verbose:
                 logging.info("Writing YAML file for: %s" % filename)
-            with open(
-                os.path.join(self.secret_dir, f"{filename}.yaml"), "w"
-            ) as f:
+            with open(os.path.join(self.secret_dir, f"{filename}.yaml"), "w") as f:
                 f.write(template)
 
             if self.verbose:
@@ -74,9 +72,7 @@ class HubManager:
 
         if self.pod == "hub":
             if self.verbose:
-                logging.info(
-                    "Pulling JupyterHub pod logs for: %s" % self.hub_name
-                )
+                logging.info("Pulling JupyterHub pod logs for: %s" % self.hub_name)
             regex = "^hub-"
         elif self.pod == "binder":
             if self.verbose:
@@ -137,9 +133,7 @@ class HubManager:
 
         if self.dry_run:
             if self.verbose:
-                logging.info(
-                    "THIS IS A DRY-RUN. HELM CHART WILL NOT BE UPGRADED."
-                )
+                logging.info("THIS IS A DRY-RUN. HELM CHART WILL NOT BE UPGRADED.")
             helm_upgrade_cmd.append("--dry-run")
 
         if self.debug:
@@ -158,9 +152,7 @@ class HubManager:
     def print_pods(self):
         """Print the Kubernetes pods"""
         if self.verbose:
-            logging.info(
-                "Fetching the Kubernetes pods for: %s" % self.hub_name
-            )
+            logging.info("Fetching the Kubernetes pods for: %s" % self.hub_name)
 
         if self.subcommand == "print-pods":
             self.login()
@@ -276,9 +268,7 @@ class HubManager:
 
         if self.identity:
             if self.verbose:
-                logging.info(
-                    "Logging into Azure with a Managed System Identity"
-                )
+                logging.info("Logging into Azure with a Managed System Identity")
             login_cmd.append("--identity")
         else:
             if self.verbose:
@@ -346,8 +336,7 @@ class HubManager:
         """Update the local helm chart"""
         if self.verbose:
             logging.info(
-                "Updating local helm chart dependencies for: %s"
-                % self.chart_name
+                "Updating local helm chart dependencies for: %s" % self.chart_name
             )
 
         os.chdir(os.path.join(self.folder, self.chart_name))
