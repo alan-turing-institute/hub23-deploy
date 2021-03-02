@@ -98,7 +98,7 @@ jobs:
           config-file: yamlling-config.yaml
 
       - name: Run kubeval
-        uses: brpaz/gh-kubeval-action@v1.0.1
+        uses: brpaz/gh-action-kubeval@v1.0.1
         with:
           files: ./rendered_templates
           github_token: "${{ secrets.GITHUB_TOKEN }}"
