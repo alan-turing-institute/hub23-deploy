@@ -28,6 +28,7 @@ binderhub:
       # nginx-ingress controller to be explicitly utilised instead of "gce"
       # This is required to allow nginx-ingress-controller to function. This will override any cloud provided ingress controllers and use the one we choose to deploy, i.e. nginx.
       kubernetes.io/ingress.class: nginx
+      cert-manager.io/issuer: "hub23-letsencrypt-prod"
       https:
         enabled: true
         type: nginx
@@ -48,6 +49,7 @@ binderhub:
       annotations:
         kubernetes.io/tls-acme: "true"
         kubernetes.io/ingress.class: nginx
+        cert-manager.io/issuer: "hub23-letsencrypt-prod"
         https:
           enabled: true
           type: nginx
@@ -85,11 +87,3 @@ nginx-ingress:
   controller:
     config:
       proxy-body-size: 64m
-
-cert-manager:
-  webhook:
-    enabled: false
-  ingressShim:
-    defaultIssuerName: "staging"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"
