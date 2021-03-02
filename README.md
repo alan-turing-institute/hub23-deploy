@@ -20,7 +20,6 @@ A repository to manage the private Turing BinderHub instance, Hub23.
   - [:electric_plug: Connect to Kubernetes](#electric_plug-connect-to-kubernetes)
 - [:computer: Code Snippets](#computer-code-snippets)
   - [:dizzy: Restarting the JupyterHub](#dizzy-restarting-the-jupyterhub)
-  - [:leftwards_arrow_with_hook: Pre-Commit Hook](#leftwards_arrow_with_hook-pre-commit-hook)
   - [:money_with_wings: Billing](#money_with_wings-billing)
 - [:books: Documentation](#books-documentation)
 
@@ -136,22 +135,6 @@ Scale the Hub back up:
 ```bash
 kubectl --namespace hub23scale deployment hub --replicas=1
 ```
-
-### :leftwards_arrow_with_hook: Pre-Commit Hook
-
-If modifying the Python scripts, you can install a git pre-commit hook to ensure the files conform to PEP8 standards.
-
-To install the pre-commit hook, do the following:
-
-```bash
-# Install the development requirements
-pip install -r dev-requirements.txt
-
-# Install the pre-commit configuration
-pre-commit install
-```
-
-[Black](https://github.com/psf/black) and [Flake8](http://flake8.pycqa.org/en/latest/) will then be applied to every commit effecting Python files.
 
 ### :money_with_wings: Billing
 

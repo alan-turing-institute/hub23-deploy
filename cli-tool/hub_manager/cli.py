@@ -40,14 +40,10 @@ helm_upgrade = subparsers.add_parser(
     "helm-upgrade", help="Perform an upgrade of the Hub23 helm chart"
 )
 helm_upgrade.add_argument(
-    "--dry-run",
-    action="store_true",
-    help="Perform a dry run of the helm upgrade",
+    "--dry-run", action="store_true", help="Perform a dry run of the helm upgrade"
 )
 helm_upgrade.add_argument(
-    "--debug",
-    action="store_true",
-    help="Enable debugging output for the helm upgrade",
+    "--debug", action="store_true", help="Enable debugging output for the helm upgrade"
 )
 
 # Add print-pods subcommand

@@ -12,8 +12,7 @@ not provided, this value defaults to 10%.
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Parse a contingency percentage for calculating BinderHub "
-            "Cloud costs."
+            "Parse a contingency percentage for calculating BinderHub Cloud costs."
         )
     )
 
