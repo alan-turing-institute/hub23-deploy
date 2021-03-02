@@ -95,7 +95,7 @@ jobs:
       - name: Run yamllint
         uses: bewuethr/yamllint-action@v1
         with:
-          config-file: yamlling-config.yaml
+          config-file: yamllint-config.yaml
 
       - name: Run kubeval
         uses: brpaz/gh-action-kubeval@v1.0.1
