@@ -6,8 +6,7 @@ See the [developing helm chart docs](https://helm.sh/docs/developing_charts/) fo
 
 - **BinderHub repository:** <https://github.com/jupyterhub/binderhub>
 - **BinderHub Helm chart:** <https://jupyterhub.github.io/helm-chart/>
-- **`nginx-ingress` Helm chart:** <https://github.com/helm/charts/tree/master/stable/nginx-ingress>
-- **`cert-manager` Helm chart:** <https://github.com/helm/charts/tree/master/stable/cert-manager>
+- **`ingress-nginx` Helm chart:** <https://github.com/kubernetes/ingress-nginx>
 
 ## :rocket: Installing the Chart
 
