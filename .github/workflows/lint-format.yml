@@ -101,4 +101,6 @@ jobs:
         uses: brpaz/gh-action-kubeval@v1.0.1
         with:
           files: ./rendered_templates
+          version: 1.18.1
+          ignore_missing_schemas: true
           github_token: "${{ secrets.GITHUB_TOKEN }}"
