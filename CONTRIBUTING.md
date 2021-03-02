@@ -63,8 +63,7 @@ This chart is located in the [`hub23-chart`](./hub23-chart) folder and the deplo
 The Hub23 Helm chart is dependent on a range of other published Helm charts:
 
 - **BinderHub:** The main software
-- **`nginx-ingress`:** To monitor traffic from the internet and outside sources
-- **`cert-manager`:** To automatically request HTTPS certificates from Let's Encrypt for our internet-facing endpoints
+- **`ingress-nginx`:** To monitor traffic from the internet and outside sources
 
 These charts are also under active development and regularly updated, so how do we make sure Hub23 is running the latest version?
 With a bot of course!
@@ -94,7 +93,7 @@ This will help maintain a consistent state of the deployment. :rotating_light:
 Kubernetes resources and Helm charts are compromised of YAML files.
 Unfortunately, Helm is sensitive to malformed YAML files but fails silently during an upgrade if such a file is found.
 
-Therefore, there is a [linting and validation pipeline](.az-pipelines/lint-pipeline.yml) implemented on the repository which runs in all Pull Requests to main branch.
+Therefore, there is a [linting and validation pipeline](.github/workflows/lint-format.yml) implemented on the repository which runs in all Pull Requests to main branch.
 This verifies that the helm chart is well-formed and can be understood by Kubernetes and Helm when applied.
 
 The pipeline uses [YAMLlint](https://github.com/adrienverge/yamllint), [`helm lint`](https://helm.sh/docs/helm/helm_lint/), [`helm template`](https://helm.sh/docs/helm/helm_template/), and [`kubeval`](https://github.com/instrumenta/kubeval).
@@ -102,7 +101,7 @@ The pipeline uses [YAMLlint](https://github.com/adrienverge/yamllint), [`helm li
 :rotating_light: This linting and validation test is a [Required Status Check](https://help.github.com/en/github/administering-a-repository/about-required-status-checks) and must pass before a Pull Request can be merged into main.
 Again, this is to help us maintain a consistent state of the deployment. :rotating_light:
 
-There are also two [GitHub Actions](https://help.github.com/en/actions) that check any Python code in the repository conforms to [`black`](https://github.com/psf/black) and [`flake8`](https://flake8.pycqa.org/en/latest/) conventions.
+There are also further [GitHub Actions](https://help.github.com/en/actions) that check any Python code in the repository conforms to [`black`](https://github.com/psf/black) and [`flake8`](https://flake8.pycqa.org/en/latest/) conventions.
 The configurations for these tests can be found in the [`.github/workflows`](.github/workflows) folder.
 
 Lastly, another Azure Pipeline runs a nightly check to see if the deployment [subscription is still active](.az-pipelines/subscription-test.yml).
@@ -111,7 +110,7 @@ The most likely cause for the subscription to be disabled is lack of funds and a
 ### :book: Documentation
 
 The Hub23 Deployment Guide is written in Markdown files kept in the [`docs/_posts`](./docs/_posts) folder.
-These are then rendered using [Jekyll](https://jekyllrb.com/) and [GitHub Pages](https://help.github.com/en/github/working-with-github-pages/about-github-pages) and served at [alan-turing-instutite.github.io/hub23-deploy](https://alan-turing-instutite.github.io/hub23-deploy), using the [So Simple theme](https://github.com/mmistakes/so-simple-theme).
+These are then rendered using [Jupyter Book](https://jupyterbook.org) and [GitHub Pages](https://help.github.com/en/github/working-with-github-pages/about-github-pages) and served at [alan-turing-instutite.github.io/hub23-deploy](https://alan-turing-instutite.github.io/hub23-deploy).
 
 ### :sparkles: Extras
 
@@ -125,7 +124,7 @@ These are then rendered using [Jekyll](https://jekyllrb.com/) and [GitHub Pages]
 ### :bug: Bug Reports
 
 If something doesn't work the way you expect it to, please check it hasn't already been reported in the repository's [issue tracker](https://github.com/alan-turing-institute/hub23-deploy/issues).
-Bug reports should have the [bug label]([is:issue is:open label:bug ](https://github.com/alan-turing-institute/hub23-deploy/issues?q=is%3Aissue+is%3Aopen+label%3Abug)), or have a title beginning with [`[BUG]`](https://github.com/alan-turing-institute/hub23-deploy/issues?q=is%3Aissue+is%3Aopen+%5BBUG%5D).
+Bug reports should have the [bug label]([is:issue is:open label:bug](https://github.com/alan-turing-institute/hub23-deploy/issues?q=is%3Aissue+is%3Aopen+label%3Abug)), or have a title beginning with [`[BUG]`](https://github.com/alan-turing-institute/hub23-deploy/issues?q=is%3Aissue+is%3Aopen+%5BBUG%5D).
 
 If you can't find an issue already reporting your bug, then please feel free to [open a new issue](https://github.com/alan-turing-institute/hub23-deploy/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D).
 This repository has a [bug report template](.github/ISSUE_TEMPLATE/bug_report.md) to reports be as descriptive as possible so we can squash that bug! :muscle:
