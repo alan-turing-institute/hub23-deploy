@@ -173,19 +173,6 @@ These tools are used as the maintainers believe this makes the code easier to re
 While flake8 commands can be [disabled](https://flake8.pycqa.org/en/latest/user/violations.html), we only recommend doing this for [specific lines](https://flake8.pycqa.org/en/latest/user/violations.html#in-line-ignoring-errors) in such cases where reformatting would produce "ugly code".
 The maintainers retain final say on what is "ugly code" on a case-by-case basis.
 
-This repository also contains configuration files to install a [pre-commit hook](https://githooks.com/) that will run black and flake8 on each commit so you don't have to worry!
-To install the pre-commit hook, do the following:
-
-```bash
-# Install the development requirements
-pip install -r dev-requirements.txt
-
-# Install the pre-commit configuration
-pre-commit install
-```
-
-And you're good to go! :tada:
-
 ### :pencil: Markdown Styleguide
 
 Documentation files are written in [Markdown](https://guides.github.com/features/mastering-markdown/).
