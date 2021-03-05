@@ -5,6 +5,7 @@
 Since Hub23 now shares the same Kubernetes infrastructure as the Turing Federation BinderHub, the following docs are only here for clarity and should not be acted upon without first notifying the mybinder.org operating team and removing the Turing's BinderHub from the Federation.
 ```
 
+(content:k8s:version)=
 ## Finding a Kubernetes version
 
 First, find a reasonably up-to-date version of Kubernetes to install onto the cluster.

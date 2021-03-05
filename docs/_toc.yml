@@ -23,6 +23,7 @@ sections:
   - file: deploy-k8s/download-secrets
   - file: deploy-k8s/network-policies
   - file: deploy-k8s/az-aks-create
+  - file: deploy-k8s/upgrade
   - file: deploy-k8s/refs
 - file: setup-helm/index
   sections:

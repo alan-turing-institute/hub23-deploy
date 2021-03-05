@@ -15,4 +15,5 @@ Since Hub23 now shares the same Kubernetes infrastructure as the Turing Federati
 - {ref}`content:k8s:download-secrets`
 - {ref}`content:k8s:net-pols`
 - {ref}`content:k8s:create`
+- {ref}`content:k8s:upgrade`
 - {ref}`content:k8s:refs`
