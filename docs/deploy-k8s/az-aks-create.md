@@ -1,6 +1,31 @@
 (content:k8s:create)=
 # Deploy the Kubernetes cluster
 
+```{warning}
+Since Hub23 now shares the same Kubernetes infrastructure as the Turing Federation BinderHub, the following docs are only here for clarity and should not be acted upon without first notifying the mybinder.org operating team and removing the Turing's BinderHub from the Federation.
+```
+
+## Finding a Kubernetes version
+
+First, find a reasonably up-to-date version of Kubernetes to install onto the cluster.
+This can be done with the below command which will output a table as demonstrated.
+
+```bash
+$ az aks get-versions -l westeurope -o table
+KubernetesVersion    Upgrades
+-------------------  -------------------------
+1.20.2(preview)      None available
+1.19.7               1.20.2(preview)
+1.19.6               1.19.7, 1.20.2(preview)
+1.18.14              1.19.6, 1.19.7
+1.18.10              1.18.14, 1.19.6, 1.19.7
+1.17.16              1.18.10, 1.18.14
+1.17.13              1.17.16, 1.18.10, 1.18.14
+```
+
+It is recommended to pick a version number that has at least one upgrade version available that is **not** in preview, so we can be sure that any bugs are likely to have been found and fixed.
+This would be `1.19.6` based on the above example.
+
 ## Create the AKS cluster
 
 The following command will deploy a Kubernetes cluster into the Hub23 resource group.
@@ -9,19 +34,20 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 ```bash
 az aks create \
     --name hub23cluster \
-    --resource-group Hub23 \
-    --kubernetes-version 1.16.15 \
+    --resource-group hub23 \
+    --kubernetes-version VERSION \
     --ssh-key-value .secret/ssh-key-hub23cluster.pub \
-    --node-count 3
+    --node-count 3 \
     --node-vm-size Standard_D2s_v3 \
-    --service-principal $(cat .secret/appID.txt) \
-    --client-secret $(cat .secret/key.txt) \
+    --service-principal $(cat .secret/appId.txt) \
+    --client-secret $(cat .secret/appKey.txt) \
     --dns-service-ip 10.0.0.10 \
     --docker-bridge-address 172.17.0.1/16 \
-    --network-plugin azure \
-    --network-policy azure \
+    --network-plugin kubenet \
+    --network-policy calico \
+    --max-pods 110 \
     --service-cidr 10.0.0.0/16 \
-    --vnet-subnet-id $SUBNET_ID \
+    --vnet-subnet-id ${SUBNET_ID} \
     --output table
 ```
 
@@ -32,6 +58,8 @@ az aks create \
 - `--docker-bridge-address`: A specific IP address and netmask for the Docker bridge, using standard CIDR notation.
 - `--network-plugin`: The Kubernetes network plugin to use.
 - `--network-policy`: The Kubernetes network policy to use.
+- `--max-pods`: The maximum number of pods per node.
+  The Kubernetes API seems to struggle above 110 pods.
 - `--service-cidr`: A CIDR notation IP range from which to assign service cluster IPs.
 - `--vnet-subnet-id`: The ID of a subnet in an existing VNet into which to deploy the cluster.
 
@@ -74,11 +102,12 @@ Another nodepool can then be added as follows:
 az aks nodepool add \
     --cluster-name hub23cluster \
     --name user \
-    --resource-group Hub23 \
-    --kubernetes-version 1.16.15 \
+    --resource-group hub23 \
+    --kubernetes-version VERSION \
+    --max-pods 110 \
     --node-count 3 \
     --node-vm-size Standard_D2s_v3 \
-    --vnet-subnet-id $SUBNET_ID \
+    --vnet-subnet-id ${SUBNET_ID} \
     --labels hub.jupyter.org/node-purpose=user \
     --output table
 ```
@@ -97,8 +126,8 @@ Once the Kubernetes cluster is deployed, you should delete the local copy of the
 
 ```bash
 rm .secret/ssh-key-hub23cluster.pub
-rm .secret/appID.txt
-rm .secret/key.txt
+rm .secret/appId.txt
+rm .secret/appKey.txt
 ```
 
 ## Get credentials for `kubectl`
@@ -106,10 +135,7 @@ rm .secret/key.txt
 We need to configure the local installation of the Kubernetes CLI to work with the version deployed onto the cluster, and do so with the following command.
 
 ```bash
-az aks get-credentials \
-    --name hub23cluster \
-    --resource-group Hub23 \
-    --output table
+az aks get-credentials --name hub23cluster --resource-group hub23
 ```
 
 This command would need to be repeated when trying to manage the cluster from another computer or if you have been working with a different cluster.

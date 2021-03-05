@@ -20,7 +20,6 @@ sections:
 - file: deploy-k8s/index
   sections:
   - file: deploy-k8s/install
-  - file: deploy-k8s/setup
   - file: deploy-k8s/download-secrets
   - file: deploy-k8s/network-policies
   - file: deploy-k8s/az-aks-create
