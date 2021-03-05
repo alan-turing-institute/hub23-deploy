@@ -19,3 +19,4 @@ Since Hub23 now shares the same Kubernetes infrastructure as the Turing Federati
 - {ref}`content:binderhub`
 - {ref}`content:customising`
 - {ref}`content:advanced-config`
+- {ref}`content:teardown`

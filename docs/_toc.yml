@@ -54,3 +54,8 @@ sections:
   - file: advanced/enabling-page-redirection
   - file: advanced/optimising-jupyterhub
   - file: advanced/refs
+- file: tearing-down/index
+  sections:
+  - file: tearing-down/install
+  - file: tearing-down/teardown
+  - file: tearing-down/refs
