@@ -8,5 +8,5 @@ Key vault names must be lower case and/or numerical and may only include hyphens
 ```
 
 ```bash
-az keyvault create --name hub23-keyvault --resource-group Hub23
+az keyvault create --name hub23-keyvault --resource-group hub23
 ```

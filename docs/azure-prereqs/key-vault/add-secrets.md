@@ -32,7 +32,7 @@ Add the private key:
 ```bash
 az keyvault secret set \
     --vault-name hub23-keyvault \
-    --name ssh-key-Hub23cluster-private \
+    --name ssh-key-hub23cluster-private \
     --file .secret/ssh-key-hub23cluster
 ```
 
@@ -41,7 +41,7 @@ Add the public key:
 ```bash
 az keyvault secret set \
     --vault-name hub23-keyvault \
-    --name ssh-key-Hub23cluster-public \
+    --name ssh-key-hub23cluster-public \
     --file .secret/ssh-key-hub23cluster.pub
 ```
 
