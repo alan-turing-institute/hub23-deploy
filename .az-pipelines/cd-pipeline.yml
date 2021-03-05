@@ -26,13 +26,14 @@ jobs:
     inputs:
       kubectlVersion: $(KUBERNETES_VERSION)
 
-  - task: AzureCLI@1
+  - task: AzureCLI@2
     displayName: 'Stage 1 Step 2: Merge kubectl config'
     inputs:
       azureSubscription: $(SERVICE_CONNECTION)
+      scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        az aks get-credentials -n $(KUBERNETES_CLUSTER_NAME) -g $(CLUSTER_RESOURCE_GROUP_NAME)
+        'az aks get-credentials -n $(KUBERNETES_CLUSTER_NAME) -g $(CLUSTER_RESOURCE_GROUP_NAME)'
 
   - task: HelmInstaller@1
     displayName: 'Stage 1 Step 3: Install helm'
@@ -96,6 +97,7 @@ jobs:
       azureSubscription: '$(SERVICE_CONNECTION)'
       azureResourceGroup: '$(CLUSTER_RESOURCE_GROUP_NAME)'
       kubernetesCluster: '$(KUBERNETES_CLUSTER_NAME)'
+      useClusterAdmin: true
       namespace: '$(KUBERNETES_NAMESPACE)'
       command: 'upgrade'
       chartType: 'FilePath'
