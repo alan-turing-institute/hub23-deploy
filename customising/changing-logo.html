@@ -97,6 +97,25 @@
   </a>
   <ul class="collapse-ul">
    <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../azure-prereqs/resource-group/index.html">
+     Getting Started on Azure
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/install.html">
+       Installation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/create-resource-group.html">
+       Create the Resource Group
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="../azure-prereqs/key-vault/index.html">
      Azure Key Vault
     </a>
@@ -108,7 +127,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/create-key-vault.html">
-       Setup and Create the Key Vault
+       Create the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -118,7 +137,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/download-secrets.html">
-       Downloading Secrets
+       Downloading Secrets from the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -164,11 +183,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../deploy-k8s/setup.html">
-     Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../deploy-k8s/download-secrets.html">
      Download the required secrets
     </a>
@@ -181,6 +195,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../deploy-k8s/az-aks-create.html">
      Deploy the Kubernetes cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../deploy-k8s/upgrade.html">
+     Upgrading the Kubernetes cluster
     </a>
    </li>
    <li class="toctree-l2">
@@ -342,6 +361,30 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../tearing-down/index.html">
+   Tearing Down BinderHub
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/install.html">
+     Installation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/teardown.html">
+     Tearing down your Deployment
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/refs.html">
+     References
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
 </ul>
 
 </nav> <!-- To handle the deprecated key -->
@@ -496,7 +539,7 @@
     <span class="nt">args</span><span class="p">:</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">clone</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--single-branch</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--branch=master</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--branch=main</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--depth=1</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/alan-turing-institute/hub23-deploy</span>

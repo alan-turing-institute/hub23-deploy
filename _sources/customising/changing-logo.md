@@ -34,7 +34,7 @@ initContainers:
     args:
       - clone
       - --single-branch
-      - --branch=master
+      - --branch=main
       - --depth=1
       - --
       - https://github.com/alan-turing-institute/hub23-deploy

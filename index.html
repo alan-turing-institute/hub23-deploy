@@ -96,6 +96,25 @@
   </a>
   <ul class="collapse-ul">
    <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="azure-prereqs/resource-group/index.html">
+     Getting Started on Azure
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="azure-prereqs/resource-group/install.html">
+       Installation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="azure-prereqs/resource-group/create-resource-group.html">
+       Create the Resource Group
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="azure-prereqs/key-vault/index.html">
      Azure Key Vault
     </a>
@@ -107,7 +126,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="azure-prereqs/key-vault/create-key-vault.html">
-       Setup and Create the Key Vault
+       Create the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -117,7 +136,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="azure-prereqs/key-vault/download-secrets.html">
-       Downloading Secrets
+       Downloading Secrets from the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -163,11 +182,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="deploy-k8s/setup.html">
-     Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="deploy-k8s/download-secrets.html">
      Download the required secrets
     </a>
@@ -180,6 +194,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="deploy-k8s/az-aks-create.html">
      Deploy the Kubernetes cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="deploy-k8s/upgrade.html">
+     Upgrading the Kubernetes cluster
     </a>
    </li>
    <li class="toctree-l2">
@@ -341,6 +360,30 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="tearing-down/index.html">
+   Tearing Down BinderHub
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="tearing-down/install.html">
+     Installation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tearing-down/teardown.html">
+     Tearing down your Deployment
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tearing-down/refs.html">
+     References
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
 </ul>
 
 </nav> <!-- To handle the deprecated key -->
@@ -431,11 +474,16 @@
   <div class="section" id="hub23-deployment-guide">
 <span id="homepage"></span><h1>Hub23 Deployment Guide<a class="headerlink" href="#hub23-deployment-guide" title="Permalink to this headline">¶</a></h1>
 <p>This site hosts documentation around deploying, maintaining and customising the Hub23 BinderHub instance.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Since Hub23 now shares the same Kubernetes infrastructure as the Turing Federation BinderHub, the docs discussing how to deploy/change/remove Kubernetes clusters are only here for clarity and should not be acted upon without first notifying the mybinder.org operating team and removing the Turing’s BinderHub from the Federation.</p>
+</div>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="azure-prereqs/index.html#content-azure"><span class="std std-ref">Azure Resources</span></a></p>
 <ul>
+<li><p><a class="reference internal" href="azure-prereqs/resource-group/index.html#content-resource-group"><span class="std std-ref">Getting Started on Azure</span></a></p></li>
 <li><p><a class="reference internal" href="azure-prereqs/key-vault/index.html#content-key-vault"><span class="std std-ref">Azure Key Vault</span></a></p></li>
 <li><p><a class="reference internal" href="azure-prereqs/container-registry/index.html#content-container-registry"><span class="std std-ref">Azure Container Registry</span></a></p></li>
 </ul>
@@ -446,6 +494,7 @@
 <li><p><a class="reference internal" href="binderhub/index.html#content-binderhub"><span class="std std-ref">Installing BinderHub</span></a></p></li>
 <li><p><a class="reference internal" href="customising/index.html#content-customising"><span class="std std-ref">Customising your Deployment</span></a></p></li>
 <li><p><a class="reference internal" href="advanced/index.html#content-advanced-config"><span class="std std-ref">Advanced Configurations</span></a></p></li>
+<li><p><a class="reference internal" href="tearing-down/index.html#content-teardown"><span class="std std-ref">Tearing Down BinderHub</span></a></p></li>
 </ul>
 <div class="toctree-wrapper compound">
 </div>

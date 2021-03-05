@@ -54,7 +54,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="References" href="refs.html" />
+    <link rel="next" title="Upgrading the Kubernetes cluster" href="upgrade.html" />
     <link rel="prev" title="Enable Network Policies" href="network-policies.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -97,6 +97,25 @@
   </a>
   <ul class="collapse-ul">
    <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../azure-prereqs/resource-group/index.html">
+     Getting Started on Azure
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/install.html">
+       Installation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/create-resource-group.html">
+       Create the Resource Group
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="../azure-prereqs/key-vault/index.html">
      Azure Key Vault
     </a>
@@ -108,7 +127,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/create-key-vault.html">
-       Setup and Create the Key Vault
+       Create the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -118,7 +137,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/download-secrets.html">
-       Downloading Secrets
+       Downloading Secrets from the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -164,11 +183,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="setup.html">
-     Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="download-secrets.html">
      Download the required secrets
     </a>
@@ -181,6 +195,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Deploy the Kubernetes cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="upgrade.html">
+     Upgrading the Kubernetes cluster
     </a>
    </li>
    <li class="toctree-l2">
@@ -342,6 +361,30 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../tearing-down/index.html">
+   Tearing Down BinderHub
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/install.html">
+     Installation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/teardown.html">
+     Tearing down your Deployment
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/refs.html">
+     References
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
 </ul>
 
 </nav> <!-- To handle the deprecated key -->
@@ -413,6 +456,11 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finding-a-kubernetes-version">
+   Finding a Kubernetes version
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#create-the-aks-cluster">
    Create the AKS cluster
   </a>
@@ -463,25 +511,49 @@
                 
   <div class="section" id="deploy-the-kubernetes-cluster">
 <span id="content-k8s-create"></span><h1>Deploy the Kubernetes cluster<a class="headerlink" href="#deploy-the-kubernetes-cluster" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Since Hub23 now shares the same Kubernetes infrastructure as the Turing Federation BinderHub, the following docs are only here for clarity and should not be acted upon without first notifying the mybinder.org operating team and removing the Turing’s BinderHub from the Federation.</p>
+</div>
+<div class="section" id="finding-a-kubernetes-version">
+<span id="content-k8s-version"></span><h2>Finding a Kubernetes version<a class="headerlink" href="#finding-a-kubernetes-version" title="Permalink to this headline">¶</a></h2>
+<p>First, find a reasonably up-to-date version of Kubernetes to install onto the cluster.
+This can be done with the below command which will output a table as demonstrated.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ az aks get-versions -l westeurope -o table
+KubernetesVersion    Upgrades
+-------------------  -------------------------
+<span class="m">1</span>.20.2<span class="o">(</span>preview<span class="o">)</span>      None available
+<span class="m">1</span>.19.7               <span class="m">1</span>.20.2<span class="o">(</span>preview<span class="o">)</span>
+<span class="m">1</span>.19.6               <span class="m">1</span>.19.7, <span class="m">1</span>.20.2<span class="o">(</span>preview<span class="o">)</span>
+<span class="m">1</span>.18.14              <span class="m">1</span>.19.6, <span class="m">1</span>.19.7
+<span class="m">1</span>.18.10              <span class="m">1</span>.18.14, <span class="m">1</span>.19.6, <span class="m">1</span>.19.7
+<span class="m">1</span>.17.16              <span class="m">1</span>.18.10, <span class="m">1</span>.18.14
+<span class="m">1</span>.17.13              <span class="m">1</span>.17.16, <span class="m">1</span>.18.10, <span class="m">1</span>.18.14
+</pre></div>
+</div>
+<p>It is recommended to pick a version number that has at least one upgrade version available that is <strong>not</strong> in preview, so we can be sure that any bugs are likely to have been found and fixed.
+This would be <code class="docutils literal notranslate"><span class="pre">1.19.6</span></code> based on the above example.</p>
+</div>
 <div class="section" id="create-the-aks-cluster">
 <h2>Create the AKS cluster<a class="headerlink" href="#create-the-aks-cluster" title="Permalink to this headline">¶</a></h2>
 <p>The following command will deploy a Kubernetes cluster into the Hub23 resource group.
 This command has been known to take between 7 and 30 minutes to execute depending on resource availability in the location we set when creating the resource group.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks create <span class="se">\</span>
     --name hub23cluster <span class="se">\</span>
-    --resource-group Hub23 <span class="se">\</span>
-    --kubernetes-version <span class="m">1</span>.16.15 <span class="se">\</span>
+    --resource-group hub23 <span class="se">\</span>
+    --kubernetes-version VERSION <span class="se">\</span>
     --ssh-key-value .secret/ssh-key-hub23cluster.pub <span class="se">\</span>
-    --node-count <span class="m">3</span>
+    --node-count <span class="m">3</span> <span class="se">\</span>
     --node-vm-size Standard_D2s_v3 <span class="se">\</span>
-    --service-principal <span class="k">$(</span>cat .secret/appID.txt<span class="k">)</span> <span class="se">\</span>
-    --client-secret <span class="k">$(</span>cat .secret/key.txt<span class="k">)</span> <span class="se">\</span>
+    --service-principal <span class="k">$(</span>cat .secret/appId.txt<span class="k">)</span> <span class="se">\</span>
+    --client-secret <span class="k">$(</span>cat .secret/appKey.txt<span class="k">)</span> <span class="se">\</span>
     --dns-service-ip <span class="m">10</span>.0.0.10 <span class="se">\</span>
     --docker-bridge-address <span class="m">172</span>.17.0.1/16 <span class="se">\</span>
-    --network-plugin azure <span class="se">\</span>
-    --network-policy azure <span class="se">\</span>
+    --network-plugin kubenet <span class="se">\</span>
+    --network-policy calico <span class="se">\</span>
+    --max-pods <span class="m">110</span> <span class="se">\</span>
     --service-cidr <span class="m">10</span>.0.0.0/16 <span class="se">\</span>
-    --vnet-subnet-id <span class="nv">$SUBNET_ID</span> <span class="se">\</span>
+    --vnet-subnet-id <span class="si">${</span><span class="nv">SUBNET_ID</span><span class="si">}</span> <span class="se">\</span>
     --output table
 </pre></div>
 </div>
@@ -493,6 +565,8 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 <li><p><code class="docutils literal notranslate"><span class="pre">--docker-bridge-address</span></code>: A specific IP address and netmask for the Docker bridge, using standard CIDR notation.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--network-plugin</span></code>: The Kubernetes network plugin to use.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--network-policy</span></code>: The Kubernetes network policy to use.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--max-pods</span></code>: The maximum number of pods per node.
+The Kubernetes API seems to struggle above 110 pods.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--service-cidr</span></code>: A CIDR notation IP range from which to assign service cluster IPs.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--vnet-subnet-id</span></code>: The ID of a subnet in an existing VNet into which to deploy the cluster.</p></li>
 </ul>
@@ -529,11 +603,12 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks nodepool add <span class="se">\</span>
     --cluster-name hub23cluster <span class="se">\</span>
     --name user <span class="se">\</span>
-    --resource-group Hub23 <span class="se">\</span>
-    --kubernetes-version <span class="m">1</span>.16.15 <span class="se">\</span>
+    --resource-group hub23 <span class="se">\</span>
+    --kubernetes-version VERSION <span class="se">\</span>
+    --max-pods <span class="m">110</span> <span class="se">\</span>
     --node-count <span class="m">3</span> <span class="se">\</span>
     --node-vm-size Standard_D2s_v3 <span class="se">\</span>
-    --vnet-subnet-id <span class="nv">$SUBNET_ID</span> <span class="se">\</span>
+    --vnet-subnet-id <span class="si">${</span><span class="nv">SUBNET_ID</span><span class="si">}</span> <span class="se">\</span>
     --labels hub.jupyter.org/node-purpose<span class="o">=</span>user <span class="se">\</span>
     --output table
 </pre></div>
@@ -551,8 +626,8 @@ This command has been known to take between 7 and 30 minutes to execute dependin
 <h3>Delete local copies of the secret files<a class="headerlink" href="#delete-local-copies-of-the-secret-files" title="Permalink to this headline">¶</a></h3>
 <p>Once the Kubernetes cluster is deployed, you should delete the local copy of the Service Principal and public SSH key.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm .secret/ssh-key-hub23cluster.pub
-rm .secret/appID.txt
-rm .secret/key.txt
+rm .secret/appId.txt
+rm .secret/appKey.txt
 </pre></div>
 </div>
 </div>
@@ -560,10 +635,7 @@ rm .secret/key.txt
 <div class="section" id="get-credentials-for-kubectl">
 <h2>Get credentials for <code class="docutils literal notranslate"><span class="pre">kubectl</span></code><a class="headerlink" href="#get-credentials-for-kubectl" title="Permalink to this headline">¶</a></h2>
 <p>We need to configure the local installation of the Kubernetes CLI to work with the version deployed onto the cluster, and do so with the following command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks get-credentials <span class="se">\</span>
-    --name hub23cluster <span class="se">\</span>
-    --resource-group Hub23 <span class="se">\</span>
-    --output table
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks get-credentials --name hub23cluster --resource-group hub23
 </pre></div>
 </div>
 <p>This command would need to be repeated when trying to manage the cluster from another computer or if you have been working with a different cluster.</p>
@@ -604,7 +676,7 @@ rm .secret/key.txt
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="network-policies.html" title="previous page">Enable Network Policies</a>
-    <a class='right-next' id="next-link" href="refs.html" title="next page">References</a>
+    <a class='right-next' id="next-link" href="upgrade.html" title="next page">Upgrading the Kubernetes cluster</a>
 
         </div>
         

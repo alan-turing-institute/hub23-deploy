@@ -97,6 +97,25 @@
   </a>
   <ul class="collapse-ul">
    <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../azure-prereqs/resource-group/index.html">
+     Getting Started on Azure
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/install.html">
+       Installation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/create-resource-group.html">
+       Create the Resource Group
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="../azure-prereqs/key-vault/index.html">
      Azure Key Vault
     </a>
@@ -108,7 +127,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/create-key-vault.html">
-       Setup and Create the Key Vault
+       Create the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -118,7 +137,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/download-secrets.html">
-       Downloading Secrets
+       Downloading Secrets from the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -164,11 +183,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="setup.html">
-     Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="download-secrets.html">
      Download the required secrets
     </a>
@@ -181,6 +195,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="az-aks-create.html">
      Deploy the Kubernetes cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="upgrade.html">
+     Upgrading the Kubernetes cluster
     </a>
    </li>
    <li class="toctree-l2">
@@ -342,6 +361,30 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../tearing-down/index.html">
+   Tearing Down BinderHub
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/install.html">
+     Installation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/teardown.html">
+     Tearing down your Deployment
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/refs.html">
+     References
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
 </ul>
 
 </nav> <!-- To handle the deprecated key -->
@@ -449,10 +492,14 @@
 <p>The BinderHub helm chart contains network policies designed to restrict access to pods and the JupyterHub.
 However, the Kubernetes cluster will not be automatically configured to obey these network policies.
 Therefore, we need create a virtual network (vnet) and sub network (subnet) with network policies enabled so that these pod traffic restrictions are obeyed.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Since Hub23 now shares the same Kubernetes infrastructure as the Turing Federation BinderHub, the following docs are only here for clarity and should not be acted upon without first notifying the mybinder.org operating team and removing the Turing’s BinderHub from the Federation.</p>
+</div>
 <div class="section" id="create-a-vnet">
 <h2>Create a VNET<a class="headerlink" href="#create-a-vnet" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az network vnet create <span class="se">\</span>
-    --resource-group Hub23 <span class="se">\</span>
+    --resource-group hub23 <span class="se">\</span>
     --name hub23-vnet <span class="se">\</span>
     --address-prefixes <span class="m">10</span>.0.0.0/8 <span class="se">\</span>
     --subnet-name hub23-subnet <span class="se">\</span>
@@ -469,7 +516,7 @@ Therefore, we need create a virtual network (vnet) and sub network (subnet) with
 <p>This saves the VNet ID into a bash variable.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">VNET_ID</span><span class="o">=</span><span class="k">$(</span>
     az network vnet show <span class="se">\</span>
-    --resource-group Hub23 <span class="se">\</span>
+    --resource-group hub23 <span class="se">\</span>
     --name hub23-vnet <span class="se">\</span>
     --query id <span class="se">\</span>
     --output tsv
@@ -480,7 +527,7 @@ Therefore, we need create a virtual network (vnet) and sub network (subnet) with
 <div class="section" id="assign-the-contributor-role-to-the-service-principal-for-accessing-the-vnet">
 <h2>Assign the Contributor role to the Service Principal for accessing the VNet<a class="headerlink" href="#assign-the-contributor-role-to-the-service-principal-for-accessing-the-vnet" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az role assignment create <span class="se">\</span>
-    --assignee <span class="k">$(</span>cat .secret/appID.txt<span class="k">)</span> <span class="se">\</span>
+    --assignee <span class="k">$(</span>cat .secret/appId.txt<span class="k">)</span> <span class="se">\</span>
     --scope <span class="nv">$VNET_ID</span> <span class="se">\</span>
     --role Contributor
 </pre></div>
@@ -495,7 +542,7 @@ Therefore, we need create a virtual network (vnet) and sub network (subnet) with
 <p>This will save the subnet ID to a bash variable.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SUBNET_ID</span><span class="o">=</span><span class="k">$(</span>
     az network vnet subnet show <span class="se">\</span>
-    --resource-group Hub23 <span class="se">\</span>
+    --resource-group hub23 <span class="se">\</span>
     --vnet-name hub23-vnet <span class="se">\</span>
     --name hub23-subnet <span class="se">\</span>
     --query id <span class="se">\</span>

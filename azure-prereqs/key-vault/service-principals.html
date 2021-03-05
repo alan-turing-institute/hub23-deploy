@@ -55,7 +55,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Azure Container Registry" href="../container-registry/index.html" />
-    <link rel="prev" title="Downloading Secrets" href="download-secrets.html" />
+    <link rel="prev" title="Downloading Secrets from the Key Vault" href="download-secrets.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -96,6 +96,25 @@
    Azure Resources
   </a>
   <ul class="current collapse-ul">
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../resource-group/index.html">
+     Getting Started on Azure
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../resource-group/install.html">
+       Installation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../resource-group/create-resource-group.html">
+       Create the Resource Group
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
    <li class="toctree-l2 current active collapsible-parent">
     <a class="reference internal" href="index.html">
      Azure Key Vault
@@ -108,7 +127,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="create-key-vault.html">
-       Setup and Create the Key Vault
+       Create the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -118,7 +137,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="download-secrets.html">
-       Downloading Secrets
+       Downloading Secrets from the Key Vault
       </a>
      </li>
      <li class="toctree-l3 current active">
@@ -164,11 +183,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../deploy-k8s/setup.html">
-     Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../../deploy-k8s/download-secrets.html">
      Download the required secrets
     </a>
@@ -181,6 +195,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../deploy-k8s/az-aks-create.html">
      Deploy the Kubernetes cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../deploy-k8s/upgrade.html">
+     Upgrading the Kubernetes cluster
     </a>
    </li>
    <li class="toctree-l2">
@@ -342,6 +361,30 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../../tearing-down/index.html">
+   Tearing Down BinderHub
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tearing-down/install.html">
+     Installation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tearing-down/teardown.html">
+     Tearing down your Deployment
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tearing-down/refs.html">
+     References
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
 </ul>
 
 </nav> <!-- To handle the deprecated key -->
@@ -420,34 +463,33 @@
 <p>When deploying a Kubernetes cluster onto Azure, a Service Principal is required.
 A Service Principal is a protocol, consisting of an app ID and a key, that grants the cluster permissions to act on behalf of both the user and itself.
 REG members presently don’t have permissions to create Service Principals and so IT Services create them on our behalf via a TopDesk request.
-I (<a class="reference external" href="https://github.com/sgibson91"><strong>&#64;sgibson91</strong></a>) have saved the Service Principal to the key vault for safe-keeping.
-The following steps document how I did it and how one would download the Service Principal again.</p>
+It is then recommended to save the Service Principal to the key vault for safe-keeping.</p>
 <p>Add the app ID:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret <span class="nb">set</span> <span class="se">\</span>
     --vault-name hub23-keyvault <span class="se">\</span>
-    --name SP-appID <span class="se">\</span>
+    --name appId <span class="se">\</span>
     --value &lt;redacted&gt;
 </pre></div>
 </div>
 <p>Add the key:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret <span class="nb">set</span> <span class="se">\</span>
     --vault-name hub23-keyvault <span class="se">\</span>
-    --name SP-key <span class="se">\</span>
+    --name appKey <span class="se">\</span>
     --value &lt;redacted&gt;
 </pre></div>
 </div>
 <p>Download the app ID and save to a file:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret download <span class="se">\</span>
     --vault-name hub23-keyvault <span class="se">\</span>
-    --name SP-appID <span class="se">\</span>
-    --file .secret/appID.txt
+    --name appId <span class="se">\</span>
+    --file .secret/appId.txt
 </pre></div>
 </div>
 <p>Download the key and save to a file:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret download <span class="se">\</span>
     --vault-name hub23-keyvault <span class="se">\</span>
-    --name SP-secret <span class="se">\</span>
-    --file .secret/key.txt
+    --name appKey <span class="se">\</span>
+    --file .secret/appKey.txt
 </pre></div>
 </div>
 </div>
@@ -477,7 +519,7 @@ The following steps document how I did it and how one would download the Service
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="download-secrets.html" title="previous page">Downloading Secrets</a>
+    <a class='left-prev' id="prev-link" href="download-secrets.html" title="previous page">Downloading Secrets from the Key Vault</a>
     <a class='right-next' id="next-link" href="../container-registry/index.html" title="next page">Azure Container Registry</a>
 
         </div>

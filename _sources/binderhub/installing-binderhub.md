@@ -90,6 +90,7 @@ helm install jupyterhub/binderhub \
     --create-namespace \
     -f .secret/secret.yaml \
     -f deploy/config.yaml \
+    -f deploy/letsencrypt-{ staging | prod }.yaml \
     --cleanup-on-fail
 ```
 
@@ -122,6 +123,7 @@ helm upgrade hub23 jupyterhub/binderhub \
     --version=0.2.0-a2079a5 \
     -f .secret/secret.yaml \
     -f deploy/config.yaml \
+    -f deploy/letsencrypt-{ staging | prod }.yaml \
     --cleanup-on-fail
 ```
 

@@ -97,6 +97,25 @@
   </a>
   <ul class="collapse-ul">
    <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../azure-prereqs/resource-group/index.html">
+     Getting Started on Azure
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/install.html">
+       Installation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/create-resource-group.html">
+       Create the Resource Group
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="../azure-prereqs/key-vault/index.html">
      Azure Key Vault
     </a>
@@ -108,7 +127,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/create-key-vault.html">
-       Setup and Create the Key Vault
+       Create the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -118,7 +137,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/download-secrets.html">
-       Downloading Secrets
+       Downloading Secrets from the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -164,11 +183,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../deploy-k8s/setup.html">
-     Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../deploy-k8s/download-secrets.html">
      Download the required secrets
     </a>
@@ -181,6 +195,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../deploy-k8s/az-aks-create.html">
      Deploy the Kubernetes cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../deploy-k8s/upgrade.html">
+     Upgrading the Kubernetes cluster
     </a>
    </li>
    <li class="toctree-l2">
@@ -342,6 +361,30 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../tearing-down/index.html">
+   Tearing Down BinderHub
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/install.html">
+     Installation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/teardown.html">
+     Tearing down your Deployment
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/refs.html">
+     References
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
 </ul>
 
 </nav> <!-- To handle the deprecated key -->
@@ -459,7 +502,7 @@ We will create a subdomain in the Turing domain.</p>
 <li><p>Click “Create”</p></li>
 </ul>
 </li>
-<li><p>Set the subscription to “Turing-BinderHub” and select the “Hub23” resource group.
+<li><p>Set the subscription to “turingmybinder” and select the “Hub23” resource group.
 (Or use a different/new subscription and resource group.)
 Set the <strong>Name</strong> field to the desired URL, in our case: <code class="docutils literal notranslate"><span class="pre">hub23.turing.ac.uk</span></code>.</p>
 <ul class="simple">
@@ -479,7 +522,7 @@ Ask them to add the subdomain’s DNS record as an NS record for <code class="do
 <li><p>When viewing the DNS zone on the Azure Portal, click “+ Record set”</p></li>
 <li><p>In the <strong>Name</strong> field, enter “binder” or “hub” (depending on which IP you choose to set a record for first, the process is the same for both).</p></li>
 <li><p>Set <strong>Alias record set</strong> to “Yes” and this will bring up some new options.</p></li>
-<li><p>Make sure the subscription is set to “Turing-BinderHub”.
+<li><p>Make sure the subscription is set to “turingmybinder”.
 Under <strong>Azure resource</strong> select one of the two items under <strong>Public IP Address</strong>.
 If you view these resources (under the resource group beginning <code class="docutils literal notranslate"><span class="pre">MC_</span></code>), you will be able to see the IP addresses they refer to. Compare these with the output of <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">svc</span> <span class="pre">--namespace</span> <span class="pre">hub23</span></code> in order to ascertain which one is Binder and which is JupyterHub.</p></li>
 <li><p>Click “OK” and repeat the process for the second IP address.</p></li>

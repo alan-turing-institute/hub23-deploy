@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Setup and Create the Key Vault &#8212; Hub23 Deployment Guide</title>
+    <title>Create the Key Vault &#8212; Hub23 Deployment Guide</title>
     
   <link rel="stylesheet" href="../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -96,6 +96,25 @@
    Azure Resources
   </a>
   <ul class="current collapse-ul">
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../resource-group/index.html">
+     Getting Started on Azure
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../resource-group/install.html">
+       Installation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../resource-group/create-resource-group.html">
+       Create the Resource Group
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
    <li class="toctree-l2 current active collapsible-parent">
     <a class="reference internal" href="index.html">
      Azure Key Vault
@@ -108,7 +127,7 @@
      </li>
      <li class="toctree-l3 current active">
       <a class="current reference internal" href="#">
-       Setup and Create the Key Vault
+       Create the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -118,7 +137,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="download-secrets.html">
-       Downloading Secrets
+       Downloading Secrets from the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -164,11 +183,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../deploy-k8s/setup.html">
-     Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../../deploy-k8s/download-secrets.html">
      Download the required secrets
     </a>
@@ -181,6 +195,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../deploy-k8s/az-aks-create.html">
      Deploy the Kubernetes cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../deploy-k8s/upgrade.html">
+     Upgrading the Kubernetes cluster
     </a>
    </li>
    <li class="toctree-l2">
@@ -342,6 +361,30 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../../tearing-down/index.html">
+   Tearing Down BinderHub
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tearing-down/install.html">
+     Installation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tearing-down/teardown.html">
+     Tearing down your Deployment
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tearing-down/refs.html">
+     References
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
 </ul>
 
 </nav> <!-- To handle the deprecated key -->
@@ -413,22 +456,7 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#login-to-azure">
-   Login to Azure
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#activate-the-subscription">
-   Activate the Subscription
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#create-a-resource-group">
-   Create a Resource Group
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#create-the-key-vault">
+  <a class="reference internal nav-link" href="#id1">
    Create the key vault
   </a>
  </li>
@@ -444,55 +472,15 @@
         
               <div>
                 
-  <div class="section" id="setup-and-create-the-key-vault">
-<span id="content-key-vault-create"></span><h1>Setup and Create the Key Vault<a class="headerlink" href="#setup-and-create-the-key-vault" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="login-to-azure">
-<h2>Login to Azure<a class="headerlink" href="#login-to-azure" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az login --username YOUR_TURING_EMAIL --output none
-</pre></div>
-</div>
-<p>Login with your Turing account.</p>
-</div>
-<div class="section" id="activate-the-subscription">
-<h2>Activate the Subscription<a class="headerlink" href="#activate-the-subscription" title="Permalink to this headline">¶</a></h2>
-<p>Hub23 has its own subscription and so we have to activate that.</p>
-<p>To check which subscriptions you have access to, run the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az account list --refresh --output table
-</pre></div>
-</div>
-<p>You should see <code class="docutils literal notranslate"><span class="pre">Turing-BinderHub</span></code> listed as an option.
-If not, request access by opening a TopDesk ticket.</p>
-<p>To activate the subscription, run the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az account <span class="nb">set</span> --subscription Turing-BinderHub
-</pre></div>
-</div>
-</div>
-<div class="section" id="create-a-resource-group">
-<h2>Create a Resource Group<a class="headerlink" href="#create-a-resource-group" title="Permalink to this headline">¶</a></h2>
-<p>Azure groups related resources together by assigning them to a Resource Group.
-We need to create one for Hub23.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az group create --name Hub23 --location westeurope --output table
-</pre></div>
-</div>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code> is what we’ll use to identify resources relating to the BinderHub and should be short and descriptive.
-Hence we’ve given it the same name as our hub.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--location</span></code> sets the <a class="reference external" href="https://azure.microsoft.com/en-gb/global-infrastructure/locations/">region of data centres</a> that will host the resources.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">table</span></code> prints the info in a human-readable format.</p></li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If the resource group already exists, this step can be skipped.
-Test if the resource group exists by running the following: <code class="docutils literal notranslate"><span class="pre">az</span> <span class="pre">group</span> <span class="pre">exists</span> <span class="pre">--name</span> <span class="pre">Hub23</span></code></p>
-</div>
-</div>
-<div class="section" id="create-the-key-vault">
-<h2>Create the key vault<a class="headerlink" href="#create-the-key-vault" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="create-the-key-vault">
+<span id="content-key-vault-create"></span><h1>Create the Key Vault<a class="headerlink" href="#create-the-key-vault" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>Create the key vault<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Key vault names must be lower case and/or numerical and may only include hyphens (<code class="docutils literal notranslate"><span class="pre">-</span></code>), no underscores (<code class="docutils literal notranslate"><span class="pre">_</span></code>) or other non-alphanumeric characters. They must also be unique.</p>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault create --name hub23-keyvault --resource-group Hub23
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault create --name hub23-keyvault --resource-group hub23
 </pre></div>
 </div>
 </div>

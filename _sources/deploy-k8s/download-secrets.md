@@ -26,15 +26,15 @@ Download the Service Principal:
 ```bash
 az keyvault secret download \
     --vault-name hub23-keyvault \
-    --name SP-appID \
-    --file .secret/appID.txt
+    --name appId \
+    --file .secret/appId.txt
 ```
 
 ```bash
 az keyvault secret download \
     --vault-name hub23-keyvault \
-    --name SP-key \
-    --file .secret/key.txt
+    --name appKey \
+    --file .secret/appKey.txt
 ```
 
 Download the public SSH key:
@@ -42,6 +42,6 @@ Download the public SSH key:
 ```bash
 az keyvault secret download \
     --vault-name hub23-keyvault \
-    --name ssh-key-Hub23cluster-public \
+    --name ssh-key-hub23cluster-public \
     --file .secret/ssh-key-hub23cluster.pub
 ```

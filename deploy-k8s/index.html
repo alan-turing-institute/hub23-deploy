@@ -97,6 +97,25 @@
   </a>
   <ul class="collapse-ul">
    <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../azure-prereqs/resource-group/index.html">
+     Getting Started on Azure
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/install.html">
+       Installation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/create-resource-group.html">
+       Create the Resource Group
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="../azure-prereqs/key-vault/index.html">
      Azure Key Vault
     </a>
@@ -108,7 +127,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/create-key-vault.html">
-       Setup and Create the Key Vault
+       Create the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -118,7 +137,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/download-secrets.html">
-       Downloading Secrets
+       Downloading Secrets from the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -164,11 +183,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="setup.html">
-     Setup
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="download-secrets.html">
      Download the required secrets
     </a>
@@ -181,6 +195,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="az-aks-create.html">
      Deploy the Kubernetes cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="upgrade.html">
+     Upgrading the Kubernetes cluster
     </a>
    </li>
    <li class="toctree-l2">
@@ -342,6 +361,30 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../tearing-down/index.html">
+   Tearing Down BinderHub
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/install.html">
+     Installation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/teardown.html">
+     Tearing down your Deployment
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tearing-down/refs.html">
+     References
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
 </ul>
 
 </nav> <!-- To handle the deprecated key -->
@@ -434,14 +477,18 @@
 <p>This section covers deploying a Kubernetes cluster with Azure Kubernetes Service (AKS).
 It includes instructions for a standard cluster, or one with autoscaling or multiple nodepools enabled.
 These instructions can be combined to create a cluster with <strong>both</strong> autoscaling and multiple nodepools.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Since Hub23 now shares the same Kubernetes infrastructure as the Turing Federation BinderHub, the following docs are only here for clarity and should not be acted upon without first notifying the mybinder.org operating team and removing the Turing’s BinderHub from the Federation.</p>
+</div>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="install.html#content-k8s-install"><span class="std std-ref">Installation</span></a></p></li>
-<li><p><a class="reference internal" href="setup.html#content-k8s-setup"><span class="std std-ref">Setup</span></a></p></li>
 <li><p><a class="reference internal" href="download-secrets.html#content-k8s-download-secrets"><span class="std std-ref">Download the required secrets</span></a></p></li>
 <li><p><a class="reference internal" href="network-policies.html#content-k8s-net-pols"><span class="std std-ref">Enable Network Policies</span></a></p></li>
 <li><p><a class="reference internal" href="az-aks-create.html#content-k8s-create"><span class="std std-ref">Deploy the Kubernetes cluster</span></a></p></li>
+<li><p><a class="reference internal" href="upgrade.html#content-k8s-upgrade"><span class="std std-ref">Upgrading the Kubernetes cluster</span></a></p></li>
 <li><p><a class="reference internal" href="refs.html#content-k8s-refs"><span class="std std-ref">References</span></a></p></li>
 </ul>
 <div class="toctree-wrapper compound">

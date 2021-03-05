@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Setup &#8212; Hub23 Deployment Guide</title>
+    <title>References &#8212; Hub23 Deployment Guide</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -54,8 +54,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Download the required secrets" href="download-secrets.html" />
-    <link rel="prev" title="Installation" href="install.html" />
+    <link rel="prev" title="Tearing down your Deployment" href="teardown.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -97,6 +96,25 @@
   </a>
   <ul class="collapse-ul">
    <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="../azure-prereqs/resource-group/index.html">
+     Getting Started on Azure
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/install.html">
+       Installation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../azure-prereqs/resource-group/create-resource-group.html">
+       Create the Resource Group
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="../azure-prereqs/key-vault/index.html">
      Azure Key Vault
     </a>
@@ -108,7 +126,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/create-key-vault.html">
-       Setup and Create the Key Vault
+       Create the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -118,7 +136,7 @@
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../azure-prereqs/key-vault/download-secrets.html">
-       Downloading Secrets
+       Downloading Secrets from the Key Vault
       </a>
      </li>
      <li class="toctree-l3">
@@ -153,38 +171,38 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
- <li class="toctree-l1 current active collapsible-parent">
-  <a class="reference internal" href="index.html">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../deploy-k8s/index.html">
    Deploy a Kubernetes Cluster with AKS
   </a>
-  <ul class="current collapse-ul">
+  <ul class="collapse-ul">
    <li class="toctree-l2">
-    <a class="reference internal" href="install.html">
+    <a class="reference internal" href="../deploy-k8s/install.html">
      Installation
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Setup
-    </a>
-   </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="download-secrets.html">
+    <a class="reference internal" href="../deploy-k8s/download-secrets.html">
      Download the required secrets
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="network-policies.html">
+    <a class="reference internal" href="../deploy-k8s/network-policies.html">
      Enable Network Policies
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="az-aks-create.html">
+    <a class="reference internal" href="../deploy-k8s/az-aks-create.html">
      Deploy the Kubernetes cluster
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="refs.html">
+    <a class="reference internal" href="../deploy-k8s/upgrade.html">
+     Upgrading the Kubernetes cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../deploy-k8s/refs.html">
      References
     </a>
    </li>
@@ -342,6 +360,30 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="index.html">
+   Tearing Down BinderHub
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="install.html">
+     Installation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="teardown.html">
+     Tearing down your Deployment
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     References
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
 </ul>
 
 </nav> <!-- To handle the deprecated key -->
@@ -382,7 +424,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/deploy-k8s/setup.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/tearing-down/refs.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -407,30 +449,6 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
-        </div>
-        <nav id="bd-toc-nav">
-            <ul class="nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#login-to-azure">
-   Login to Azure
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#activate-the-subscription">
-   Activate the Subscription
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#create-a-resource-group">
-   Create a Resource Group
-  </a>
- </li>
-</ul>
-
-        </nav>
-        
         </div>
     </div>
 </div>
@@ -439,47 +457,15 @@
         
               <div>
                 
-  <div class="section" id="setup">
-<span id="content-k8s-setup"></span><h1>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="login-to-azure">
-<h2>Login to Azure<a class="headerlink" href="#login-to-azure" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az login --username YOUR_TURING_EMAIL --output none
-</pre></div>
-</div>
-<p>Login with your Turing account.</p>
-</div>
-<div class="section" id="activate-the-subscription">
-<h2>Activate the Subscription<a class="headerlink" href="#activate-the-subscription" title="Permalink to this headline">¶</a></h2>
-<p>Hub23 has its own subscription and so we have to activate that.
-To check which subscriptions you have access to, run the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az account list --refresh --output table
-</pre></div>
-</div>
-<p>You should see <code class="docutils literal notranslate"><span class="pre">Turing-BinderHub</span></code> listed as an option.
-If not, request access by opening a TopDesk ticket.</p>
-<p>To activate the subscription, run the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az account <span class="nb">set</span> --subscription Turing-BinderHub
-</pre></div>
-</div>
-</div>
-<div class="section" id="create-a-resource-group">
-<h2>Create a Resource Group<a class="headerlink" href="#create-a-resource-group" title="Permalink to this headline">¶</a></h2>
-<p>Azure groups related resources together by assigning them a Resource Group.
-We need to create one for Hub23.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az group create --name Hub23 --location westeurope --output table
-</pre></div>
-</div>
+  <div class="section" id="references">
+<span id="content-teardown-refs"></span><h1>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code> is what we’ll use to identify resources relating to the BinderHub and should be short and descriptive.
-Hence we’ve given it the same name as our hub.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--location</span></code> sets the <a class="reference external" href="https://azure.microsoft.com/en-gb/global-infrastructure/locations/">region of data centres</a> that will host the resources.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">table</span></code> prints the info in a human-readable format.</p></li>
+<li><p>Uninstalling JupyterHub</p>
+<ul>
+<li><p><a class="reference external" href="https://zero-to-jupyterhub.readthedocs.io/en/stable/jupyterhub/uninstall.html">https://zero-to-jupyterhub.readthedocs.io/en/stable/jupyterhub/uninstall.html</a></p></li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you have already followed the docs on creating a key vault, then this resource group should already exist and this step can be skipped.</p>
-</div>
-</div>
+</li>
+</ul>
 </div>
 
     <script type="text/x-thebe-config">
@@ -495,7 +481,7 @@ Hence we’ve given it the same name as our hub.</p></li>
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./deploy-k8s"
+            path: "./tearing-down"
         },
         predefinedOutput: true
     }
@@ -507,8 +493,7 @@ Hence we’ve given it the same name as our hub.</p></li>
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="install.html" title="previous page">Installation</a>
-    <a class='right-next' id="next-link" href="download-secrets.html" title="next page">Download the required secrets</a>
+    <a class='left-prev' id="prev-link" href="teardown.html" title="previous page">Tearing down your Deployment</a>
 
         </div>
         

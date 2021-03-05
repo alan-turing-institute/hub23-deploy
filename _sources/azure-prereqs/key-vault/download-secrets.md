@@ -1,5 +1,5 @@
 (content:key-vault:download-secrets)=
-# Downloading Secrets
+# Downloading Secrets from the Key Vault
 
 ## Saving secrets to files
 
@@ -14,7 +14,7 @@ Download the private key:
 ```bash
 az keyvault secret download \
     --vault-name hub23-keyvault \
-    --name ssh-key-Hub23cluster-private \
+    --name ssh-key-hub23cluster-private \
     --file .secret/ssh-key-hub23cluster
 ```
 
@@ -23,7 +23,7 @@ Download the public key:
 ```bash
 az keyvault secret download \
     --vault-name hub23-keyvault \
-    --name ssh-key-Hub23cluster-public \
+    --name ssh-key-hub23cluster-public \
     --file .secret/ssh-key-hub23cluster.pub
 ```
 
@@ -62,4 +62,6 @@ API_TOKEN=$(
 )
 ```
 
+```{note}
 Here, `tsv` stands for 'Tab Separated Variable'.
+```
