@@ -1,9 +1,6 @@
 rbac:
   enabled: true
 
-letsencrypt:
-  contactEmail: hub23registry@turing.ac.uk
-
 binderhub:
   config:
     BinderHub:
@@ -85,11 +82,3 @@ nginx-ingress:
   controller:
     config:
       proxy-body-size: 64m
-
-cert-manager:
-  webhook:
-    enabled: false
-  ingressShim:
-    defaultIssuerName: "staging"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"
