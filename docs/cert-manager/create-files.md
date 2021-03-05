@@ -9,7 +9,7 @@ The resulting file structure will look as follows:
 hub23-chart/
 |-files/
 |-templates/
-| |-clusterissuer.yaml
+| |-issuer.yaml
 | |-user-configmap.yaml
 |
 |-Chart.yaml
@@ -19,30 +19,22 @@ hub23-chart/
 
 We will have already created `Chart.yaml`, `requirements.yaml` and `values.yaml` in {ref}`content:binderhub:local-chart`.
 
-## Create `templates/cluster-issuer.yaml`
+## Create `templates/issuer.yaml`
 
 ```yaml
 ---
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Issuer
 metadata:
-  name: letsencrypt-prod
+  name: hub23-letsencrypt-prod
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
     email: hub23registry@turing.ac.uk
     privateKeySecretRef:
-      name: letsencrypt-prod
+      name: hub23-letsencrypt-prod
     solvers:
     - http01:
         ingress:
           class: nginx
-```
-
-## Create `deploy/cert-manager.yaml`
-
-```yaml
-ingressShim:
-  defaultIssuerName: letsencrypt-prod
-  defaultIssuerKind: ClusterIssuer
 ```
