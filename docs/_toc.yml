@@ -2,6 +2,10 @@ file: index
 sections:
 - file: azure-prereqs/index
   sections:
+  - file: azure-prereqs/resource-group/index
+    sections:
+    - file: azure-prereqs/resource-group/install
+    - file: azure-prereqs/resource-group/create-resource-group
   - file: azure-prereqs/key-vault/index
     sections:
     - file: azure-prereqs/key-vault/install

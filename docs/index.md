@@ -6,6 +6,7 @@ This site hosts documentation around deploying, maintaining and customising the 
 ## Table of Contents
 
 - {ref}`content:azure`
+  - {ref}`content:resource-group`
   - {ref}`content:key-vault`
   - {ref}`content:container-registry`
 - {ref}`content:k8s`

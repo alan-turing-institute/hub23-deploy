@@ -1,42 +1,12 @@
 (content:container-registry:create)=
 # Create an Azure Container Registry
 
-## Login to Azure
-
-```bash
-az login --username YOUR_TURING_EMAIL --output none
-```
-
-Login with your Turing account.
-
-## Set subscription
-
-To see a list of your subscriptions, run the following command.
-
-```bash
-az account list --refresh --output table
-```
-
-Activate the BinderHub subscription with the following command.
-
-```bash
-az account set --subscription turingmybinder
-```
-
-## Create Resource Group
-
-```bash
-az group create --name Hub23 --location westeurope
-```
-
-```{note}
-This step can be skipped if the Resource Group already exists.
-```
-
 ## Create an ACR
 
+```{note}
 The ACR name must be globally unique and consist of only lowercase alphanumeric characters, between 5 and 50 characters long.
 This can be checked using: `az acr check-name --name <ACR-NAME>`.
+```
 
 ```bash
 az acr create --name hub23registry --resource-group Hub23 --sku Standard
