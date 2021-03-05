@@ -2,6 +2,10 @@ file: index
 sections:
 - file: azure-prereqs/index
   sections:
+  - file: azure-prereqs/resource-group/index
+    sections:
+    - file: azure-prereqs/resource-group/install
+    - file: azure-prereqs/resource-group/create-resource-group
   - file: azure-prereqs/key-vault/index
     sections:
     - file: azure-prereqs/key-vault/install
@@ -16,10 +20,10 @@ sections:
 - file: deploy-k8s/index
   sections:
   - file: deploy-k8s/install
-  - file: deploy-k8s/setup
   - file: deploy-k8s/download-secrets
   - file: deploy-k8s/network-policies
   - file: deploy-k8s/az-aks-create
+  - file: deploy-k8s/upgrade
   - file: deploy-k8s/refs
 - file: setup-helm/index
   sections:
@@ -50,3 +54,8 @@ sections:
   - file: advanced/enabling-page-redirection
   - file: advanced/optimising-jupyterhub
   - file: advanced/refs
+- file: tearing-down/index
+  sections:
+  - file: tearing-down/install
+  - file: tearing-down/teardown
+  - file: tearing-down/refs

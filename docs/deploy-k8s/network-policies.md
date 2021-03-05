@@ -5,11 +5,15 @@ The BinderHub helm chart contains network policies designed to restrict access t
 However, the Kubernetes cluster will not be automatically configured to obey these network policies.
 Therefore, we need create a virtual network (vnet) and sub network (subnet) with network policies enabled so that these pod traffic restrictions are obeyed.
 
+```{warning}
+Since Hub23 now shares the same Kubernetes infrastructure as the Turing Federation BinderHub, the following docs are only here for clarity and should not be acted upon without first notifying the mybinder.org operating team and removing the Turing's BinderHub from the Federation.
+```
+
 ## Create a VNET
 
 ```bash
 az network vnet create \
-    --resource-group Hub23 \
+    --resource-group hub23 \
     --name hub23-vnet \
     --address-prefixes 10.0.0.0/8 \
     --subnet-name hub23-subnet \
@@ -26,7 +30,7 @@ This saves the VNet ID into a bash variable.
 ```bash
 VNET_ID=$(
     az network vnet show \
-    --resource-group Hub23 \
+    --resource-group hub23 \
     --name hub23-vnet \
     --query id \
     --output tsv
@@ -37,7 +41,7 @@ VNET_ID=$(
 
 ```bash
 az role assignment create \
-    --assignee $(cat .secret/appID.txt) \
+    --assignee $(cat .secret/appId.txt) \
     --scope $VNET_ID \
     --role Contributor
 ```
@@ -53,7 +57,7 @@ This will save the subnet ID to a bash variable.
 ```bash
 SUBNET_ID=$(
     az network vnet subnet show \
-    --resource-group Hub23 \
+    --resource-group hub23 \
     --vnet-name hub23-vnet \
     --name hub23-subnet \
     --query id \

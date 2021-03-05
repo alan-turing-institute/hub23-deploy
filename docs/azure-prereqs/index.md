@@ -5,5 +5,6 @@ This section covers deploying complementary Azure resources, such as Key Vault a
 
 ## Table of Contents
 
+- {ref}`content:resource-group`
 - {ref}`content:key-vault`
 - {ref}`content:container-registry`

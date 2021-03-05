@@ -1,5 +1,5 @@
-(content:k8s:setup)=
-# Setup
+(content:resource-group:create)=
+# Create the Resource Group
 
 ## Login to Azure
 
@@ -12,28 +12,29 @@ Login with your Turing account.
 ## Activate the Subscription
 
 Hub23 has its own subscription and so we have to activate that.
+
 To check which subscriptions you have access to, run the following:
 
 ```bash
 az account list --refresh --output table
 ```
 
-You should see `Turing-BinderHub` listed as an option.
+You should see `turingmybinder` listed as an option.
 If not, request access by opening a TopDesk ticket.
 
 To activate the subscription, run the following:
 
 ```bash
-az account set --subscription Turing-BinderHub
+az account set --subscription turingmybinder
 ```
 
 ## Create a Resource Group
 
-Azure groups related resources together by assigning them a Resource Group.
+Azure groups related resources together by assigning them to a Resource Group.
 We need to create one for Hub23.
 
 ```bash
-az group create --name Hub23 --location westeurope --output table
+az group create --name hub23 --location westeurope --output table
 ```
 
 - `--name` is what we'll use to identify resources relating to the BinderHub and should be short and descriptive.
@@ -42,5 +43,6 @@ az group create --name Hub23 --location westeurope --output table
 - `--output table` prints the info in a human-readable format.
 
 ```{note}
-If you have already followed the docs on creating a key vault, then this resource group should already exist and this step can be skipped.
+If the resource group already exists, this step can be skipped.
+Test if the resource group exists by running the following: `az group exists --name hub23`
 ```

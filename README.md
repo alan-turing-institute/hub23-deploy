@@ -100,7 +100,7 @@ This section uses the [Azure CLI](#pushpin-requirements).
 2. Set the Azure subscription
 
     ```bash
-    az account set --subscription Turing-BinderHub
+    az account set --subscription turingmybinder
     ```
 
 3. Connect to the cluster
