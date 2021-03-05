@@ -74,14 +74,14 @@ jobs:
         helm repo update
 
   - task: Bash@3
-    displayName: 'Stage 2 Step 7: Update local helm chart'
+    displayName: 'Stage 2 Step 5: Update local helm chart'
     inputs:
       targetType: 'inline'
       script: |
         cd $(HELM_CHART_NAME) && helm dep up && cd ..
 
   - task: HelmDeploy@0
-    displayName: 'Stage 2 Step 8: Perform helm upgrade'
+    displayName: 'Stage 2 Step 6: Perform helm upgrade'
     inputs:
       connectionType: 'Azure Resource Manager'
       azureSubscription: '$(SERVICE_CONNECTION)'
