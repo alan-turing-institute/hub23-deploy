@@ -413,34 +413,67 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#create-a-namespace-for-cert-manager">
-   Create a namespace for
+  <a class="reference internal nav-link" href="#deploying-cert-manager-into-a-namespace">
+   Deploying
    <code class="docutils literal notranslate">
     <span class="pre">
      cert-manager
     </span>
    </code>
+   into a namespace
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-a-namespace-for-cert-manager">
+     Create a namespace for
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       cert-manager
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#add-the-cert-manager-chart-repo-to-helm">
+     Add the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       cert-manager
+      </span>
+     </code>
+     chart repo to Helm
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#install-the-custom-resource-definitions">
+     Install the Custom Resource Definitions
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#install-using-helm">
+     Install using Helm
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#add-the-cert-manager-chart-repo-to-helm">
-   Add the
+  <a class="reference internal nav-link" href="#performing-a-helm-upgrade-with-the-cert-manager-configs">
+   Performing a
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     helm
+    </span>
+    <span class="pre">
+     upgrade
+    </span>
+   </code>
+   with the
    <code class="docutils literal notranslate">
     <span class="pre">
      cert-manager
     </span>
    </code>
-   chart repo to Helm
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#install-the-custom-resource-definitions">
-   Install the Custom Resource Definitions
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#install-using-helm">
-   Install using Helm
+   configs
   </a>
  </li>
 </ul>
@@ -457,33 +490,48 @@
                 
   <div class="section" id="deploying-cert-manager">
 <span id="content-cert-manager-deploy"></span><h1>Deploying <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code><a class="headerlink" href="#deploying-cert-manager" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="deploying-cert-manager-into-a-namespace">
+<h2>Deploying <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> into a namespace<a class="headerlink" href="#deploying-cert-manager-into-a-namespace" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Since Hub23 shares infrastructure with the turing.mybinder.org, this step should <strong>not</strong> be executed.
+Instead the <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> deployment should be managed from the <a class="reference external" href="https://github.com/jupyterhub/mybinder.org-deploy">mybinder.org-deploy repo</a></p>
+</div>
 <div class="section" id="create-a-namespace-for-cert-manager">
-<h2>Create a namespace for <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code><a class="headerlink" href="#create-a-namespace-for-cert-manager" title="Permalink to this headline">¶</a></h2>
+<h3>Create a namespace for <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code><a class="headerlink" href="#create-a-namespace-for-cert-manager" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl create namespace cert-manager
 </pre></div>
 </div>
 </div>
 <div class="section" id="add-the-cert-manager-chart-repo-to-helm">
-<h2>Add the <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> chart repo to Helm<a class="headerlink" href="#add-the-cert-manager-chart-repo-to-helm" title="Permalink to this headline">¶</a></h2>
+<h3>Add the <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> chart repo to Helm<a class="headerlink" href="#add-the-cert-manager-chart-repo-to-helm" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm repo add jetstack https://charts.jetstack.io
 helm repo update
 </pre></div>
 </div>
 </div>
 <div class="section" id="install-the-custom-resource-definitions">
-<h2>Install the Custom Resource Definitions<a class="headerlink" href="#install-the-custom-resource-definitions" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply --validate<span class="o">=</span><span class="nb">false</span> -f https://github.com/jetstack/cert-manager/releases/download/v1.0.3/cert-manager.crds.yaml
+<h3>Install the Custom Resource Definitions<a class="headerlink" href="#install-the-custom-resource-definitions" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v<span class="o">{</span>INSERT_VERSION_NUMBER_HERE<span class="o">}</span>/cert-manager.crds.yaml
 </pre></div>
 </div>
 </div>
 <div class="section" id="install-using-helm">
-<h2>Install using Helm<a class="headerlink" href="#install-using-helm" title="Permalink to this headline">¶</a></h2>
+<h3>Install using Helm<a class="headerlink" href="#install-using-helm" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm install cert-manager jetstack/cert-manager <span class="se">\</span>
-    --version v1.0.3 <span class="se">\</span>
+    --version VERSION <span class="se">\</span>
+    --create-namespace <span class="se">\</span>
     --namespace cert-manager <span class="se">\</span>
-    -f deploy/cert-manager.yaml
+    --timeout 5m0s <span class="se">\</span>
+    --wait
 </pre></div>
 </div>
+</div>
+</div>
+<div class="section" id="performing-a-helm-upgrade-with-the-cert-manager-configs">
+<h2>Performing a <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code> with the <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> configs<a class="headerlink" href="#performing-a-helm-upgrade-with-the-cert-manager-configs" title="Permalink to this headline">¶</a></h2>
+<p>When running <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code>, append either <code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">deploy/letsencrypt-staging.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">deploy/letsencrypt-prod.yaml</span></code> to the command to enable the annotations in the cluster.
+Using the <code class="docutils literal notranslate"><span class="pre">staging</span></code> config will allow you to test that <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> is installed and working correctly, whereas the <code class="docutils literal notranslate"><span class="pre">prod</span></code> config will actually request certificates for your domain.</p>
 </div>
 </div>
 

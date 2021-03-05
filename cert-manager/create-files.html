@@ -413,24 +413,50 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#create-templates-cluster-issuer-yaml">
+  <a class="reference internal nav-link" href="#create-templates-issuer-yaml">
    Create
    <code class="docutils literal notranslate">
     <span class="pre">
-     templates/cluster-issuer.yaml
+     templates/issuer.yaml
     </span>
    </code>
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#create-deploy-cert-manager-yaml">
+  <a class="reference internal nav-link" href="#create-deploy-letsencrypt-staging-yaml-and-deploy-letsencrypt-prod-yaml">
    Create
    <code class="docutils literal notranslate">
     <span class="pre">
-     deploy/cert-manager.yaml
+     deploy/letsencrypt-staging.yaml
+    </span>
+   </code>
+   and
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     deploy/letsencrypt-prod.yaml
     </span>
    </code>
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deploy-letsencrypt-staging-yaml">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       deploy/letsencrypt-staging.yaml
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deploy-letsencrypt-prod-yaml">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       deploy/letsencrypt-prod.yaml
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -448,31 +474,49 @@
 <span id="content-cert-manager-create-files"></span><h1>Creating files<a class="headerlink" href="#creating-files" title="Permalink to this headline">¶</a></h1>
 <p>Some extra files are required which we will outline below.</p>
 <p>The resulting file structure will look as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hub23-chart/
-<span class="p">|</span>-files/
-<span class="p">|</span>-templates/
-<span class="p">|</span> <span class="p">|</span>-clusterissuer.yaml
-<span class="p">|</span> <span class="p">|</span>-user-configmap.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="p">|</span>-deploy/
+<span class="p">|</span> <span class="p">|</span>-letsencrypt-staging.yaml
+<span class="p">|</span> <span class="p">|</span>-letsencrypt-prod.yaml
 <span class="p">|</span>
-<span class="p">|</span>-Chart.yaml
-<span class="p">|</span>-requirements.yaml
-<span class="p">|</span>-values.yaml
+<span class="p">|</span>-hub23-chart/
+<span class="p">|</span> <span class="p">|</span>-files/
+<span class="p">|</span> <span class="p">|</span>-templates/
+<span class="p">|</span> <span class="p">|</span> <span class="p">|</span>-issuer.yaml
+<span class="p">|</span> <span class="p">|</span> <span class="p">|</span>-user-configmap.yaml
+<span class="p">|</span> <span class="p">|</span>-Chart.yaml
+<span class="p">|</span> <span class="p">|</span>-requirements.yaml
+<span class="p">|</span> <span class="p">|</span>-values.yaml
 </pre></div>
 </div>
 <p>We will have already created <code class="docutils literal notranslate"><span class="pre">Chart.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">requirements.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> in <a class="reference internal" href="../binderhub/installing-binderhub-local-helm-chart.html#content-binderhub-local-chart"><span class="std std-ref">Installing BinderHub with a Local Helm Chart</span></a>.</p>
-<div class="section" id="create-templates-cluster-issuer-yaml">
-<h2>Create <code class="docutils literal notranslate"><span class="pre">templates/cluster-issuer.yaml</span></code><a class="headerlink" href="#create-templates-cluster-issuer-yaml" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="create-templates-issuer-yaml">
+<h2>Create <code class="docutils literal notranslate"><span class="pre">templates/issuer.yaml</span></code><a class="headerlink" href="#create-templates-issuer-yaml" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cert-manager.io/v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ClusterIssuer</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Issuer</span>
 <span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">letsencrypt-prod</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hub23-letsencrypt-staging</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">acme</span><span class="p">:</span>
+    <span class="nt">server</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://acme-staging-v02.api.letsencrypt.org/directory</span>
+    <span class="nt">email</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hub23registry@turing.ac.uk</span>
+    <span class="nt">privateKeySecretRef</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hub23-letsencrypt-staging</span>
+    <span class="nt">solvers</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">http01</span><span class="p">:</span>
+        <span class="nt">ingress</span><span class="p">:</span>
+          <span class="nt">class</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cert-manager.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Issuer</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hub23-letsencrypt-prod</span>
 <span class="nt">spec</span><span class="p">:</span>
   <span class="nt">acme</span><span class="p">:</span>
     <span class="nt">server</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://acme-v02.api.letsencrypt.org/directory</span>
     <span class="nt">email</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hub23registry@turing.ac.uk</span>
     <span class="nt">privateKeySecretRef</span><span class="p">:</span>
-      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">letsencrypt-prod</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hub23-letsencrypt-prod</span>
     <span class="nt">solvers</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="nt">http01</span><span class="p">:</span>
         <span class="nt">ingress</span><span class="p">:</span>
@@ -480,12 +524,35 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="create-deploy-cert-manager-yaml">
-<h2>Create <code class="docutils literal notranslate"><span class="pre">deploy/cert-manager.yaml</span></code><a class="headerlink" href="#create-deploy-cert-manager-yaml" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ingressShim</span><span class="p">:</span>
-  <span class="nt">defaultIssuerName</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">letsencrypt-prod</span>
-  <span class="nt">defaultIssuerKind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ClusterIssuer</span>
+<div class="section" id="create-deploy-letsencrypt-staging-yaml-and-deploy-letsencrypt-prod-yaml">
+<h2>Create <code class="docutils literal notranslate"><span class="pre">deploy/letsencrypt-staging.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">deploy/letsencrypt-prod.yaml</span></code><a class="headerlink" href="#create-deploy-letsencrypt-staging-yaml-and-deploy-letsencrypt-prod-yaml" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="deploy-letsencrypt-staging-yaml">
+<h3><code class="docutils literal notranslate"><span class="pre">deploy/letsencrypt-staging.yaml</span></code><a class="headerlink" href="#deploy-letsencrypt-staging-yaml" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">binderhub</span><span class="p">:</span>
+  <span class="nt">ingress</span><span class="p">:</span>
+    <span class="nt">annotations</span><span class="p">:</span>
+      <span class="nt">cert-manager.io/issuer</span><span class="p">:</span> <span class="s">&quot;hub23-letsencrypt-staging&quot;</span>
+
+  <span class="nt">jupyterhub</span><span class="p">:</span>
+    <span class="nt">ingress</span><span class="p">:</span>
+      <span class="nt">annotations</span><span class="p">:</span>
+        <span class="nt">cert-manager.io/issuer</span><span class="p">:</span> <span class="s">&quot;hub23-letsencrypt-staging&quot;</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="deploy-letsencrypt-prod-yaml">
+<h3><code class="docutils literal notranslate"><span class="pre">deploy/letsencrypt-prod.yaml</span></code><a class="headerlink" href="#deploy-letsencrypt-prod-yaml" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">binderhub</span><span class="p">:</span>
+  <span class="nt">ingress</span><span class="p">:</span>
+    <span class="nt">annotations</span><span class="p">:</span>
+      <span class="nt">cert-manager.io/issuer</span><span class="p">:</span> <span class="s">&quot;hub23-letsencrypt-prod&quot;</span>
+
+  <span class="nt">jupyterhub</span><span class="p">:</span>
+    <span class="nt">ingress</span><span class="p">:</span>
+      <span class="nt">annotations</span><span class="p">:</span>
+        <span class="nt">cert-manager.io/issuer</span><span class="p">:</span> <span class="s">&quot;hub23-letsencrypt-prod&quot;</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
