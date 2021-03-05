@@ -9,7 +9,7 @@ This can be checked using: `az acr check-name --name <ACR-NAME>`.
 ```
 
 ```bash
-az acr create --name hub23registry --resource-group Hub23 --sku Standard
+az acr create --name hub23registry --resource-group hub23 --sku Standard
 ```
 
 ## Login to the ACR
@@ -36,14 +36,12 @@ The Service Principal needs an AcrPush role so that it is permitted to both push
 Without this, BinderHub won't be able to store the images it generates.
 
 ```{warning}
-You will only have permission to perform this step if you are an owner on the turingmybinder Azure subscription.
+You will only have permission to perform this step if you are an owner on the `turingmybinder` Azure subscription.
 Otherwise, you should ask IT to assign this role to the Service Principal.
 ```
 
-```bash
-# First download the Service Principal Client ID
-az key-vault secret download --vault-name hub23-keyvault --name SP-appID --file .secret/sp-appID.txt
+See the {ref}`content:key-vault:service-principals` section for instructions on how to download the Service Principal app ID to a file from the Key Vault.
 
-# Then create the AcrPush role
-az role assignment create --assignee $(cat .secret/sp-appID.txt) --scope $ACR_ID --role AcrPush
+```bash
+az role assignment create --assignee $(cat .secret/appId.txt) --scope ${ACR_ID} --role AcrPush
 ```
