@@ -6,8 +6,7 @@ A repository to manage the private Turing BinderHub instance, Hub23.
 | --- | --- |
 | :money_with_wings: Subscription | [![Build Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Azure%20Subscription%20Status?branchName=main)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=5&branchName=main) |
 | :rocket: Deployment | [![Deploy Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Deploy%20upgrade%20to%20Hub23?branchName=main)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=1&branchName=main) |
-| :wheel_of_dharma: Helm Chart | [![Lint Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Lint%20and%20Validate%20Helm%20Chart?branchName=main)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=4&branchName=main) |
-| :snake: Python Scripts | [![Lint and Format Python files](https://github.com/alan-turing-institute/hub23-deploy/workflows/Lint%20and%20Format%20Python%20files/badge.svg)](https://github.com/alan-turing-institute/hub23-deploy/actions?query=workflow%3A%22Lint+and+Format+Python+files%22+branch%3Amain) |
+| :broom: Linting and Formatting | [![Lint and Format](https://github.com/alan-turing-institute/hub23-deploy/actions/workflows/lint-format.yml/badge.svg)](https://github.com/alan-turing-institute/hub23-deploy/actions/workflows/lint-format.yml) |
 | :notebook: Docs | [![Build and Publish JupyterBook Docs](https://github.com/alan-turing-institute/hub23-deploy/workflows/Build%20and%20Publish%20JupyterBook%20Docs/badge.svg)](https://github.com/alan-turing-institute/hub23-deploy/actions?query=workflow%3A%22Build+and+Publish+JupyterBook+Docs%22+branch%3Amain) |
 
 **Table of Contents:**
@@ -21,7 +20,6 @@ A repository to manage the private Turing BinderHub instance, Hub23.
   - [:electric_plug: Connect to Kubernetes](#electric_plug-connect-to-kubernetes)
 - [:computer: Code Snippets](#computer-code-snippets)
   - [:dizzy: Restarting the JupyterHub](#dizzy-restarting-the-jupyterhub)
-  - [:leftwards_arrow_with_hook: Pre-Commit Hook](#leftwards_arrow_with_hook-pre-commit-hook)
   - [:money_with_wings: Billing](#money_with_wings-billing)
 - [:books: Documentation](#books-documentation)
 
@@ -137,22 +135,6 @@ Scale the Hub back up:
 ```bash
 kubectl --namespace hub23scale deployment hub --replicas=1
 ```
-
-### :leftwards_arrow_with_hook: Pre-Commit Hook
-
-If modifying the Python scripts, you can install a git pre-commit hook to ensure the files conform to PEP8 standards.
-
-To install the pre-commit hook, do the following:
-
-```bash
-# Install the development requirements
-pip install -r dev-requirements.txt
-
-# Install the pre-commit configuration
-pre-commit install
-```
-
-[Black](https://github.com/psf/black) and [Flake8](http://flake8.pycqa.org/en/latest/) will then be applied to every commit effecting Python files.
 
 ### :money_with_wings: Billing
 
