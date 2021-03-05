@@ -133,7 +133,7 @@ Use `kubectl --namespace hub23 get pods` to check its status.
 Scale the Hub back up:
 
 ```bash
-kubectl --namespace hub23scale deployment hub --replicas=1
+kubectl --namespace hub23 scale deployment hub --replicas=1
 ```
 
 ### :money_with_wings: Billing
