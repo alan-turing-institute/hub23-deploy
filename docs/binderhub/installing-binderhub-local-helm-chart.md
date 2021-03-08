@@ -115,7 +115,7 @@ binderhub:
       secretToken: "{secretToken}"
 ```
 
-`sed` commands or the [`hub-manager` CLI](https://github.com/alan-turing-institute/hub23-deploy/blob/main/cli-tool/hub_manager/README.md) can be used to populate this template and save it to `.secret/`.
+`sed` commands can be used to populate this template and save it to `.secret/`.
 
 ## Installing `hub23-chart`
 
