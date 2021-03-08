@@ -82,7 +82,7 @@ These templates extend the [BinderHub web framework](https://github.com/jupyterh
 ### :recycle: Continuous Deployment
 
 This repository uses an [Azure Pipeline](https://docs.microsoft.com/en-gb/azure/devops/pipelines/?view=azure-devops) to keep the Hub23 deployment up-to-date with the main branch of this repository.
-Any push to the master branch (such as merging a Pull Request) will [trigger the pipeline and upgrade the deployment](.az-pipelines/cd-pipeline.yml) with any changes implemented in the Helm chart.
+Any push to the main branch (such as merging a Pull Request) will [trigger the pipeline and upgrade the deployment](.az-pipelines/cd-pipeline.yml) with any changes implemented in the Helm chart.
 
 :rotating_light: It is therefore strongly recommended that developers avoid manually upgrading the deployment.
 Instead, please use a Pull Request that can be reverted if needed.
@@ -114,8 +114,6 @@ These are then rendered using [Jupyter Book](https://jupyterbook.org) and [GitHu
 
 ### :sparkles: Extras
 
-- **CLI tool:** There is a command line interface tool called [`hub-manager`](./cli-tool) that can make interacting with Hub23 easier.
-  Please read the [README](cli-tool/README.md).
 - **Billing:** There is a Python script under [`billing`](./billing) that helps calculate running costs for the deployment.
   If the subscription runs out of funds, a [request for more credits](https://turingcomplete.topdesk.net/tas/public/ssp/content/serviceflow?unid=b6672711a411404482aedce2fcc981be&openedFromService=true) should be filed on Turing Complete (TopDesk).
 

@@ -115,7 +115,7 @@ binderhub:
       secretToken: "{secretToken}"
 ```
 
-`sed` commands or the [`hub-manager` CLI](https://github.com/alan-turing-institute/hub23-deploy/blob/master/cli-tool/hub_manager/README.md) can be used to populate this template and save it to `.secret/`.
+`sed` commands can be used to populate this template and save it to `.secret/`.
 
 ## Installing `hub23-chart`
 
@@ -134,6 +134,7 @@ helm install ./hub23-chart \
     --create-namespace \
     -f deploy/prod.yaml \
     -f .secret/prod.yaml \
+    -f deploy/letsencrypt-{ staging | prod }.yaml \
     --cleanup-on-fail
 ```
 
@@ -151,5 +152,6 @@ cd hub23-chart && helm dependency update && cd ..
 helm upgrade hub23 ./hub23-chart \
     -f deploy/prod.yaml \
     -f .secret/prod.yaml \
+    -f deploy/letsencrypt-{ staging | prod }.yaml \
     --cleanup-on-fail
 ```
