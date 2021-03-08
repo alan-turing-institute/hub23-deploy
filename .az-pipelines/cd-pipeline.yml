@@ -26,17 +26,8 @@ jobs:
     inputs:
       kubectlVersion: $(KUBERNETES_VERSION)
 
-  - task: AzureCLI@2
-    displayName: 'Stage 1 Step 2: Merge kubectl config'
-    inputs:
-      azureSubscription: $(SERVICE_CONNECTION)
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        'az aks get-credentials -n $(KUBERNETES_CLUSTER_NAME) -g $(CLUSTER_RESOURCE_GROUP_NAME)'
-
   - task: HelmInstaller@1
-    displayName: 'Stage 1 Step 3: Install helm'
+    displayName: 'Stage 1 Step 2: Install helm'
     inputs:
       helmVersionToInstall: $(HELM_VERSION)
 
@@ -67,7 +58,7 @@ jobs:
       script: |
         sed -e "s/{binderhub_access_token}/$(binderhub-access-token)/" \
         -e "s/{username}/$(appId)/" \
-        -e "s/{password}/$(appKey)/" \
+        -e "s@{password}@$(appKey)@" \
         -e "s/{apiToken}/$(apiToken)/" \
         -e "s/{secretToken}/$(secretToken)/" \
         -e "s/{github_client_id}/$(github-client-id)/" \
