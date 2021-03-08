@@ -21,8 +21,7 @@ binderhub:
           client_id: "{github_client_id}"
           client_secret: "{github_client_secret}"
         JupyterHub:
-          admin_access:
-            - "sgibson91"
+          admin_access: true
 
     proxy:
       secretToken: "{secretToken}"
