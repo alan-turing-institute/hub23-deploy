@@ -51,7 +51,7 @@ If changes are made during development, make sure that:
 
 - the new format is reflected in [`deploy/prod-template.yaml`](deploy/prod-template.yaml) and any new secrets/tokens/passwords are redacted;
 - new secrets/tokens/passwords are added to the Azure Key Vault (see the [Key Vault docs](https://alan-turing-institute.github.io/hub23-deploy/azure-keyvault/)); and
-- [`.az-pipelines/cd-pipeline.yml`](.az-pipelines/cd-pipeline.yml) and [`cli-tool/hub_manager/hub_manager.py`](cli-tool/hub_manager/hub_manager.py) are updated in order to populate the template with the appropriate information.
+- [`.az-pipelines/cd-pipeline.yml`](.az-pipelines/cd-pipeline.yml) is updated in order to populate the template with the appropriate information.
 
 This will ensure that the Hub23 deployment is kept up-to-date with the repo, and a future developer (someone else or future-you!) can recreate the configuration files for Hub23.
 

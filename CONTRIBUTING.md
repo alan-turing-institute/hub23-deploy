@@ -114,8 +114,6 @@ These are then rendered using [Jupyter Book](https://jupyterbook.org) and [GitHu
 
 ### :sparkles: Extras
 
-- **CLI tool:** There is a command line interface tool called [`hub-manager`](./cli-tool) that can make interacting with Hub23 easier.
-  Please read the [README](cli-tool/README.md).
 - **Billing:** There is a Python script under [`billing`](./billing) that helps calculate running costs for the deployment.
   If the subscription runs out of funds, a [request for more credits](https://turingcomplete.topdesk.net/tas/public/ssp/content/serviceflow?unid=b6672711a411404482aedce2fcc981be&openedFromService=true) should be filed on Turing Complete (TopDesk).
 
