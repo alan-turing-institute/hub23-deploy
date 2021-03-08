@@ -26,17 +26,8 @@ jobs:
     inputs:
       kubectlVersion: $(KUBERNETES_VERSION)
 
-  # - task: AzureCLI@2
-  #   displayName: 'Stage 1 Step 2: Merge kubectl config'
-  #   inputs:
-  #     azureSubscription: $(SERVICE_CONNECTION)
-  #     scriptType: 'bash'
-  #     scriptLocation: 'inlineScript'
-  #     inlineScript: |
-  #       'az aks get-credentials --name $(KUBERNETES_CLUSTER_NAME) --resource-group $(CLUSTER_RESOURCE_GROUP_NAME)'
-
   - task: HelmInstaller@1
-    displayName: 'Stage 1 Step 3: Install helm'
+    displayName: 'Stage 1 Step 2: Install helm'
     inputs:
       helmVersionToInstall: $(HELM_VERSION)
 
