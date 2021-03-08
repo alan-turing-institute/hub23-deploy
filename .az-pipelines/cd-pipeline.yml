@@ -58,7 +58,7 @@ jobs:
       script: |
         sed -e "s/{binderhub_access_token}/$(binderhub-access-token)/" \
         -e "s/{username}/$(appId)/" \
-        -e "s/{password}/$(appKey)/" \
+        -e "s@{password}@$(appKey)@" \
         -e "s/{apiToken}/$(apiToken)/" \
         -e "s/{secretToken}/$(secretToken)/" \
         -e "s/{github_client_id}/$(github-client-id)/" \
