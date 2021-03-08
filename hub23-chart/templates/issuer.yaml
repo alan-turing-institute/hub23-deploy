@@ -1,5 +1,5 @@
 ---
-apiVersion: cert-manager.io/v1
+apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: hub23-letsencrypt-staging
@@ -14,7 +14,7 @@ spec:
         ingress:
           class: nginx
 ---
-apiVersion: cert-manager.io/v1
+apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: hub23-letsencrypt-prod
