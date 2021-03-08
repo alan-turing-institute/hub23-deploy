@@ -7,14 +7,16 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+  cluster_resource_group_name: 'binder-prod'
+  service_connection: 'deploy-scn'
+
   helm_chart_name: 'hub23-chart'
   helm_release_name: 'hub23'
   helm_version: '3.3.4'
-  kubernetes_cluster_name: 'hub23cluster'
+
+  kubernetes_cluster_name: 'turing'
   kubernetes_namespace: 'hub23'
-  kubernetes_version: '1.18.1'
-  resource_group_name: 'Hub23'
-  service_connection: 'hub23-deploy-scn'
+  kubernetes_version: '1.18.14'
 
 jobs:
 - job: DeployUpgradetoHub23
@@ -24,13 +26,14 @@ jobs:
     inputs:
       kubectlVersion: $(KUBERNETES_VERSION)
 
-  - task: AzureCLI@1
+  - task: AzureCLI@2
     displayName: 'Stage 1 Step 2: Merge kubectl config'
     inputs:
       azureSubscription: $(SERVICE_CONNECTION)
+      scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        az aks get-credentials -n $(KUBERNETES_CLUSTER_NAME) -g $(RESOURCE_GROUP_NAME)
+        'az aks get-credentials -n $(KUBERNETES_CLUSTER_NAME) -g $(CLUSTER_RESOURCE_GROUP_NAME)'
 
   - task: HelmInstaller@1
     displayName: 'Stage 1 Step 3: Install helm'
@@ -38,11 +41,18 @@ jobs:
       helmVersionToInstall: $(HELM_VERSION)
 
   - task: AzureKeyVault@1
-    displayName: 'Stage 2 Step 1: Pull Key Vault Secrets'
+    displayName: 'Stage 2 Step 1a: Pull Key Vault Secrets - Hub23'
     inputs:
       azureSubscription: $(SERVICE_CONNECTION)
       KeyVaultName: 'hub23-keyvault'
-      SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, SP-appID, SP-key, binderhub-access-token'
+      SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, binderhub-access-token'
+
+  - task: AzureKeyVault@1
+    displayName: 'Stage 2 Step 1b: Pull Key Vault Secrets - turingmybinder'
+    inputs:
+      azureSubscription: $(SERVICE_CONNECTION)
+      KeyVaultName: 'turingmybinderkeyvault'
+      SecretsFilter: 'appId, appKey'
 
   - task: Bash@3
     displayName: 'Stage 2 Step 2: Make .secret folder'
@@ -56,8 +66,8 @@ jobs:
       targetType: 'inline'
       script: |
         sed -e "s/{binderhub_access_token}/$(binderhub-access-token)/" \
-        -e "s/{username}/$(SP-appID)/" \
-        -e "s/{password}/$(SP-key)/" \
+        -e "s/{username}/$(appId)/" \
+        -e "s/{password}/$(appKey)/" \
         -e "s/{apiToken}/$(apiToken)/" \
         -e "s/{secretToken}/$(secretToken)/" \
         -e "s/{github_client_id}/$(github-client-id)/" \
@@ -85,11 +95,12 @@ jobs:
     inputs:
       connectionType: 'Azure Resource Manager'
       azureSubscription: '$(SERVICE_CONNECTION)'
-      azureResourceGroup: '$(RESOURCE_GROUP_NAME)'
+      azureResourceGroup: '$(CLUSTER_RESOURCE_GROUP_NAME)'
       kubernetesCluster: '$(KUBERNETES_CLUSTER_NAME)'
+      useClusterAdmin: true
       namespace: '$(KUBERNETES_NAMESPACE)'
       command: 'upgrade'
       chartType: 'FilePath'
       chartPath: '$(HELM_CHART_NAME)'
       releaseName: '$(HELM_RELEASE_NAME)'
-      arguments: '-f deploy/prod.yaml -f .secret/prod.yaml --timeout 10m0s --cleanup-on-fail --create-namespace'
+      arguments: '-f deploy/prod.yaml -f .secret/prod.yaml -f deploy/letsencrypt-prod.yaml --timeout 30m0s --wait --cleanup-on-fail --create-namespace'
