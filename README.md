@@ -106,7 +106,7 @@ This section uses the [Azure CLI](#pushpin-requirements).
 3. Connect to the cluster
 
     ```bash
-    az aks get-credentials --name hub23cluster --resource-group Hub23
+    az aks get-credentials --name turing --resource-group binder-prod
     ```
 
 ## :computer: Code Snippets
