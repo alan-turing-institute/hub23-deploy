@@ -1,9 +1,0 @@
-binderhub:
-  ingress:
-    annotations:
-      cert-manager.io/issuer: "hub23-letsencrypt-staging"
-
-  jupyterhub:
-    ingress:
-      annotations:
-        cert-manager.io/issuer: "hub23-letsencrypt-staging"
