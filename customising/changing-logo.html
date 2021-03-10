@@ -26,7 +26,7 @@
 
     
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.37f24b989f4638ff9c27c22dc7559d4f.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.c441f2ba0852f4cabcb80105e3a46ae6.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -451,7 +451,8 @@
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
         <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
+            <i class="fas fa-list"></i>
+            Contents
         </div>
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
@@ -511,19 +512,32 @@
                 
   <div class="section" id="changing-the-logo-on-the-binder-page">
 <span id="content-customising-logo"></span><h1>Changing the logo on the Binder page<a class="headerlink" href="#changing-the-logo-on-the-binder-page" title="Permalink to this headline">¶</a></h1>
-<p>The html content must be publicly hosted so the repo must remain public.</p>
+<p>The html content must be publicly hosted so the repo must remain public.
+Also, to reduce the size of the container when it is cloned, the <code class="docutils literal notranslate"><span class="pre">static</span></code> and <code class="docutils literal notranslate"><span class="pre">templates</span></code> directories are hosted on the separate branch <a class="reference external" href="https://github.com/alan-turing-institute/hub23-deploy/tree/html-templates"><code class="docutils literal notranslate"><span class="pre">html-templates</span></code></a>.</p>
 <div class="section" id="add-the-logo-image-file-to-the-static-folder">
 <h2>Add the logo image file to the <code class="docutils literal notranslate"><span class="pre">static</span></code> folder<a class="headerlink" href="#add-the-logo-image-file-to-the-static-folder" title="Permalink to this headline">¶</a></h2>
 <p>This can be any valid image file.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Remember to checkout the <code class="docutils literal notranslate"><span class="pre">html-templates</span></code> branch first!</p>
+</div>
 </div>
 <div class="section" id="extend-templates-page-html">
 <h2>Extend <code class="docutils literal notranslate"><span class="pre">templates/page.html</span></code><a class="headerlink" href="#extend-templates-page-html" title="Permalink to this headline">¶</a></h2>
 <p>In <code class="docutils literal notranslate"><span class="pre">templates/page.html</span></code>, change the name of the image to match that of your chosen file.</p>
 <p>The line should look as follows.</p>
 <script src="https://gist.github.com/sgibson91/c2201608c3d1ecb40a891a8b921c3a9b.js"></script>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Remember to checkout the <code class="docutils literal notranslate"><span class="pre">html-templates</span></code> branch first!</p>
+</div>
 </div>
 <div class="section" id="update-deploy-config-yaml-or-deploy-prod-yaml">
 <h2>Update <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code><a class="headerlink" href="#update-deploy-config-yaml-or-deploy-prod-yaml" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This change should be made to the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch!</p>
+</div>
 <p>Add the following to your config file.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
   <span class="nt">BinderHub</span><span class="p">:</span>
@@ -539,7 +553,7 @@
     <span class="nt">args</span><span class="p">:</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">clone</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--single-branch</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--branch=main</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--branch=html-templates</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--depth=1</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--</span>
       <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/alan-turing-institute/hub23-deploy</span>
@@ -556,10 +570,6 @@
   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">custom-templates</span>
     <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/binderhub/custom</span>
 </pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you are testing the logo on a branch of this repo, you will need to update the <code class="docutils literal notranslate"><span class="pre">--branch</span></code> argument to match.</p>
 </div>
 </div>
 <div class="section" id="upgrade-the-binderhub-deployment-and-visit-the-binder-page">
