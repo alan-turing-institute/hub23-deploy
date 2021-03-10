@@ -16,43 +16,37 @@ variables:
 
   kubernetes_cluster_name: 'turing'
   kubernetes_namespace: 'hub23'
-  kubernetes_version: '1.18.14'
 
 jobs:
 - job: DeployUpgradetoHub23
   steps:
-  - task: KubectlInstaller@0
-    displayName: 'Stage 1 Step 1: Install kubectl'
-    inputs:
-      kubectlVersion: $(KUBERNETES_VERSION)
-
   - task: HelmInstaller@1
-    displayName: 'Stage 1 Step 2: Install helm'
+    displayName: 'Step 1: Install helm'
     inputs:
       helmVersionToInstall: $(HELM_VERSION)
 
   - task: AzureKeyVault@1
-    displayName: 'Stage 2 Step 1a: Pull Key Vault Secrets - Hub23'
+    displayName: 'Step 2a: Pull Key Vault Secrets - Hub23'
     inputs:
       azureSubscription: $(SERVICE_CONNECTION)
       KeyVaultName: 'hub23-keyvault'
       SecretsFilter: 'apiToken, secretToken, github-client-id, github-client-secret, binderhub-access-token'
 
   - task: AzureKeyVault@1
-    displayName: 'Stage 2 Step 1b: Pull Key Vault Secrets - turingmybinder'
+    displayName: 'Step 2b: Pull Key Vault Secrets - turingmybinder'
     inputs:
       azureSubscription: $(SERVICE_CONNECTION)
       KeyVaultName: 'turingmybinderkeyvault'
       SecretsFilter: 'appId, appKey'
 
   - task: Bash@3
-    displayName: 'Stage 2 Step 2: Make .secret folder'
+    displayName: 'Step 3: Make .secret folder'
     inputs:
       targetType: 'inline'
       script: 'mkdir -p .secret'
 
   - task: Bash@3
-    displayName: "Stage 2 Step 3: Generate .secret/prod.yaml"
+    displayName: "Step 4: Generate .secret/prod.yaml"
     inputs:
       targetType: 'inline'
       script: |
@@ -66,7 +60,7 @@ jobs:
         deploy/prod-template.yaml > .secret/prod.yaml
 
   - task: Bash@3
-    displayName: 'Stage 2 Step 4: Add helm chart repos'
+    displayName: 'Step 5: Add helm chart repos'
     inputs:
       targetType: 'inline'
       script: |
@@ -75,14 +69,14 @@ jobs:
         helm repo update
 
   - task: Bash@3
-    displayName: 'Stage 2 Step 5: Update local helm chart'
+    displayName: 'Step 6: Update local helm chart'
     inputs:
       targetType: 'inline'
       script: |
         cd $(HELM_CHART_NAME) && helm dep up && cd ..
 
   - task: HelmDeploy@0
-    displayName: 'Stage 2 Step 6: Perform helm upgrade'
+    displayName: 'Step 7: Perform helm upgrade'
     inputs:
       connectionType: 'Azure Resource Manager'
       azureSubscription: '$(SERVICE_CONNECTION)'
