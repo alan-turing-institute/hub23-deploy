@@ -61,7 +61,7 @@ binderhub:
       args:
         - clone
         - --single-branch
-        - --branch=main
+        - --branch=html-templates
         - --depth=1
         - --
         - https://github.com/alan-turing-institute/hub23-deploy
