@@ -1,7 +1,7 @@
 dependencies:
 - name: binderhub
   repository: https://jupyterhub.github.io/helm-chart
-  version: 0.2.0-n525.h7fc6e48
+  version: 0.2.0-n528.h3aa7cd9
 - name: ingress-nginx
   repository: https://kubernetes.github.io/ingress-nginx
   version: 3.24.0
