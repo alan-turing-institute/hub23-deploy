@@ -88,4 +88,4 @@ jobs:
       chartType: 'FilePath'
       chartPath: '$(HELM_CHART_NAME)'
       releaseName: '$(HELM_RELEASE_NAME)'
-      arguments: '-f deploy/prod.yaml -f .secret/prod.yaml -f deploy/letsencrypt-prod.yaml --timeout 30m0s --wait --cleanup-on-fail --create-namespace'
+      arguments: '-f deploy/prod.yaml -f .secret/prod.yaml -f deploy/letsencrypt-prod.yaml --timeout 30m0s --cleanup-on-fail --create-namespace'
