@@ -82,3 +82,5 @@ nginx-ingress:
   controller:
     config:
       proxy-body-size: 64m
+    scope:
+      enabled: true
