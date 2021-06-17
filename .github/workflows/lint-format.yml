@@ -69,7 +69,7 @@ jobs:
             helmv3 repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
             helmv3 repo update
             echo "#### Setup: Update local chart"
-            cd hub23-chart && helm dep up && cd ..
+            cd hub23-chart && helmv3 dep up && cd ..
             echo "#### TEST 1: Run helm lint"
             helmv3 lint hub23-chart \
               -f hub23-chart/values.yaml \
