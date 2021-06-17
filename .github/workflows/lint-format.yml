@@ -63,7 +63,6 @@ jobs:
         uses: stefanprodan/kube-tools@v1.5.0
         with:
           helmv3: 3.5.2
-          kubeval: 0.15.0
           command: |
             echo "#### Setup: Add helm charts"
             helmv3 repo add jupyterhub https://jupyterhub.github.io/helm-chart
