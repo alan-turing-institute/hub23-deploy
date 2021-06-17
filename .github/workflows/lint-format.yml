@@ -83,4 +83,4 @@ jobs:
               -f deploy/test-values.yaml \
               --debug | kubeval \
               --kubernetes-version 1.18.1 \
-              --ignore-missing-schema
+              --ignore-missing-schemas
