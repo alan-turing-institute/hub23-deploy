@@ -52,6 +52,7 @@ jobs:
           flake8 --ignore=E501,W503,F821 .
 
   lint-validate-helm-chart:
+    if: github.respository_owner == 'alan-turing-institute'
     runs-on: ubuntu-latest
 
     steps:
@@ -104,3 +105,59 @@ jobs:
           version: 1.18.1
           ignore_missing_schemas: true
           github_token: "${{ secrets.GITHUB_TOKEN }}"
+
+  lint-validate-helm-chart-fork:
+    if: github.respository_owner != 'alan-turing-institute'
+    environment: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: 'v3.5.2'
+
+      - name: Add helm charts
+        run: |
+          helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          helm repo update
+
+      - name: Update local chart
+        working-directory: hub23-chart
+        run: |
+          helm dep up
+
+      - name: Run helm lint
+        run: |
+          helm lint hub23-chart \
+            -f hub23-chart/values.yaml \
+            -f deploy/prod.yaml \
+            -f deploy/test-values.yaml \
+            --debug
+
+      - name: Run helm template
+        run: |
+          mkdir rendered_templates
+          helm template hub23-chart \
+            -f hub23-chart/values.yaml \
+            -f deploy/prod.yaml \
+            -f deploy/test-values.yaml \
+            --output-dir rendered_templates \
+            --debug
+
+      # - name: Run yamllint
+      #   uses: bewuethr/yamllint-action@v1
+      #   with:
+      #     config-file: yamllint-config.yaml
+
+      - name: Run kubeval
+        uses: brpaz/gh-action-kubeval@v1.0.1
+        with:
+          files: ./rendered_templates
+          version: 1.18.1
+          ignore_missing_schemas: true
+          github_token: "${{ secrets.SECRET_TOKEN }}"
