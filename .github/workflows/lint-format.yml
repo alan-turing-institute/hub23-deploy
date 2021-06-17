@@ -77,15 +77,11 @@ jobs:
               -f deploy/prod.yaml \
               -f deploy/test-values.yaml \
               --debug
-            echo "#### Setup: Run helm template"
+            echo "#### TEST 2: Run helm template and pipe to kubeval"
             helmv3 template hub23-chart \
               -f hub23-chart/values.yaml \
               -f deploy/prod.yaml \
               -f deploy/test-values.yaml \
-              --output-dir rendered_templates \
-              --debug
-            echo "#### TEST 2: Run kubeval"
-            kubeval \
-              --directories ./rendered_templates \
+              --debug | kubeval \
               --kubernetes-version 1.18.1 \
               --ignore-missing-schema
