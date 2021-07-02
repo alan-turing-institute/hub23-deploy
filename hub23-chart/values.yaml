@@ -25,9 +25,6 @@ binderhub:
       # nginx-ingress controller to be explicitly utilised instead of "gce"
       # This is required to allow nginx-ingress-controller to function. This will override any cloud provided ingress controllers and use the one we choose to deploy, i.e. nginx.
       kubernetes.io/ingress.class: nginx
-      https:
-        enabled: true
-        type: nginx
     hosts:
       - binder.hub23.turing.ac.uk
     tls:
@@ -45,9 +42,6 @@ binderhub:
       annotations:
         kubernetes.io/tls-acme: "true"
         kubernetes.io/ingress.class: nginx
-        https:
-          enabled: true
-          type: nginx
       hosts:
         - hub.hub23.turing.ac.uk
       tls:
