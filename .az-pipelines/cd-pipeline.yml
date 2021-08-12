@@ -12,7 +12,7 @@ variables:
 
   helm_chart_name: 'hub23-chart'
   helm_release_name: 'hub23'
-  helm_version: '3.3.4'
+  helm_version: '3.6.3'
 
   kubernetes_cluster_name: 'turing'
   kubernetes_namespace: 'hub23'
