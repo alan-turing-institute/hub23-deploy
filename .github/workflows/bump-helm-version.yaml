@@ -1,0 +1,22 @@
+name: Check Helm Chart dependencies are up to date
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Perform a dry run of the Action. Do not open a Pull Request."
+        required: false
+        default: 'false'
+  schedule:
+    - cron: "0 10 * * 1-5"
+
+jobs:
+  bump-helm-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: sgibson91/bump-helm-deps-action@main
+        with:
+          chart_path: 'hub23-chart/requirements.yaml'
+          chart_urls: '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml"}'
+          reviewers: 'sgibson91,callummole'
+          dry_run: ${{ github.event_name == 'workflow_dispatch' }} && ${{ github.events.inputs.dry_run }}
