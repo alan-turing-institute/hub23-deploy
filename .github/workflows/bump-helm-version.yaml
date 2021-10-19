@@ -14,7 +14,7 @@ jobs:
   bump-helm-deps:
     runs-on: ubuntu-latest
     steps:
-      - uses: sgibson91/bump-helm-deps-action@main
+      - uses: sgibson91/bump-helm-deps-action@fix-bug
         with:
           chart_path: 'hub23-chart/requirements.yaml'
           chart_urls: '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml"}'
