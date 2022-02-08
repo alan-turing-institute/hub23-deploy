@@ -1,0 +1,2 @@
+# Helm chart's templates aren't pure YAML files
+**/templates/
