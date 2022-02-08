@@ -1,14 +1,15 @@
-import yaml
 import argparse
+
+import yaml
 
 
 def parse_args():
     """
-Parse command line arguments.
+    Parse command line arguments.
 
-This function reads one command line argument which is the percentage
-contingency desired when calculating costs for autoscaling of the cluster. If
-not provided, this value defaults to 10%.
+    This function reads one command line argument which is the percentage
+    contingency desired when calculating costs for autoscaling of the cluster. If
+    not provided, this value defaults to 10%.
     """
     parser = argparse.ArgumentParser(
         description=(
@@ -42,13 +43,13 @@ not provided, this value defaults to 10%.
 
 def calculate_costs(billing_info):
     """
-Function to calculate various monthly and yearly costs of the cluster and
-container registry required to run a BinderHub. A contingency value is parsed
-from the command line in order to account for autoscaling.
+    Function to calculate various monthly and yearly costs of the cluster and
+    container registry required to run a BinderHub. A contingency value is parsed
+    from the command line in order to account for autoscaling.
 
-    :param billing_info: a dict object containing the billing information
-    :param contingency: the desired contingency percentage (float, 0 < contingency < 1)
-    :return: updated instance of billing_info (dict)
+        :param billing_info: a dict object containing the billing information
+        :param contingency: the desired contingency percentage (float, 0 < contingency < 1)
+        :return: updated instance of billing_info (dict)
     """
     # Create empty dictionary
     billing_info["costs"] = {}
