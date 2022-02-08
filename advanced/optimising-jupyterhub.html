@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Optimising the JupyterHub &#8212; Hub23 Deployment Guide</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet" />
-  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.e8f53015daec13862f6db5e763c41738.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
 
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -41,20 +41,22 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script >
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
+    <script src="../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <script >const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="References" href="refs.html" />
     <link rel="prev" title="Enabling Page Redirection" href="enabling-page-redirection.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
     
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
@@ -66,10 +68,16 @@
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
+      
       
       
       <h1 class="site-logo" id="site-title">Hub23 Deployment Guide</h1>
@@ -431,22 +439,22 @@
 
 
           
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
     <div class="topbar container-xl fixed-top">
     <div class="topbar-contents row">
         <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
         <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
             
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
@@ -461,7 +469,7 @@
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -479,7 +487,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -533,7 +541,64 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Optimising the JupyterHub</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#culling-user-pods">
+   Culling user pods
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#efficient-cluster-autoscaling">
+   Efficient Cluster Autoscaling
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scaling-up-in-time-user-placeholders">
+     Scaling up in time (user placeholders)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scaling-down-efficiently">
+     Scaling down efficiently
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#labelling-nodes-for-core-purpose">
+       Labelling nodes for core purpose
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-available-nodes-efficiently-user-scheduler">
+   Using available nodes efficiently (user scheduler)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pre-pulling-images">
+   Pre-Pulling images
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="section" id="optimising-the-jupyterhub">
@@ -549,10 +614,10 @@ This means that leaving the computer running with the JupyterHub window open wil
 <p>By default, JupyterHub will run the culling process every ten minutes and will cull any user pods that have been inactive for more than one hour.
 You can configure this behavior in your config file with the following code snippet.
 The culler can also be configured to cull pods that have existed for over a given length of time via the <code class="docutils literal notranslate"><span class="pre">maxAge</span></code> argument.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cull</span><span class="p">:</span>
-  <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;max-idle-seconds-before-user-pod-is-deleted&gt;</span>
-  <span class="nt">every</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-this-check-is-done&gt;</span>
-  <span class="nt">maxAge</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-the-pods-has-been-active&gt;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cull</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;max-idle-seconds-before-user-pod-is-deleted&gt;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">every</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-this-check-is-done&gt;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">maxAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-the-pods-has-been-active&gt;</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -572,14 +637,14 @@ The now evicted user-placeholder will signal the CA that it needs to scale up.</
 <p>User-placeholders will have the same resource requests as the default user.
 Therefore, if you have 3 user placeholders running, real users will only need to wait for a scale up if more than 3 users arrive in a time interval less than it takes to make a node ready for use.</p>
 <p>Add the following code snippet to use 3 user-placeholders.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
-  <span class="nt">jupyterhub</span><span class="p">:</span>
-  <span class="nt">scheduling</span><span class="p">:</span>
-    <span class="nt">podPriority</span><span class="p">:</span>
-      <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-    <span class="nt">userPlaceholder</span><span class="p">:</span>
-      <span class="c1"># Specify three dummy user pods will be used as placeholders</span>
-      <span class="nt">replicas</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">scheduling</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">podPriority</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">    </span><span class="nt">userPlaceholder</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Specify three dummy user pods will be used as placeholders</span><span class="w"></span>
+<span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -614,16 +679,16 @@ See <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content
 </li>
 <li><p>Make core pods require to be scheduled on the node pool setup above.</p>
 <p>The default setting is to make core pods <em>prefer</em> to be scheduled on nodes with the <code class="docutils literal notranslate"><span class="pre">hub.jupyter.org/node-purpose=core</span></code> label, but we can make it a <em>requirement</em> by using the code snippet below.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
-  <span class="nt">jupyterhub</span><span class="p">:</span>
-    <span class="nt">scheduling</span><span class="p">:</span>
-      <span class="nt">corePods</span><span class="p">:</span>
-        <span class="nt">nodeAffinity</span><span class="p">:</span>
-          <span class="c1"># matchNodePurpose valid options:</span>
-          <span class="c1"># - ignore</span>
-          <span class="c1"># - prefer (the default)</span>
-          <span class="c1"># - require</span>
-          <span class="nt">matchNodePurpose</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">require</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">scheduling</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">corePods</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nodeAffinity</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="c1"># matchNodePurpose valid options:</span><span class="w"></span>
+<span class="w">          </span><span class="c1"># - ignore</span><span class="w"></span>
+<span class="w">          </span><span class="c1"># - prefer (the default)</span><span class="w"></span>
+<span class="w">          </span><span class="c1"># - require</span><span class="w"></span>
+<span class="w">          </span><span class="nt">matchNodePurpose</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">require</span><span class="w"></span>
 </pre></div>
 </div>
 </li>
@@ -644,11 +709,11 @@ Only the user scheduler would allow the underutilised nodes to free up over time
 <p>If you don’t want to scale down, it makes more sense to let users spread out and utilise all available nodes. Only activate the user scheduler if you have an autoscaling node pool.</p>
 </div>
 <p>Enable the user scheduler with the following code snippet:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
-  <span class="nt">jupyterhub</span><span class="p">:</span>
-    <span class="nt">scheduling</span><span class="p">:</span>
-      <span class="nt">userScheduler</span><span class="p">:</span>
-        <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">scheduling</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">userScheduler</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -659,13 +724,13 @@ If the image is large, this can be a long wait!</p>
 <p>In the case when a new node is added (Cluster Autoscaler), the <em>continuous-image-puller</em> will pull a user’s container.
 This uses a daemonset to force Kubernetes to pull the user image on all nodes as soon as a node is present.</p>
 <p>The continuous-image-puller is disabled by default and the following snippet is added to <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> to enable it.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
-  <span class="nt">jupyterhub</span><span class="p">:</span>
-    <span class="nt">hub</span><span class="p">:</span>
-      <span class="nt">prePuller</span><span class="p">:</span>
-        <span class="nt">continuous</span><span class="p">:</span>
-          <span class="c1"># NOTE: if used with a Cluster Autoscaler, also add user-placeholders</span>
-          <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">prePuller</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">continuous</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="c1"># NOTE: if used with a Cluster Autoscaler, also add user-placeholders</span><span class="w"></span>
+<span class="w">          </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -693,54 +758,42 @@ This uses a daemonset to force Kubernetes to pull the user image on all nodes as
 
               </div>
               
-        
             
-
-
-
-<div class='prev-next-bottom'>
-    
-    <div id="prev">
-        <a class="left-prev" href="enabling-page-redirection.html" title="previous page">
-            <i class="prevnext-label fas fa-angle-left"></i>
-            <div class="prevnext-info">
-                <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">Enabling Page Redirection</p>
-            </div>
-        </a>
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="enabling-page-redirection.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Enabling Page Redirection</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="refs.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">References</p>
     </div>
-     <div id="next">
-        <a class="right-next" href="refs.html" title="next page">
-            <div class="prevnext-info">
-                <p class="prevnext-label">next</p>
-                <p class="prevnext-title">References</p>
-            </div>
-            <i class="prevnext-label fas fa-angle-right"></i>
-        </a>
-     </div>
-
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
-        
+            
         </div>
     </div>
-    <footer class="footer mt-5 mt-md-0">
-    <div class="container">
-      <p>
-        
-          By Sarah Gibson<br/>
-        
-            &copy; Copyright 2020.<br/>
-      </p>
-    </div>
-  </footer>
+    <footer class="footer">
+  <p>
+    
+      By Sarah Gibson<br/>
+    
+        &copy; Copyright 2020.<br/>
+  </p>
+</footer>
 </main>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
-  
   </body>
 </html>
