@@ -6,7 +6,7 @@ A repository to manage the private Turing BinderHub instance, Hub23.
 | --- | --- |
 | :money_with_wings: Subscription | [![Build Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Azure%20Subscription%20Status?branchName=main)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=5&branchName=main) |
 | :rocket: Deployment | [![Deploy Status](https://dev.azure.com/hub23/hub23-deploy/_apis/build/status/Deploy%20upgrade%20to%20Hub23?branchName=main)](https://dev.azure.com/hub23/hub23-deploy/_build/latest?definitionId=1&branchName=main) |
-| :broom: Linting and Formatting | [![Lint and Format](https://github.com/alan-turing-institute/hub23-deploy/actions/workflows/lint-format.yml/badge.svg)](https://github.com/alan-turing-institute/hub23-deploy/actions/workflows/lint-format.yml) |
+| :broom: Linting and Formatting | [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/alan-turing-institute/hub23-deploy/main.svg)](https://results.pre-commit.ci/latest/github/alan-turing-institute/hub23-deploy/main) |
 | :notebook: Docs | [![Build and Publish JupyterBook Docs](https://github.com/alan-turing-institute/hub23-deploy/workflows/Build%20and%20Publish%20JupyterBook%20Docs/badge.svg)](https://github.com/alan-turing-institute/hub23-deploy/actions?query=workflow%3A%22Build+and+Publish+JupyterBook+Docs%22+branch%3Amain) |
 
 **Table of Contents:**
