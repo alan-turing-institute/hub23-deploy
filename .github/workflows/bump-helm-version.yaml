@@ -18,5 +18,5 @@ jobs:
         with:
           chart_path: 'hub23-chart/requirements.yaml'
           chart_urls: '{"binderhub": "https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml"}'
-          reviewers: 'sgibson91,callummole'
+          reviewers: 'sgibson91,callummole,lukehare'
           dry_run: ${{ github.event_name == 'workflow_dispatch' }} && ${{ github.events.inputs.dry_run }}
