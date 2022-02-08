@@ -1,4 +1,4 @@
-name: Lint and Format
+name: Validate Helm Chart
 
 on:
   push:
@@ -9,53 +9,10 @@ on:
       - main
 
 jobs:
-  format-python-files:
+  validate-helm-chart:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Setup Python 3.8
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
-
-      - name: Install black
-        run: |
-          python -m pip install -U pip
-          python -m pip install black==19.3b0
-
-      - name: Check formatting
-        run: |
-          black --check .
-
-  lint-python-files:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Setup Python 3.8
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
-
-      - name: Install flake8
-        run: |
-          python -m pip install -U pip
-          python -m pip install flake8==3.7.8
-
-      - name: Check linting
-        run: |
-          flake8 --ignore=E501,W503,F821 .
-
-  lint-validate-helm-chart:
-    runs-on: ubuntu-latest
-
-    steps:
-      # TODO: Add yamllint
       - name: Checkout repo
         uses: actions/checkout@v2
 
