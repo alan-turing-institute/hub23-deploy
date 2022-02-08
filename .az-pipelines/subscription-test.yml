@@ -1,29 +1,29 @@
 schedules:
-- cron: "0 * * * *"
-  displayName: Hourly subscription test
-  branches:
-    include:
-    - main
-  always: true
+  - cron: "0 * * * *"
+    displayName: Hourly subscription test
+    branches:
+      include:
+        - main
+    always: true
 
 pr: none
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 jobs:
-- job: CheckSubscriptionStatus
-  steps:
-  - task: CmdLine@2
-    displayName: 'Install Azure CLI'
-    inputs:
-      script: 'curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash'
+  - job: CheckSubscriptionStatus
+    steps:
+      - task: CmdLine@2
+        displayName: "Install Azure CLI"
+        inputs:
+          script: "curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
 
-  - task: CmdLine@2
-    displayName: 'Check subscription Status'
-    inputs:
-      script: |
-        az login --service-principal --username $(appId) --password $(appKey) --tenant $(tenantId)
-        subStatus=$(az account show --subscription turingmybinder --query state --output tsv)
-        echo "The subscription is ${subStatus}"
-        [[ $subStatus == 'Enabled' ]]
+      - task: CmdLine@2
+        displayName: "Check subscription Status"
+        inputs:
+          script: |
+            az login --service-principal --username $(appId) --password $(appKey) --tenant $(tenantId)
+            subStatus=$(az account show --subscription turingmybinder --query state --output tsv)
+            echo "The subscription is ${subStatus}"
+            [[ $subStatus == 'Enabled' ]]

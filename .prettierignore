@@ -1,0 +1,5 @@
+# Helm chart's templates aren't pure YAML files
+**/templates/
+
+# Ignore Markdown files for now
+**/*.md

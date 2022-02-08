@@ -12,7 +12,7 @@ Use your best judgement and feel free to propose changes to this document in a P
 - [:question: What do I need to know?](#question-what-do-i-need-to-know)
   - [:zap: Hub23](#zap-hub23)
   - [:wheel_of_dharma: Kubernetes and Helm](#wheel_of_dharma-kubernetes-and-helm)
-  - [:robot: HelmUpgradeBot - Managing Dependencies](#robot-helmupgradebot---managing-dependencies)
+  - [:robot: `bump-helm-deps-action` - Managing Dependencies](#robot-bump-helm-deps-action---managing-dependencies)
   - [:globe_with_meridians: Website](#globe_with_meridians-website)
   - [:recycle: Continuous Deployment](#recycle-continuous-deployment)
   - [:white_check_mark: Tests](#white_check_mark-tests)
@@ -58,7 +58,7 @@ This repository (<https://github.com/alan-turing-institute/hub23-deploy>) houses
 
 This chart is located in the [`hub23-chart`](./hub23-chart) folder and the deployment configuration is stored in [`deploy`](./deploy).
 
-### :robot: HelmUpgradeBot - Managing Dependencies
+### :robot: `bump-helm-deps-action` - Managing Dependencies
 
 The Hub23 Helm chart is dependent on a range of other published Helm charts:
 
@@ -68,7 +68,7 @@ The Hub23 Helm chart is dependent on a range of other published Helm charts:
 These charts are also under active development and regularly updated, so how do we make sure Hub23 is running the latest version?
 With a bot of course!
 
-[HelmUpgradeBot](https://github.com/HelmUpgradeBot/hub23-deploy-upgrades) regularly checks the Helm chart version we're running against the published versions.
+The [`bump-helm-deps-action`](https://github.com/sgibson91/bump-helm-deps-action) GitHub Action regularly checks the Helm chart version we're running against the published versions.
 If it finds a newer version, the bot will open a Pull Request updating Hub23's [`requirements.yaml`](hub23-chart/requirements.yaml) file with the most up-to-date versions.
 Providing the [tests](#white_check_mark-tests) pass on the Pull Request, these are generally safe to merge.
 
@@ -92,19 +92,10 @@ This will help maintain a consistent state of the deployment. :rotating_light:
 
 Kubernetes resources and Helm charts are compromised of YAML files.
 Unfortunately, Helm is sensitive to malformed YAML files but fails silently during an upgrade if such a file is found.
-
-Therefore, there is a [linting and validation pipeline](.github/workflows/lint-format.yml) implemented on the repository which runs in all Pull Requests to main branch.
+Therefore, there is a [validation pipeline](.github/workflows/validate-helm-chart.yml) implemented on the repository which runs in all Pull Requests to main branch.
 This verifies that the helm chart is well-formed and can be understood by Kubernetes and Helm when applied.
 
-The pipeline uses [YAMLlint](https://github.com/adrienverge/yamllint), [`helm lint`](https://helm.sh/docs/helm/helm_lint/), [`helm template`](https://helm.sh/docs/helm/helm_template/), and [`kubeval`](https://github.com/instrumenta/kubeval).
-
-:rotating_light: This linting and validation test is a [Required Status Check](https://help.github.com/en/github/administering-a-repository/about-required-status-checks) and must pass before a Pull Request can be merged into main.
-Again, this is to help us maintain a consistent state of the deployment. :rotating_light:
-
-There are also further [GitHub Actions](https://help.github.com/en/actions) that check any Python code in the repository conforms to [`black`](https://github.com/psf/black) and [`flake8`](https://flake8.pycqa.org/en/latest/) conventions.
-The configurations for these tests can be found in the [`.github/workflows`](.github/workflows) folder.
-
-Lastly, another Azure Pipeline runs a nightly check to see if the deployment [subscription is still active](.az-pipelines/subscription-test.yml).
+An Azure Pipeline runs a nightly check to see if the deployment [subscription is still active](.az-pipelines/subscription-test.yml).
 The most likely cause for the subscription to be disabled is lack of funds and all resources will be unreachable during this time.
 
 ### :book: Documentation
@@ -165,7 +156,7 @@ Once you and the maintainers are happy, your contribution will be merged!
 ### :snake: Python Styleguide
 
 When writing Python scripts for this repository, it is recommended that contributors use [black](https://github.com/psf/black) and [flake8](https://flake8.pycqa.org/en/latest/) for formatting and linting styles.
-The repository has [GitHub Actions to check files are conforming to this styleguide](#white_check_mark-tests), though not doing so will not prevent your contribution from being merged.
+The repository uses [`pre-commit`](https://pre-commit.com/) to automatically ensure code adheres to these guidelines.
 These tools are used as the maintainers believe this makes the code easier to read and keeps consistent formatting as more people contribute to the project.
 
 While flake8 commands can be [disabled](https://flake8.pycqa.org/en/latest/user/violations.html), we only recommend doing this for [specific lines](https://flake8.pycqa.org/en/latest/user/violations.html#in-line-ignoring-errors) in such cases where reformatting would produce "ugly code".
