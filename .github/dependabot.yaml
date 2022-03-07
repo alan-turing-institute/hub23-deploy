@@ -5,6 +5,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "00:00"
+      timezone: "Europe/London"
     reviewers:
       - sgibson91
       - callummole
@@ -14,6 +17,9 @@ updates:
     directory: "/docs"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "00:00"
+      timezone: "Europe/London"
     reviewers:
       - sgibson91
       - callummole
