@@ -4,7 +4,7 @@
       {
         "name": "binderhub",
         "repository": "https://jupyterhub.github.io/helm-chart",
-        "version": "0.2.0-n905.h3d3e24e",
+        "version": "0.2.0-n914.h51b7354",
       },
       {
         "name": "ingress-nginx",
