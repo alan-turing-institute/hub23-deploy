@@ -1,15 +1,7 @@
-{
-  "dependencies":
-    [
-      {
-        "name": "binderhub",
-        "repository": "https://jupyterhub.github.io/helm-chart",
-        "version": "0.2.0-n919.he87e25a",
-      },
-      {
-        "name": "ingress-nginx",
-        "repository": "https://kubernetes.github.io/ingress-nginx",
-        "version": "2.13.0",
-      },
-    ],
-}
+dependencies:
+  - name: binderhub
+    repository: "https://jupyterhub.github.io/helm-chart"
+    version: "0.2.0-n919.he87e25a"
+  - name: ingress-nginx
+    repository: "https://kubernetes.github.io/ingress-nginx"
+    version: "2.13.0"
