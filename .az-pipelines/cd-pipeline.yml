@@ -1,5 +1,9 @@
 trigger:
-  - main
+  # Wait for a previous run to finish before beinning the next triggered run
+  batch: true
+  branches:
+    include:
+    - main
 
 pr: none
 
