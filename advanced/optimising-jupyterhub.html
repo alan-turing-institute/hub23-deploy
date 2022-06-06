@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Optimising the JupyterHub &#8212; Hub23 Deployment Guide</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -39,12 +37,13 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -62,7 +61,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -71,9 +84,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
       
@@ -86,14 +100,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../index.html">
-   Hub23 Deployment Guide
-  </a>
- </li>
-</ul>
-<ul class="current nav bd-sidenav">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Hub23 Deployment Guide
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../azure-prereqs/index.html">
    Azure Resources
@@ -424,12 +439,17 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
 </div>
 
 
@@ -437,61 +457,117 @@ const thebe_selector_output = ".output, .cell_output"
 
 
           
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
     
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
+    <div class="header-article row sticky-top noprint">
         
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/advanced/optimising-jupyterhub.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/advanced/optimising-jupyterhub.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
     </div>
 </div>
 
-            <!-- Source interaction buttons -->
-
-            <!-- Full screen (wrap in <a> to have style consistency -->
-
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
-
-            <!-- Launch buttons -->
-
-        </div>
-
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#culling-user-pods">
    Culling user pods
@@ -533,12 +609,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Optimising the JupyterHub</h1>
@@ -596,14 +671,15 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="optimising-the-jupyterhub">
-<span id="content-advanced-config-optimising-jupyterhub"></span><h1>Optimising the JupyterHub<a class="headerlink" href="#optimising-the-jupyterhub" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="optimising-the-jupyterhub">
+<span id="content-advanced-config-optimising-jupyterhub"></span><h1>Optimising the JupyterHub<a class="headerlink" href="#optimising-the-jupyterhub" title="Permalink to this headline">#</a></h1>
 <p>All config code snippets should be added to <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code>.</p>
-<div class="section" id="culling-user-pods">
-<h2>Culling user pods<a class="headerlink" href="#culling-user-pods" title="Permalink to this headline">¶</a></h2>
+<section id="culling-user-pods">
+<h2>Culling user pods<a class="headerlink" href="#culling-user-pods" title="Permalink to this headline">#</a></h2>
 <p>JupyterHub will automatically delete any user pods that have no activity for a period of time.
 This helps free up computational resources and keeps costs down if you are using an autoscaling cluster.</p>
 <p>In JupyterHub, “inactivity” is defined as no response from the user’s browser.
@@ -618,13 +694,13 @@ The culler can also be configured to cull pods that have existed for over a give
 <span class="w">  </span><span class="nt">maxAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-the-pods-has-been-active&gt;</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="efficient-cluster-autoscaling">
-<h2>Efficient Cluster Autoscaling<a class="headerlink" href="#efficient-cluster-autoscaling" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="efficient-cluster-autoscaling">
+<h2>Efficient Cluster Autoscaling<a class="headerlink" href="#efficient-cluster-autoscaling" title="Permalink to this headline">#</a></h2>
 <p>A <a class="reference external" href="https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler">Cluster Autoscaler (CA)</a> will help add and remove nodes from the cluster.
 It needs to scale up before users arrive and scale down nodes aggressively enough without disrupting users.</p>
-<div class="section" id="scaling-up-in-time-user-placeholders">
-<h3>Scaling up in time (user placeholders)<a class="headerlink" href="#scaling-up-in-time-user-placeholders" title="Permalink to this headline">¶</a></h3>
+<section id="scaling-up-in-time-user-placeholders">
+<h3>Scaling up in time (user placeholders)<a class="headerlink" href="#scaling-up-in-time-user-placeholders" title="Permalink to this headline">#</a></h3>
 <p>A CA will add nodes when pods don’t fit on the available nodes but would fit if another node is added.
 But this can lead to a long waiting time for the user as a pod is spun up.</p>
 <p>Kubernetes 1.11+ (and Helm 2.11+) introduced <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/">Pod Priority and Preemption</a>.
@@ -645,9 +721,9 @@ Therefore, if you have 3 user placeholders running, real users will only need to
 <span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="scaling-down-efficiently">
-<h3>Scaling down efficiently<a class="headerlink" href="#scaling-down-efficiently" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="scaling-down-efficiently">
+<h3>Scaling down efficiently<a class="headerlink" href="#scaling-down-efficiently" title="Permalink to this headline">#</a></h3>
 <p>To scale down, <a class="reference external" href="https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node">certain technical criteria</a> need to be met.
 Most importantly for a node to be scaled down, it must be free from pods that are not allowed to be disrupted.
 Such pods are for example real user pods, important system pods, and some JupyterHub pods.</p>
@@ -657,8 +733,8 @@ Some system pods end up on the new nodes with user pods.
 At night, when the <em>culler</em> has removed many inactive pods, the nodes are now free from user pods but cannot be removing since there is a single system pod remaining.</p>
 <p>We setup a node affinity for core pods to remain on the 3 nodes that were deployed.
 See <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content-az-aks-create-autoscale"><span class="std std-ref">Enable Autoscaling</span></a>.</p>
-<div class="section" id="labelling-nodes-for-core-purpose">
-<h4>Labelling nodes for core purpose<a class="headerlink" href="#labelling-nodes-for-core-purpose" title="Permalink to this headline">¶</a></h4>
+<section id="labelling-nodes-for-core-purpose">
+<h4>Labelling nodes for core purpose<a class="headerlink" href="#labelling-nodes-for-core-purpose" title="Permalink to this headline">#</a></h4>
 <p>Add a <code class="docutils literal notranslate"><span class="pre">core</span></code> label to all the nodes in the node pool.</p>
 <ol>
 <li><p>Setup a node pool (with autoscaling (see <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content-az-aks-create-autoscale"><span class="std std-ref">Enable Autoscaling</span></a>) and/or nodepools (see <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content-az-aks-create-nodepools"><span class="std std-ref">Create multiple nodepools</span></a>)) and a certain label.</p>
@@ -692,11 +768,11 @@ See <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content
 </li>
 </ol>
 <p>This process can be repeated for a <code class="docutils literal notranslate"><span class="pre">user</span></code> label.</p>
-</div>
-</div>
-</div>
-<div class="section" id="using-available-nodes-efficiently-user-scheduler">
-<h2>Using available nodes efficiently (user scheduler)<a class="headerlink" href="#using-available-nodes-efficiently-user-scheduler" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+</section>
+<section id="using-available-nodes-efficiently-user-scheduler">
+<h2>Using available nodes efficiently (user scheduler)<a class="headerlink" href="#using-available-nodes-efficiently-user-scheduler" title="Permalink to this headline">#</a></h2>
 <p>If you have users starting new servers while the total number of active users is decreasing, how will you free up a node so it can be scaled down?</p>
 <p>This is what the <em>user scheduler</em> is for.
 It’s only task is to schedule new user pods to the <em>most utilised node</em>.
@@ -714,9 +790,9 @@ Only the user scheduler would allow the underutilised nodes to free up over time
 <span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="pre-pulling-images">
-<h2>Pre-Pulling images<a class="headerlink" href="#pre-pulling-images" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="pre-pulling-images">
+<h2>Pre-Pulling images<a class="headerlink" href="#pre-pulling-images" title="Permalink to this headline">#</a></h2>
 <p>A user will have to wait for a requested Docker image if it isn’t already pulled onto that node.
 If the image is large, this can be a long wait!</p>
 <p>In the case when a new node is added (Cluster Autoscaler), the <em>continuous-image-puller</em> will pull a user’s container.
@@ -731,8 +807,8 @@ This uses a daemonset to force Kubernetes to pull the user image on all nodes as
 <span class="w">          </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -756,9 +832,11 @@ This uses a daemonset to force Kubernetes to pull the user image on all nodes as
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="enabling-page-redirection.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -774,24 +852,28 @@ This uses a daemonset to force Kubernetes to pull the user image on all nodes as
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Sarah Gibson<br/>
+  
+      &copy; Copyright 2020.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Sarah Gibson<br/>
-    
-        &copy; Copyright 2020.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>
