@@ -72,7 +72,7 @@ binderhub:
     - name: custom-templates
       mountPath: /etc/binderhub/custom
 
-nginx-ingress:
+ingress-nginx:
   controller:
     config:
       proxy-body-size: 64m
