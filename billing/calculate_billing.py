@@ -116,7 +116,7 @@ if __name__ == "__main__":
     contingency = float(args.contingency) / 100.0
 
     # Read in billing info
-    with open("hub23_billing.yaml", "r") as stream:
+    with open("hub23_billing.yaml") as stream:
         try:
             billing_info = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
