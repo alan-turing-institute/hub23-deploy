@@ -680,38 +680,38 @@ This is advisable if you are expecting users to hosts repositories on your Binde
 <section id="add-the-token-to-the-azure-keyvault">
 <h2>Add the token to the Azure Keyvault<a class="headerlink" href="#add-the-token-to-the-azure-keyvault" title="Permalink to this headline">#</a></h2>
 <p>Save the token to the Azure key vault.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret <span class="nb">set</span> <span class="se">\</span>
-  --vault-name hub23-keyvault <span class="se">\</span>
-  --name binderhub-access-token <span class="se">\</span>
-  --value &lt;PASTE-TOKEN-HERE&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--vault-name<span class="w"> </span>hub23-keyvault<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>binderhub-access-token<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--value<span class="w"> </span>&lt;PASTE-TOKEN-HERE&gt;
 </pre></div>
 </div>
 <p>Download the secret like so:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret download <span class="se">\</span>
-    --vault-name hub23-keyvault <span class="se">\</span>
-    --name binderhub-access-token <span class="se">\</span>
-    --file .secret/accessToken.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span>download<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--vault-name<span class="w"> </span>hub23-keyvault<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>binderhub-access-token<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--file<span class="w"> </span>.secret/accessToken.txt
 </pre></div>
 </div>
 </section>
 <section id="update-secret-template-yaml-or-deploy-prod-template-yaml">
 <h2>Update <code class="docutils literal notranslate"><span class="pre">secret-template.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod-template.yaml</span></code><a class="headerlink" href="#update-secret-template-yaml-or-deploy-prod-template-yaml" title="Permalink to this headline">#</a></h2>
 <p>Update your template file with the following.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">GitHubRepoProvider</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">access_token</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">accessToken</span><span class="p p-Indicator">}</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">GitHubRepoProvider</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">access_token</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">accessToken</span><span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>Again, we can use <code class="docutils literal notranslate"><span class="pre">sed</span></code> to populate this secret:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed -e <span class="s2">&quot;s/{accessToken}/</span><span class="k">$(</span>cat .secret/accessToken.txt<span class="k">)</span><span class="s2">/&quot;</span> <span class="se">\</span>
-    deploy/secret-template.yaml &gt; .secret/secret.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;s/{accessToken}/</span><span class="k">$(</span>cat<span class="w"> </span>.secret/accessToken.txt<span class="k">)</span><span class="s2">/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>deploy/secret-template.yaml<span class="w"> </span>&gt;<span class="w"> </span>.secret/secret.yaml
 </pre></div>
 </div>
 <section id="delete-the-local-copy">
 <h3>Delete the local copy<a class="headerlink" href="#delete-the-local-copy" title="Permalink to this headline">#</a></h3>
 <p>Remember to delete the local copy after populating <code class="docutils literal notranslate"><span class="pre">.secret/secret.yaml</span></code>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm .secret/accessToken.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>.secret/accessToken.txt
 </pre></div>
 </div>
 </section>
@@ -730,7 +730,7 @@ This is advisable if you are expecting users to hosts repositories on your Binde
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./binderhub"
         },
         predefinedOutput: true

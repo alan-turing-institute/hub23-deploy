@@ -720,36 +720,36 @@ title="Print to PDF"
 <section id="downloading-the-required-secrets">
 <h2>Downloading the Required Secrets<a class="headerlink" href="#downloading-the-required-secrets" title="Permalink to this headline">#</a></h2>
 <p>To set up the BinderHub, we will need to download the API and secret tokens from the keyvault like so:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret download --vault-name hub23-keyvault --name apiToken --file .secret/apiToken.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span>download<span class="w"> </span>--vault-name<span class="w"> </span>hub23-keyvault<span class="w"> </span>--name<span class="w"> </span>apiToken<span class="w"> </span>--file<span class="w"> </span>.secret/apiToken.txt
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret download --vault-name hub23-keyvault --name secretToken --file .secret/secretToken.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span>download<span class="w"> </span>--vault-name<span class="w"> </span>hub23-keyvault<span class="w"> </span>--name<span class="w"> </span>secretToken<span class="w"> </span>--file<span class="w"> </span>.secret/secretToken.txt
 </pre></div>
 </div>
 </section>
 <section id="create-a-secret-yaml-file">
 <h2>Create a <code class="docutils literal notranslate"><span class="pre">secret.yaml</span></code> file<a class="headerlink" href="#create-a-secret-yaml-file" title="Permalink to this headline">#</a></h2>
 <p>In the <code class="docutils literal notranslate"><span class="pre">deploy/</span></code> folder, create a <code class="docutils literal notranslate"><span class="pre">secret-template.yaml</span></code> file with the following layout.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">services</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">binder</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">apiToken</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{apiToken}&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">proxy</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">secretToken</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{secretToken}&quot;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">services</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">binder</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">apiToken</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{apiToken}&quot;</span>
+<span class="w">  </span><span class="nt">proxy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">secretToken</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{secretToken}&quot;</span>
 </pre></div>
 </div>
 <p>We can then use <a class="reference external" href="http://www.grymoire.com/Unix/Sed.html"><code class="docutils literal notranslate"><span class="pre">sed</span></code></a> to insert the API and secret tokens.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed -e <span class="s2">&quot;s/{apiToken}/</span><span class="k">$(</span>cat .secret/apiToken.txt<span class="k">)</span><span class="s2">/&quot;</span> <span class="se">\</span>
-    -e <span class="s2">&quot;s/{secretToken}/</span><span class="k">$(</span>cat .secret/secretToken.txt<span class="k">)</span><span class="s2">/&quot;</span> <span class="se">\</span>
-    deploy/secret-template.yaml &gt; .secret/secret-template.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;s/{apiToken}/</span><span class="k">$(</span>cat<span class="w"> </span>.secret/apiToken.txt<span class="k">)</span><span class="s2">/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="s2">&quot;s/{secretToken}/</span><span class="k">$(</span>cat<span class="w"> </span>.secret/secretToken.txt<span class="k">)</span><span class="s2">/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>deploy/secret-template.yaml<span class="w"> </span>&gt;<span class="w"> </span>.secret/secret-template.yaml
 </pre></div>
 </div>
 <section id="deleting-local-copies-of-the-secret-files">
 <h3>Deleting local copies of the secret files<a class="headerlink" href="#deleting-local-copies-of-the-secret-files" title="Permalink to this headline">#</a></h3>
 <p>Once you have constructed <code class="docutils literal notranslate"><span class="pre">.secret/secret.yaml</span></code>, you should delete the local copies of the API and secret tokens.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm .secret/apiToken.txt
-rm .secret/secretToken.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>.secret/apiToken.txt
+rm<span class="w"> </span>.secret/secretToken.txt
 </pre></div>
 </div>
 </section>
@@ -762,22 +762,22 @@ See <a class="reference internal" href="connect-container-registry.html#content-
 <section id="create-a-config-yaml-file">
 <h2>Create a <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file<a class="headerlink" href="#create-a-config-yaml-file" title="Permalink to this headline">#</a></h2>
 <p>Again in the <code class="docutils literal notranslate"><span class="pre">deploy</span></code> folder, create a <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file with the following format.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">BinderHub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">use_registry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">image_prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YOUR_PREFIX_HERE&quot;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">BinderHub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">use_registry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">image_prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YOUR_PREFIX_HERE&quot;</span>
 </pre></div>
 </div>
 <p>The image prefix should take the following form:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span> container registry username <span class="o">}</span>-<span class="o">{</span> identifier to prepend to image name <span class="o">}</span>-
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span><span class="w"> </span>container<span class="w"> </span>registry<span class="w"> </span>username<span class="w"> </span><span class="o">}</span>-<span class="o">{</span><span class="w"> </span>identifier<span class="w"> </span>to<span class="w"> </span>prepend<span class="w"> </span>to<span class="w"> </span>image<span class="w"> </span>name<span class="w"> </span><span class="o">}</span>-
 </pre></div>
 </div>
 </section>
 <section id="pull-the-helm-charts-for-jupyterhub-binderhub">
 <h2>Pull the Helm Charts for JupyterHub/BinderHub<a class="headerlink" href="#pull-the-helm-charts-for-jupyterhub-binderhub" title="Permalink to this headline">#</a></h2>
 <p>This command will add the repository of JupyterHub/BinderHub Helm Charts to your package manager.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-helm repo update
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>jupyterhub<span class="w"> </span>https://jupyterhub.github.io/helm-chart
+helm<span class="w"> </span>repo<span class="w"> </span>update
 </pre></div>
 </div>
 </section>
@@ -787,15 +787,15 @@ helm repo update
 Find the most recent version <a class="reference external" href="https://jupyterhub.github.io/helm-chart/#development-releases-binderhub">here</a>.
 Install the Chart with the following command.
 This will install both a JupyterHub and a BinderHub.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm install jupyterhub/binderhub <span class="se">\</span>
-    --version<span class="o">=</span><span class="m">0</span>.2.0-a2079a5 <span class="se">\</span>
-    --name hub23 <span class="se">\</span>
-    --namespace hub23 <span class="se">\</span>
-    --create-namespace <span class="se">\</span>
-    -f .secret/secret.yaml <span class="se">\</span>
-    -f deploy/config.yaml <span class="se">\</span>
-    -f deploy/letsencrypt-<span class="o">{</span> staging <span class="p">|</span> prod <span class="o">}</span>.yaml <span class="se">\</span>
-    --cleanup-on-fail
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>install<span class="w"> </span>jupyterhub/binderhub<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--version<span class="o">=</span><span class="m">0</span>.2.0-a2079a5<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>hub23<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--namespace<span class="w"> </span>hub23<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--create-namespace<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>.secret/secret.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>deploy/config.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>deploy/letsencrypt-<span class="o">{</span><span class="w"> </span>staging<span class="w"> </span><span class="p">|</span><span class="w"> </span>prod<span class="w"> </span><span class="o">}</span>.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cleanup-on-fail
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">--name</span></code> and <code class="docutils literal notranslate"><span class="pre">--namespace</span></code> don’t strictly have to match, but it makes it easier to remember if they do.
@@ -805,31 +805,31 @@ They should also only contain lowercase alphanumerical characters or hyphens (<c
 <h2>Connect JupyterHub and BinderHub<a class="headerlink" href="#connect-jupyterhub-and-binderhub" title="Permalink to this headline">#</a></h2>
 <p>Get the External IP of the JupyterHub by running the following command.
 It may take some time to update, so keep running the command until <code class="docutils literal notranslate"><span class="pre">&lt;pending&gt;</span></code> disappears.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get svc proxy-public --namespace hub23
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>get<span class="w"> </span>svc<span class="w"> </span>proxy-public<span class="w"> </span>--namespace<span class="w"> </span>hub23
 </pre></div>
 </div>
 <p>Once you have the External IP address, update <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> to look like the following.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">BinderHub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">use_registry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">image_prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IMAGE_PREFIX&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hub_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://&lt;IP</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">EXTERNAL</span><span class="nv"> </span><span class="s">IP&gt;&quot;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">BinderHub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">use_registry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">image_prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IMAGE_PREFIX&quot;</span>
+<span class="w">    </span><span class="nt">hub_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://&lt;IP</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">EXTERNAL</span><span class="nv"> </span><span class="s">IP&gt;&quot;</span>
 </pre></div>
 </div>
 <p>Upgrade the Helm Chart to deploy the change.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm upgrade hub23 jupyterhub/binderhub <span class="se">\</span>
-    --version<span class="o">=</span><span class="m">0</span>.2.0-a2079a5 <span class="se">\</span>
-    -f .secret/secret.yaml <span class="se">\</span>
-    -f deploy/config.yaml <span class="se">\</span>
-    -f deploy/letsencrypt-<span class="o">{</span> staging <span class="p">|</span> prod <span class="o">}</span>.yaml <span class="se">\</span>
-    --cleanup-on-fail
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>upgrade<span class="w"> </span>hub23<span class="w"> </span>jupyterhub/binderhub<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--version<span class="o">=</span><span class="m">0</span>.2.0-a2079a5<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>.secret/secret.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>deploy/config.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>deploy/letsencrypt-<span class="o">{</span><span class="w"> </span>staging<span class="w"> </span><span class="p">|</span><span class="w"> </span>prod<span class="w"> </span><span class="o">}</span>.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cleanup-on-fail
 </pre></div>
 </div>
 </section>
 <section id="finally-get-the-ip-address-for-the-binder-page">
 <h2>Finally, get the IP address for the Binder page<a class="headerlink" href="#finally-get-the-ip-address-for-the-binder-page" title="Permalink to this headline">#</a></h2>
 <p>The External IP address from this command will be the IP address of the Binder page.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get svc binder --namespace hub23
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>get<span class="w"> </span>svc<span class="w"> </span>binder<span class="w"> </span>--namespace<span class="w"> </span>hub23
 </pre></div>
 </div>
 <p>Check the deployment is working by launching a repo, e.g.: <a class="reference external" href="https://github.com/binder-examples/requirements">https://github.com/binder-examples/requirements</a></p>
@@ -848,7 +848,7 @@ It may take some time to update, so keep running the command until <code class="
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./binderhub"
         },
         predefinedOutput: true

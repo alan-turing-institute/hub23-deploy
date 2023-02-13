@@ -691,16 +691,16 @@ title="Print to PDF"
 <span id="content-k8s-version"></span><h2>Finding a Kubernetes version<a class="headerlink" href="#finding-a-kubernetes-version" title="Permalink to this headline">#</a></h2>
 <p>First, find a reasonably up-to-date version of Kubernetes to install onto the cluster.
 This can be done with the below command which will output a table as demonstrated.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ az aks get-versions -l westeurope -o table
-KubernetesVersion    Upgrades
--------------------  -------------------------
-<span class="m">1</span>.20.2<span class="o">(</span>preview<span class="o">)</span>      None available
-<span class="m">1</span>.19.7               <span class="m">1</span>.20.2<span class="o">(</span>preview<span class="o">)</span>
-<span class="m">1</span>.19.6               <span class="m">1</span>.19.7, <span class="m">1</span>.20.2<span class="o">(</span>preview<span class="o">)</span>
-<span class="m">1</span>.18.14              <span class="m">1</span>.19.6, <span class="m">1</span>.19.7
-<span class="m">1</span>.18.10              <span class="m">1</span>.18.14, <span class="m">1</span>.19.6, <span class="m">1</span>.19.7
-<span class="m">1</span>.17.16              <span class="m">1</span>.18.10, <span class="m">1</span>.18.14
-<span class="m">1</span>.17.13              <span class="m">1</span>.17.16, <span class="m">1</span>.18.10, <span class="m">1</span>.18.14
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>az<span class="w"> </span>aks<span class="w"> </span>get-versions<span class="w"> </span>-l<span class="w"> </span>westeurope<span class="w"> </span>-o<span class="w"> </span>table
+KubernetesVersion<span class="w">    </span>Upgrades
+-------------------<span class="w">  </span>-------------------------
+<span class="m">1</span>.20.2<span class="o">(</span>preview<span class="o">)</span><span class="w">      </span>None<span class="w"> </span>available
+<span class="m">1</span>.19.7<span class="w">               </span><span class="m">1</span>.20.2<span class="o">(</span>preview<span class="o">)</span>
+<span class="m">1</span>.19.6<span class="w">               </span><span class="m">1</span>.19.7,<span class="w"> </span><span class="m">1</span>.20.2<span class="o">(</span>preview<span class="o">)</span>
+<span class="m">1</span>.18.14<span class="w">              </span><span class="m">1</span>.19.6,<span class="w"> </span><span class="m">1</span>.19.7
+<span class="m">1</span>.18.10<span class="w">              </span><span class="m">1</span>.18.14,<span class="w"> </span><span class="m">1</span>.19.6,<span class="w"> </span><span class="m">1</span>.19.7
+<span class="m">1</span>.17.16<span class="w">              </span><span class="m">1</span>.18.10,<span class="w"> </span><span class="m">1</span>.18.14
+<span class="m">1</span>.17.13<span class="w">              </span><span class="m">1</span>.17.16,<span class="w"> </span><span class="m">1</span>.18.10,<span class="w"> </span><span class="m">1</span>.18.14
 </pre></div>
 </div>
 <p>It is recommended to pick a version number that has at least one upgrade version available that is <strong>not</strong> in preview, so we can be sure that any bugs are likely to have been found and fixed.
@@ -710,23 +710,23 @@ This would be <code class="docutils literal notranslate"><span class="pre">1.19.
 <h2>Create the AKS cluster<a class="headerlink" href="#create-the-aks-cluster" title="Permalink to this headline">#</a></h2>
 <p>The following command will deploy a Kubernetes cluster into the Hub23 resource group.
 This command has been known to take between 7 and 30 minutes to execute depending on resource availability in the location we set when creating the resource group.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks create <span class="se">\</span>
-    --name hub23cluster <span class="se">\</span>
-    --resource-group hub23 <span class="se">\</span>
-    --kubernetes-version VERSION <span class="se">\</span>
-    --ssh-key-value .secret/ssh-key-hub23cluster.pub <span class="se">\</span>
-    --node-count <span class="m">3</span> <span class="se">\</span>
-    --node-vm-size Standard_D2s_v3 <span class="se">\</span>
-    --service-principal <span class="k">$(</span>cat .secret/appId.txt<span class="k">)</span> <span class="se">\</span>
-    --client-secret <span class="k">$(</span>cat .secret/appKey.txt<span class="k">)</span> <span class="se">\</span>
-    --dns-service-ip <span class="m">10</span>.0.0.10 <span class="se">\</span>
-    --docker-bridge-address <span class="m">172</span>.17.0.1/16 <span class="se">\</span>
-    --network-plugin kubenet <span class="se">\</span>
-    --network-policy calico <span class="se">\</span>
-    --max-pods <span class="m">110</span> <span class="se">\</span>
-    --service-cidr <span class="m">10</span>.0.0.0/16 <span class="se">\</span>
-    --vnet-subnet-id <span class="si">${</span><span class="nv">SUBNET_ID</span><span class="si">}</span> <span class="se">\</span>
-    --output table
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>aks<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>hub23cluster<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--resource-group<span class="w"> </span>hub23<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--kubernetes-version<span class="w"> </span>VERSION<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ssh-key-value<span class="w"> </span>.secret/ssh-key-hub23cluster.pub<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--node-count<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--node-vm-size<span class="w"> </span>Standard_D2s_v3<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--service-principal<span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>.secret/appId.txt<span class="k">)</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--client-secret<span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>.secret/appKey.txt<span class="k">)</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dns-service-ip<span class="w"> </span><span class="m">10</span>.0.0.10<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--docker-bridge-address<span class="w"> </span><span class="m">172</span>.17.0.1/16<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--network-plugin<span class="w"> </span>kubenet<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--network-policy<span class="w"> </span>calico<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-pods<span class="w"> </span><span class="m">110</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--service-cidr<span class="w"> </span><span class="m">10</span>.0.0.0/16<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--vnet-subnet-id<span class="w"> </span><span class="si">${</span><span class="nv">SUBNET_ID</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>table
 </pre></div>
 </div>
 <ul class="simple">
@@ -746,8 +746,8 @@ The Kubernetes API seems to struggle above 110 pods.</p></li>
 <span id="content-az-aks-create-autoscale"></span><h3>Enable Autoscaling<a class="headerlink" href="#enable-autoscaling" title="Permalink to this headline">#</a></h3>
 <p>To enable autoscaling on the cluster, add the following flags to the above <code class="docutils literal notranslate"><span class="pre">az</span> <span class="pre">aks</span> <span class="pre">create</span></code> command.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>--enable-cluster-autoscaler
---min-count MINIMUM_NUMBER_OF_NODES
---max-count MAXIMUM_NUMBER_OF_NODES
+--min-count<span class="w"> </span>MINIMUM_NUMBER_OF_NODES
+--max-count<span class="w"> </span>MAXIMUM_NUMBER_OF_NODES
 </pre></div>
 </div>
 <ul class="simple">
@@ -758,8 +758,8 @@ The Kubernetes API seems to struggle above 110 pods.</p></li>
 <section id="create-multiple-nodepools">
 <span id="content-az-aks-create-nodepools"></span><h3>Create multiple nodepools<a class="headerlink" href="#create-multiple-nodepools" title="Permalink to this headline">#</a></h3>
 <p>To create multiple nodepools within your Kubernetes cluster, add the following flags to the above <code class="docutils literal notranslate"><span class="pre">az</span> <span class="pre">aks</span> <span class="pre">create</span></code> command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>--nodepool-name <span class="o">{</span> core <span class="p">|</span> user <span class="o">}</span>
---nodepool-labels hub.jupyter.org/node-purpose<span class="o">={</span> core <span class="p">|</span> user <span class="o">}</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>--nodepool-name<span class="w"> </span><span class="o">{</span><span class="w"> </span>core<span class="w"> </span><span class="p">|</span><span class="w"> </span>user<span class="w"> </span><span class="o">}</span>
+--nodepool-labels<span class="w"> </span>hub.jupyter.org/node-purpose<span class="o">={</span><span class="w"> </span>core<span class="w"> </span><span class="p">|</span><span class="w"> </span>user<span class="w"> </span><span class="o">}</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -772,17 +772,17 @@ The Kubernetes API seems to struggle above 110 pods.</p></li>
 <p>The first nodepool create (i.e. with <code class="docutils literal notranslate"><span class="pre">az</span> <span class="pre">aks</span> <span class="pre">create</span></code> command) cannot be deleted as it contains the <code class="docutils literal notranslate"><span class="pre">kubeadmin</span></code> kubelet.</p>
 </div>
 <p>Another nodepool can then be added as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks nodepool add <span class="se">\</span>
-    --cluster-name hub23cluster <span class="se">\</span>
-    --name user <span class="se">\</span>
-    --resource-group hub23 <span class="se">\</span>
-    --kubernetes-version VERSION <span class="se">\</span>
-    --max-pods <span class="m">110</span> <span class="se">\</span>
-    --node-count <span class="m">3</span> <span class="se">\</span>
-    --node-vm-size Standard_D2s_v3 <span class="se">\</span>
-    --vnet-subnet-id <span class="si">${</span><span class="nv">SUBNET_ID</span><span class="si">}</span> <span class="se">\</span>
-    --labels hub.jupyter.org/node-purpose<span class="o">=</span>user <span class="se">\</span>
-    --output table
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>aks<span class="w"> </span>nodepool<span class="w"> </span>add<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cluster-name<span class="w"> </span>hub23cluster<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--resource-group<span class="w"> </span>hub23<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--kubernetes-version<span class="w"> </span>VERSION<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-pods<span class="w"> </span><span class="m">110</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--node-count<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--node-vm-size<span class="w"> </span>Standard_D2s_v3<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--vnet-subnet-id<span class="w"> </span><span class="si">${</span><span class="nv">SUBNET_ID</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--labels<span class="w"> </span>hub.jupyter.org/node-purpose<span class="o">=</span>user<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>table
 </pre></div>
 </div>
 <div class="admonition note">
@@ -797,9 +797,9 @@ The Kubernetes API seems to struggle above 110 pods.</p></li>
 <section id="delete-local-copies-of-the-secret-files">
 <h3>Delete local copies of the secret files<a class="headerlink" href="#delete-local-copies-of-the-secret-files" title="Permalink to this headline">#</a></h3>
 <p>Once the Kubernetes cluster is deployed, you should delete the local copy of the Service Principal and public SSH key.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm .secret/ssh-key-hub23cluster.pub
-rm .secret/appId.txt
-rm .secret/appKey.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>.secret/ssh-key-hub23cluster.pub
+rm<span class="w"> </span>.secret/appId.txt
+rm<span class="w"> </span>.secret/appKey.txt
 </pre></div>
 </div>
 </section>
@@ -807,7 +807,7 @@ rm .secret/appKey.txt
 <section id="get-credentials-for-kubectl">
 <h2>Get credentials for <code class="docutils literal notranslate"><span class="pre">kubectl</span></code><a class="headerlink" href="#get-credentials-for-kubectl" title="Permalink to this headline">#</a></h2>
 <p>We need to configure the local installation of the Kubernetes CLI to work with the version deployed onto the cluster, and do so with the following command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks get-credentials --name hub23cluster --resource-group hub23
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>aks<span class="w"> </span>get-credentials<span class="w"> </span>--name<span class="w"> </span>hub23cluster<span class="w"> </span>--resource-group<span class="w"> </span>hub23
 </pre></div>
 </div>
 <p>This command would need to be repeated when trying to manage the cluster from another computer or if you have been working with a different cluster.</p>
@@ -815,7 +815,7 @@ rm .secret/appKey.txt
 <section id="check-the-cluster-is-fully-functional">
 <h2>Check the cluster is fully functional<a class="headerlink" href="#check-the-cluster-is-fully-functional" title="Permalink to this headline">#</a></h2>
 <p>Output the status of the nodes.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get nodes
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>get<span class="w"> </span>nodes
 </pre></div>
 </div>
 <p>All nodes should have <code class="docutils literal notranslate"><span class="pre">STATUS</span></code> as <code class="docutils literal notranslate"><span class="pre">Ready</span></code>.</p>
@@ -834,7 +834,7 @@ rm .secret/appKey.txt
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./deploy-k8s"
         },
         predefinedOutput: true

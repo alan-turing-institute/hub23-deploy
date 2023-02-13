@@ -576,15 +576,15 @@ title="Print to PDF"
 This affects what kind of computations can be run in an active Binder instance and the overall cost of running the BinderHub.</p>
 <p>We can <em>guarantee</em> each user pod a certain amount of resources and <em>limit</em> them to another value (that is, they could use slightly more than allocated if need be).</p>
 <p>We can set the CPU and RAM memory guarantees and limits with the following code snippet in <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code>.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># EXAMPLE VALUES</span><span class="w"></span>
-<span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">singleuser</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1G</span><span class="w"></span>
-<span class="w">      </span><span class="nt">guarantee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1G</span><span class="w"></span>
-<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.5</span><span class="w"></span>
-<span class="w">      </span><span class="nt">guarantee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.5</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># EXAMPLE VALUES</span>
+<span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">singleuser</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1G</span>
+<span class="w">      </span><span class="nt">guarantee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1G</span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.5</span>
+<span class="w">      </span><span class="nt">guarantee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.5</span>
 </pre></div>
 </div>
 </section>
@@ -601,7 +601,7 @@ This affects what kind of computations can be run in an active Binder instance a
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./customising"
         },
         predefinedOutput: true

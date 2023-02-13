@@ -645,7 +645,7 @@ Both of these can be installed as Helm Charts.</p>
 For each ingress resource it finds, it further looks for annotations attached this resource.
 If the ingress resource has an annotation that indicates <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> needs to take action, then it will try to provide a certificate from Let’s Encrypt.</p>
 <p>An example of an annotation indicating the resource requires a certificate and <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> should request one looks as follows:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">kubernetes.io/tls-acme</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">kubernetes.io/tls-acme</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
 </pre></div>
 </div>
 <p>If it decides action is required, <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> will further look at the ingress object.
@@ -655,13 +655,13 @@ It will combine this information with any default settings such as what <em>Issu
 <p>An <em>Issuer</em> is a <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> concept.
 It describes what CA to speak with, what email to use as a contact person, and what kind of challenge to use.
 This can be configured in <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code>’s helm chart values like so:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example configuration of cert-manager default values</span><span class="w"></span>
-<span class="c1"># for requesting certificates</span><span class="w"></span>
-<span class="nt">cert-manager</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ingressShim</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">defaultIssuerName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a-manually-created-issuer-resource&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">defaultIssuerKind</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Issuer&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">defaultACMEChallengeType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http01&quot;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example configuration of cert-manager default values</span>
+<span class="c1"># for requesting certificates</span>
+<span class="nt">cert-manager</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ingressShim</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">defaultIssuerName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a-manually-created-issuer-resource&quot;</span>
+<span class="w">    </span><span class="nt">defaultIssuerKind</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Issuer&quot;</span>
+<span class="w">    </span><span class="nt">defaultACMEChallengeType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http01&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -679,7 +679,7 @@ This can be configured in <code class="docutils literal notranslate"><span class
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./cert-manager"
         },
         predefinedOutput: true

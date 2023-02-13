@@ -631,7 +631,7 @@ title="Print to PDF"
 <span id="content-resource-group-create"></span><h1>Create the Resource Group<a class="headerlink" href="#create-the-resource-group" title="Permalink to this headline">#</a></h1>
 <section id="login-to-azure">
 <h2>Login to Azure<a class="headerlink" href="#login-to-azure" title="Permalink to this headline">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az login --username YOUR_TURING_EMAIL --output none
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>login<span class="w"> </span>--username<span class="w"> </span>YOUR_TURING_EMAIL<span class="w"> </span>--output<span class="w"> </span>none
 </pre></div>
 </div>
 <p>Login with your Turing account.</p>
@@ -640,13 +640,13 @@ title="Print to PDF"
 <h2>Activate the Subscription<a class="headerlink" href="#activate-the-subscription" title="Permalink to this headline">#</a></h2>
 <p>Hub23 has its own subscription and so we have to activate that.</p>
 <p>To check which subscriptions you have access to, run the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az account list --refresh --output table
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>account<span class="w"> </span>list<span class="w"> </span>--refresh<span class="w"> </span>--output<span class="w"> </span>table
 </pre></div>
 </div>
 <p>You should see <code class="docutils literal notranslate"><span class="pre">turingmybinder</span></code> listed as an option.
 If not, request access by opening a TopDesk ticket.</p>
 <p>To activate the subscription, run the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az account <span class="nb">set</span> --subscription turingmybinder
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>account<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--subscription<span class="w"> </span>turingmybinder
 </pre></div>
 </div>
 </section>
@@ -654,7 +654,7 @@ If not, request access by opening a TopDesk ticket.</p>
 <h2>Create a Resource Group<a class="headerlink" href="#create-a-resource-group" title="Permalink to this headline">#</a></h2>
 <p>Azure groups related resources together by assigning them to a Resource Group.
 We need to create one for Hub23.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az group create --name hub23 --location westeurope --output table
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>group<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>hub23<span class="w"> </span>--location<span class="w"> </span>westeurope<span class="w"> </span>--output<span class="w"> </span>table
 </pre></div>
 </div>
 <ul class="simple">
@@ -683,7 +683,7 @@ Test if the resource group exists by running the following: <code class="docutil
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./azure-prereqs/resource-group"
         },
         predefinedOutput: true

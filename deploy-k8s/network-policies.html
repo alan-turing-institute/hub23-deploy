@@ -648,12 +648,12 @@ Therefore, we need create a virtual network (vnet) and sub network (subnet) with
 </div>
 <section id="create-a-vnet">
 <h2>Create a VNET<a class="headerlink" href="#create-a-vnet" title="Permalink to this headline">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az network vnet create <span class="se">\</span>
-    --resource-group hub23 <span class="se">\</span>
-    --name hub23-vnet <span class="se">\</span>
-    --address-prefixes <span class="m">10</span>.0.0.0/8 <span class="se">\</span>
-    --subnet-name hub23-subnet <span class="se">\</span>
-    --subnet-prefix <span class="m">10</span>.240.0.0/16
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>network<span class="w"> </span>vnet<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--resource-group<span class="w"> </span>hub23<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>hub23-vnet<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--address-prefixes<span class="w"> </span><span class="m">10</span>.0.0.0/8<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--subnet-name<span class="w"> </span>hub23-subnet<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--subnet-prefix<span class="w"> </span><span class="m">10</span>.240.0.0/16
 </pre></div>
 </div>
 <ul class="simple">
@@ -665,21 +665,21 @@ Therefore, we need create a virtual network (vnet) and sub network (subnet) with
 <h2>Retrieve the VNet ID<a class="headerlink" href="#retrieve-the-vnet-id" title="Permalink to this headline">#</a></h2>
 <p>This saves the VNet ID into a bash variable.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">VNET_ID</span><span class="o">=</span><span class="k">$(</span>
-    az network vnet show <span class="se">\</span>
-    --resource-group hub23 <span class="se">\</span>
-    --name hub23-vnet <span class="se">\</span>
-    --query id <span class="se">\</span>
-    --output tsv
+<span class="w">    </span>az<span class="w"> </span>network<span class="w"> </span>vnet<span class="w"> </span>show<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--resource-group<span class="w"> </span>hub23<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>hub23-vnet<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--query<span class="w"> </span>id<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>tsv
 <span class="k">)</span>
 </pre></div>
 </div>
 </section>
 <section id="assign-the-contributor-role-to-the-service-principal-for-accessing-the-vnet">
 <h2>Assign the Contributor role to the Service Principal for accessing the VNet<a class="headerlink" href="#assign-the-contributor-role-to-the-service-principal-for-accessing-the-vnet" title="Permalink to this headline">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az role assignment create <span class="se">\</span>
-    --assignee <span class="k">$(</span>cat .secret/appId.txt<span class="k">)</span> <span class="se">\</span>
-    --scope <span class="nv">$VNET_ID</span> <span class="se">\</span>
-    --role Contributor
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--assignee<span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>.secret/appId.txt<span class="k">)</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--scope<span class="w"> </span><span class="nv">$VNET_ID</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--role<span class="w"> </span>Contributor
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -691,12 +691,12 @@ Therefore, we need create a virtual network (vnet) and sub network (subnet) with
 <h2>Retrieve the subnet ID<a class="headerlink" href="#retrieve-the-subnet-id" title="Permalink to this headline">#</a></h2>
 <p>This will save the subnet ID to a bash variable.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SUBNET_ID</span><span class="o">=</span><span class="k">$(</span>
-    az network vnet subnet show <span class="se">\</span>
-    --resource-group hub23 <span class="se">\</span>
-    --vnet-name hub23-vnet <span class="se">\</span>
-    --name hub23-subnet <span class="se">\</span>
-    --query id <span class="se">\</span>
-    --output tsv
+<span class="w">    </span>az<span class="w"> </span>network<span class="w"> </span>vnet<span class="w"> </span>subnet<span class="w"> </span>show<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--resource-group<span class="w"> </span>hub23<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--vnet-name<span class="w"> </span>hub23-vnet<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>hub23-subnet<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--query<span class="w"> </span>id<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>tsv
 <span class="k">)</span>
 </pre></div>
 </div>
@@ -715,7 +715,7 @@ Therefore, we need create a virtual network (vnet) and sub network (subnet) with
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./deploy-k8s"
         },
         predefinedOutput: true

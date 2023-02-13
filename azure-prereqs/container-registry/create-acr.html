@@ -656,25 +656,25 @@ title="Print to PDF"
 <p>The ACR name must be globally unique and consist of only lowercase alphanumeric characters, between 5 and 50 characters long.
 This can be checked using: <code class="docutils literal notranslate"><span class="pre">az</span> <span class="pre">acr</span> <span class="pre">check-name</span> <span class="pre">--name</span> <span class="pre">&lt;ACR-NAME&gt;</span></code>.</p>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az acr create --name hub23registry --resource-group hub23 --sku Standard
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>acr<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>hub23registry<span class="w"> </span>--resource-group<span class="w"> </span>hub23<span class="w"> </span>--sku<span class="w"> </span>Standard
 </pre></div>
 </div>
 </section>
 <section id="login-to-the-acr">
 <h2>Login to the ACR<a class="headerlink" href="#login-to-the-acr" title="Permalink to this headline">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az acr login --name hub23registry
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>acr<span class="w"> </span>login<span class="w"> </span>--name<span class="w"> </span>hub23registry
 </pre></div>
 </div>
 </section>
 <section id="save-the-login-server-to-a-variable">
 <h2>Save the login server to a variable<a class="headerlink" href="#save-the-login-server-to-a-variable" title="Permalink to this headline">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">LOGIN_SERVER</span><span class="o">=</span><span class="k">$(</span>az acr show --name hub23-registry --query loginServer --output tsv<span class="k">)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">LOGIN_SERVER</span><span class="o">=</span><span class="k">$(</span>az<span class="w"> </span>acr<span class="w"> </span>show<span class="w"> </span>--name<span class="w"> </span>hub23-registry<span class="w"> </span>--query<span class="w"> </span>loginServer<span class="w"> </span>--output<span class="w"> </span>tsv<span class="k">)</span>
 </pre></div>
 </div>
 </section>
 <section id="save-the-registry-id-to-a-variable">
 <h2>Save the registry ID to a variable<a class="headerlink" href="#save-the-registry-id-to-a-variable" title="Permalink to this headline">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">ACR_ID</span><span class="o">=</span><span class="k">$(</span>az acr show --name hub23-registry --query id --output tsv<span class="k">)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">ACR_ID</span><span class="o">=</span><span class="k">$(</span>az<span class="w"> </span>acr<span class="w"> </span>show<span class="w"> </span>--name<span class="w"> </span>hub23-registry<span class="w"> </span>--query<span class="w"> </span>id<span class="w"> </span>--output<span class="w"> </span>tsv<span class="k">)</span>
 </pre></div>
 </div>
 </section>
@@ -688,7 +688,7 @@ Without this, BinderHub won’t be able to store the images it generates.</p>
 Otherwise, you should ask IT to assign this role to the Service Principal.</p>
 </div>
 <p>See the <a class="reference internal" href="../key-vault/service-principals.html#content-key-vault-service-principals"><span class="std std-ref">Service Principal</span></a> section for instructions on how to download the Service Principal app ID to a file from the Key Vault.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az role assignment create --assignee <span class="k">$(</span>cat .secret/appId.txt<span class="k">)</span> --scope <span class="si">${</span><span class="nv">ACR_ID</span><span class="si">}</span> --role AcrPush
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>create<span class="w"> </span>--assignee<span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>.secret/appId.txt<span class="k">)</span><span class="w"> </span>--scope<span class="w"> </span><span class="si">${</span><span class="nv">ACR_ID</span><span class="si">}</span><span class="w"> </span>--role<span class="w"> </span>AcrPush
 </pre></div>
 </div>
 </section>
@@ -706,7 +706,7 @@ Otherwise, you should ask IT to assign this role to the Service Principal.</p>
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./azure-prereqs/container-registry"
         },
         predefinedOutput: true

@@ -688,10 +688,10 @@ This means that leaving the computer running with the JupyterHub window open wil
 <p>By default, JupyterHub will run the culling process every ten minutes and will cull any user pods that have been inactive for more than one hour.
 You can configure this behavior in your config file with the following code snippet.
 The culler can also be configured to cull pods that have existed for over a given length of time via the <code class="docutils literal notranslate"><span class="pre">maxAge</span></code> argument.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cull</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;max-idle-seconds-before-user-pod-is-deleted&gt;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">every</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-this-check-is-done&gt;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">maxAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-the-pods-has-been-active&gt;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cull</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;max-idle-seconds-before-user-pod-is-deleted&gt;</span>
+<span class="w">  </span><span class="nt">every</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-this-check-is-done&gt;</span>
+<span class="w">  </span><span class="nt">maxAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-the-pods-has-been-active&gt;</span>
 </pre></div>
 </div>
 </section>
@@ -711,14 +711,14 @@ The now evicted user-placeholder will signal the CA that it needs to scale up.</
 <p>User-placeholders will have the same resource requests as the default user.
 Therefore, if you have 3 user placeholders running, real users will only need to wait for a scale up if more than 3 users arrive in a time interval less than it takes to make a node ready for use.</p>
 <p>Add the following code snippet to use 3 user-placeholders.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">scheduling</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">podPriority</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">userPlaceholder</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># Specify three dummy user pods will be used as placeholders</span><span class="w"></span>
-<span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scheduling</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">podPriority</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">userPlaceholder</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># Specify three dummy user pods will be used as placeholders</span>
+<span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
 </pre></div>
 </div>
 </section>
@@ -740,7 +740,7 @@ See <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content
 <li><p>Setup a node pool (with autoscaling (see <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content-az-aks-create-autoscale"><span class="std std-ref">Enable Autoscaling</span></a>) and/or nodepools (see <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content-az-aks-create-nodepools"><span class="std std-ref">Create multiple nodepools</span></a>)) and a certain label.</p>
 <ol>
 <li><p>The label: <code class="docutils literal notranslate"><span class="pre">hub.jupyter.org/node-purpose=core</span></code></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl label nodes &lt;node-name&gt; hub.jupyter.org/node-purpose<span class="o">=</span>core
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>label<span class="w"> </span>nodes<span class="w"> </span>&lt;node-name&gt;<span class="w"> </span>hub.jupyter.org/node-purpose<span class="o">=</span>core
 </pre></div>
 </div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">nodes</span></code> to ascertain <code class="docutils literal notranslate"><span class="pre">&lt;node-name&gt;</span></code>.</p>
@@ -753,16 +753,16 @@ See <a class="reference internal" href="../deploy-k8s/az-aks-create.html#content
 </li>
 <li><p>Make core pods require to be scheduled on the node pool setup above.</p>
 <p>The default setting is to make core pods <em>prefer</em> to be scheduled on nodes with the <code class="docutils literal notranslate"><span class="pre">hub.jupyter.org/node-purpose=core</span></code> label, but we can make it a <em>requirement</em> by using the code snippet below.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">scheduling</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">corePods</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">nodeAffinity</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="c1"># matchNodePurpose valid options:</span><span class="w"></span>
-<span class="w">          </span><span class="c1"># - ignore</span><span class="w"></span>
-<span class="w">          </span><span class="c1"># - prefer (the default)</span><span class="w"></span>
-<span class="w">          </span><span class="c1"># - require</span><span class="w"></span>
-<span class="w">          </span><span class="nt">matchNodePurpose</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">require</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">scheduling</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">corePods</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">nodeAffinity</span><span class="p">:</span>
+<span class="w">          </span><span class="c1"># matchNodePurpose valid options:</span>
+<span class="w">          </span><span class="c1"># - ignore</span>
+<span class="w">          </span><span class="c1"># - prefer (the default)</span>
+<span class="w">          </span><span class="c1"># - require</span>
+<span class="w">          </span><span class="nt">matchNodePurpose</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">require</span>
 </pre></div>
 </div>
 </li>
@@ -783,11 +783,11 @@ Only the user scheduler would allow the underutilised nodes to free up over time
 <p>If you don’t want to scale down, it makes more sense to let users spread out and utilise all available nodes. Only activate the user scheduler if you have an autoscaling node pool.</p>
 </div>
 <p>Enable the user scheduler with the following code snippet:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">scheduling</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">userScheduler</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">scheduling</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">userScheduler</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
 </section>
@@ -798,13 +798,13 @@ If the image is large, this can be a long wait!</p>
 <p>In the case when a new node is added (Cluster Autoscaler), the <em>continuous-image-puller</em> will pull a user’s container.
 This uses a daemonset to force Kubernetes to pull the user image on all nodes as soon as a node is present.</p>
 <p>The continuous-image-puller is disabled by default and the following snippet is added to <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> to enable it.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">prePuller</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">continuous</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="c1"># NOTE: if used with a Cluster Autoscaler, also add user-placeholders</span><span class="w"></span>
-<span class="w">          </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hub</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">prePuller</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">continuous</span><span class="p">:</span>
+<span class="w">          </span><span class="c1"># NOTE: if used with a Cluster Autoscaler, also add user-placeholders</span>
+<span class="w">          </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
 </section>
@@ -822,7 +822,7 @@ This uses a daemonset to force Kubernetes to pull the user image on all nodes as
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./advanced"
         },
         predefinedOutput: true

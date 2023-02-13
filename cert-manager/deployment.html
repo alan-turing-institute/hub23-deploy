@@ -736,31 +736,31 @@ Instead the <code class="docutils literal notranslate"><span class="pre">cert-ma
 </div>
 <section id="create-a-namespace-for-cert-manager">
 <h3>Create a namespace for <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code><a class="headerlink" href="#create-a-namespace-for-cert-manager" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl create namespace cert-manager
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>cert-manager
 </pre></div>
 </div>
 </section>
 <section id="add-the-cert-manager-chart-repo-to-helm">
 <h3>Add the <code class="docutils literal notranslate"><span class="pre">cert-manager</span></code> chart repo to Helm<a class="headerlink" href="#add-the-cert-manager-chart-repo-to-helm" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm repo add jetstack https://charts.jetstack.io
-helm repo update
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>jetstack<span class="w"> </span>https://charts.jetstack.io
+helm<span class="w"> </span>repo<span class="w"> </span>update
 </pre></div>
 </div>
 </section>
 <section id="install-the-custom-resource-definitions">
 <h3>Install the Custom Resource Definitions<a class="headerlink" href="#install-the-custom-resource-definitions" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v<span class="o">{</span>INSERT_VERSION_NUMBER_HERE<span class="o">}</span>/cert-manager.crds.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://github.com/jetstack/cert-manager/releases/download/v<span class="o">{</span>INSERT_VERSION_NUMBER_HERE<span class="o">}</span>/cert-manager.crds.yaml
 </pre></div>
 </div>
 </section>
 <section id="install-using-helm">
 <h3>Install using Helm<a class="headerlink" href="#install-using-helm" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm install cert-manager jetstack/cert-manager <span class="se">\</span>
-    --version VERSION <span class="se">\</span>
-    --create-namespace <span class="se">\</span>
-    --namespace cert-manager <span class="se">\</span>
-    --timeout 5m0s <span class="se">\</span>
-    --wait
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>install<span class="w"> </span>cert-manager<span class="w"> </span>jetstack/cert-manager<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--version<span class="w"> </span>VERSION<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--create-namespace<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--namespace<span class="w"> </span>cert-manager<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--timeout<span class="w"> </span>5m0s<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--wait
 </pre></div>
 </div>
 </section>
@@ -784,7 +784,7 @@ Using the <code class="docutils literal notranslate"><span class="pre">staging</
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./cert-manager"
         },
         predefinedOutput: true

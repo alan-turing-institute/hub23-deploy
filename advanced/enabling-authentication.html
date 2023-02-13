@@ -791,28 +791,28 @@ title="Print to PDF"
 <h2>Enabling Authentication using JupyterHub as an OAuth provider<a class="headerlink" href="#enabling-authentication-using-jupyterhub-as-an-oauth-provider" title="Permalink to this headline">#</a></h2>
 <section id="update-deploy-config-yaml-or-deploy-prod-yaml-with-the-following-configuration">
 <h3>Update <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> with the following configuration<a class="headerlink" href="#update-deploy-config-yaml-or-deploy-prod-yaml-with-the-following-configuration" title="Permalink to this headline">#</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">BinderHub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">auth_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">BinderHub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">auth_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
-<span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">cull</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># don&#39;t cull authenticated users</span><span class="w"></span>
-<span class="w">    </span><span class="nt">users</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
+<span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">cull</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># don&#39;t cull authenticated users</span>
+<span class="w">    </span><span class="nt">users</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
 
-<span class="w">  </span><span class="nt">custom</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">binderauth_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">custom</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">binderauth_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
-<span class="w">  </span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">redirectToServer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="w">    </span><span class="nt">services</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">binder</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">oauth_redirect_uri</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://&lt;binder-ip&gt;/oauth_callback&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">oauth_client_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;binder-oauth-client-test&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">hub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">redirectToServer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">services</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">binder</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">oauth_redirect_uri</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://&lt;binder-ip&gt;/oauth_callback&quot;</span>
+<span class="w">        </span><span class="nt">oauth_client_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;binder-oauth-client-test&quot;</span>
 
-<span class="w">  </span><span class="nt">singleuser</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># to make notebook servers aware of hub</span><span class="w"></span>
-<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyterhub-singleuser</span><span class="w"></span>
+<span class="w">  </span><span class="nt">singleuser</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># to make notebook servers aware of hub</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyterhub-singleuser</span>
 </pre></div>
 </div>
 <p>This will set up the redirection to the JupyterHub for login and spin-up user servers.</p>
@@ -822,22 +822,22 @@ title="Print to PDF"
 <h2>OAuth with GitHub<a class="headerlink" href="#oauth-with-github" title="Permalink to this headline">#</a></h2>
 <section id="modify-the-hub-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following">
 <h3>Modify the <code class="docutils literal notranslate"><span class="pre">hub</span></code> section of <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> to include the following<a class="headerlink" href="#modify-the-hub-section-of-deploy-config-yaml-or-deploy-prod-yaml-to-include-the-following" title="Permalink to this headline">#</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">GitHubOAuthenticator</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">oauth_callback_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://&lt;hub-ip&gt;/hub/oauth_callback&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">JupyterHub</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">authenticator_class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">oauth_callback_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://&lt;hub-ip&gt;/hub/oauth_callback&quot;</span>
+<span class="w">    </span><span class="nt">JupyterHub</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">authenticator_class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
 </pre></div>
 </div>
 </section>
 <section id="modify-the-jupyterhub-hub-section-of-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following">
 <h3>Modify the <code class="docutils literal notranslate"><span class="pre">jupyterhub.hub</span></code> section of <code class="docutils literal notranslate"><span class="pre">deploy/secret-template.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod-template.yaml</span></code> with the following<a class="headerlink" href="#modify-the-jupyterhub-hub-section-of-deploy-secret-template-yaml-or-deploy-prod-template-yaml-with-the-following" title="Permalink to this headline">#</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">GitHubOAuthenticator</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">client_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;clientId&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">client_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;clientSecret&quot;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">client_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;clientId&quot;</span>
+<span class="w">      </span><span class="nt">client_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;clientSecret&quot;</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -863,15 +863,15 @@ Add these values to the key vault (see <a class="reference internal" href="../az
 <p>This section of the docs is a work in progress and needs improvement.</p>
 </div>
 <p>Update <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code>  or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> to include the following under <code class="docutils literal notranslate"><span class="pre">hub.config</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">GitHubOAuthenticator</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">allowed_organizations</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;binderhub-test-org&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
-<span class="w">    </span><span class="nt">OAuthenticator</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">scope</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;read:user&quot;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">allowed_organizations</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;binderhub-test-org&quot;</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">OAuthenticator</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">scope</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;read:user&quot;</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">read:user</span></code> scope will read a user’s organisation/team memberships and look for <code class="docutils literal notranslate"><span class="pre">binderhub-test-org</span></code>.
@@ -886,18 +886,18 @@ If the membership is not found, they will be forbidden from accessing Hub23.
 This can cause errors such as <code class="docutils literal notranslate"><span class="pre">Launch</span> <span class="pre">failed.</span> <span class="pre">User</span> <span class="pre">already</span> <span class="pre">has</span> <span class="pre">a</span> <span class="pre">running</span> <span class="pre">server.</span></code>
 To avoid this, we can used <a class="reference external" href="https://blog.jupyter.org/announcing-jupyterhub-1-0-8fff78acad7f">named servers</a>.
 To enable this feature, add the following to <code class="docutils literal notranslate"><span class="pre">deploy/config.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code>.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">BinderHub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">use_named_servers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">allowNamedServers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">BinderHub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">use_named_servers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hub</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">allowNamedServers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
 <p>The number of named servers a user is allowed can be controlled as in the following example.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">namedServerLimitPerUser</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">namedServerLimitPerUser</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
 </pre></div>
 </div>
 </section>
@@ -915,7 +915,7 @@ To enable this feature, add the following to <code class="docutils literal notra
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./advanced"
         },
         predefinedOutput: true

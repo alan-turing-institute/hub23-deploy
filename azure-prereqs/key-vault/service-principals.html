@@ -577,31 +577,31 @@ A Service Principal is a protocol, consisting of an app ID and a key, that grant
 REG members presently don’t have permissions to create Service Principals and so IT Services create them on our behalf via a TopDesk request.
 It is then recommended to save the Service Principal to the key vault for safe-keeping.</p>
 <p>Add the app ID:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret <span class="nb">set</span> <span class="se">\</span>
-    --vault-name hub23-keyvault <span class="se">\</span>
-    --name appId <span class="se">\</span>
-    --value &lt;redacted&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--vault-name<span class="w"> </span>hub23-keyvault<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>appId<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--value<span class="w"> </span>&lt;redacted&gt;
 </pre></div>
 </div>
 <p>Add the key:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret <span class="nb">set</span> <span class="se">\</span>
-    --vault-name hub23-keyvault <span class="se">\</span>
-    --name appKey <span class="se">\</span>
-    --value &lt;redacted&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--vault-name<span class="w"> </span>hub23-keyvault<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>appKey<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--value<span class="w"> </span>&lt;redacted&gt;
 </pre></div>
 </div>
 <p>Download the app ID and save to a file:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret download <span class="se">\</span>
-    --vault-name hub23-keyvault <span class="se">\</span>
-    --name appId <span class="se">\</span>
-    --file .secret/appId.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span>download<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--vault-name<span class="w"> </span>hub23-keyvault<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>appId<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--file<span class="w"> </span>.secret/appId.txt
 </pre></div>
 </div>
 <p>Download the key and save to a file:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret download <span class="se">\</span>
-    --vault-name hub23-keyvault <span class="se">\</span>
-    --name appKey <span class="se">\</span>
-    --file .secret/appKey.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span>download<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--vault-name<span class="w"> </span>hub23-keyvault<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>appKey<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--file<span class="w"> </span>.secret/appKey.txt
 </pre></div>
 </div>
 </section>
@@ -618,7 +618,7 @@ It is then recommended to save the Service Principal to the key vault for safe-k
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./azure-prereqs/key-vault"
         },
         predefinedOutput: true

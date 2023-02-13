@@ -872,10 +872,10 @@ By writing a helm chart that <em>depends</em> on the BinderHub chart, we can lat
 <section id="downloading-the-required-secrets">
 <h2>Downloading the Required Secrets<a class="headerlink" href="#downloading-the-required-secrets" title="Permalink to this headline">#</a></h2>
 <p>To set up the BinderHub, we will need to download the API and secret tokens from the keyvault like so:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret download --vault-name hub23-keyvault --name apiToken --file .secret/apiToken.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span>download<span class="w"> </span>--vault-name<span class="w"> </span>hub23-keyvault<span class="w"> </span>--name<span class="w"> </span>apiToken<span class="w"> </span>--file<span class="w"> </span>.secret/apiToken.txt
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault secret download --vault-name hub23-keyvault --name secretToken --file .secret/secretToken.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span>download<span class="w"> </span>--vault-name<span class="w"> </span>hub23-keyvault<span class="w"> </span>--name<span class="w"> </span>secretToken<span class="w"> </span>--file<span class="w"> </span>.secret/secretToken.txt
 </pre></div>
 </div>
 </section>
@@ -883,31 +883,31 @@ By writing a helm chart that <em>depends</em> on the BinderHub chart, we can lat
 <h2>Writing the <code class="docutils literal notranslate"><span class="pre">hub23-chart</span></code> Helm Chart<a class="headerlink" href="#writing-the-hub23-chart-helm-chart" title="Permalink to this headline">#</a></h2>
 <section id="create-a-directory-to-store-the-chart-in">
 <h3>Create a directory to store the chart in<a class="headerlink" href="#create-a-directory-to-store-the-chart-in" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir hub23-chart
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>hub23-chart
 </pre></div>
 </div>
 </section>
 <section id="create-hub23-chart-chart-yaml">
 <h3>Create <code class="docutils literal notranslate"><span class="pre">hub23-chart/Chart.yaml</span></code><a class="headerlink" href="#create-hub23-chart-chart-yaml" title="Permalink to this headline">#</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
-<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hub23-chart</span><span class="w"></span>
-<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.1</span><span class="w"></span>
-<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">A meta-chart for the BinderHub deployment on Hub23</span><span class="w"></span>
-<span class="nt">sources</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/alan-turing-institute/hub23-deploy</span><span class="w"></span>
-<span class="nt">maintainers</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">your-name</span><span class="w"></span>
-<span class="w">    </span><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">your-email@whatever.com</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hub23-chart</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.1</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">A meta-chart for the BinderHub deployment on Hub23</span>
+<span class="nt">sources</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/alan-turing-institute/hub23-deploy</span>
+<span class="nt">maintainers</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">your-name</span>
+<span class="w">    </span><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">your-email@whatever.com</span>
 </pre></div>
 </div>
 </section>
 <section id="create-hub23-chart-requirements-yaml">
 <h3>Create <code class="docutils literal notranslate"><span class="pre">hub23-chart/requirements.yaml</span></code><a class="headerlink" href="#create-hub23-chart-requirements-yaml" title="Permalink to this headline">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">requirements.yaml</span></code> is where we define which other charts we are dependent on, e.g. BinderHub.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dependencies</span><span class="p">:</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binderhub</span><span class="w"></span>
-<span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://jupyterhub.github.io/helm-chart</span><span class="w"></span>
-<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2.0-1efa7b8</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dependencies</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binderhub</span>
+<span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://jupyterhub.github.io/helm-chart</span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2.0-1efa7b8</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -918,13 +918,13 @@ By writing a helm chart that <em>depends</em> on the BinderHub chart, we can lat
 <section id="create-hub23-chart-values-yaml">
 <h3>Create <code class="docutils literal notranslate"><span class="pre">hub23-chart/values.yaml</span></code><a class="headerlink" href="#create-hub23-chart-values-yaml" title="Permalink to this headline">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> is where we define the default values of our chart.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rbac</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rbac</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
-<span class="nt">binderhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">BinderHub</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">use_registry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">binderhub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">BinderHub</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">use_registry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -943,13 +943,13 @@ Add the <a class="reference external" href="https://github.com/helm/helm/blob/ma
 <section id="create-deploy-prod-yaml">
 <h3>Create <code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code><a class="headerlink" href="#create-deploy-prod-yaml" title="Permalink to this headline">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">deploy/prod.yaml</span></code> is where we will overwrite the chart with our non-secret values.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">projectName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hub23</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">projectName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hub23</span>
 
-<span class="nt">binderhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">BinderHub</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">image_prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IMAGE_PREFIX&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">hub_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://HUB_URL&quot;</span><span class="w"></span>
+<span class="nt">binderhub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">BinderHub</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">image_prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;IMAGE_PREFIX&quot;</span>
+<span class="w">      </span><span class="nt">hub_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://HUB_URL&quot;</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -960,18 +960,18 @@ Add the <a class="reference external" href="https://github.com/helm/helm/blob/ma
 <section id="create-deploy-prod-template-yaml">
 <h3>Create <code class="docutils literal notranslate"><span class="pre">deploy/prod-template.yaml</span></code><a class="headerlink" href="#create-deploy-prod-template-yaml" title="Permalink to this headline">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">deploy/prod-template.yaml</span></code> will include our secret values.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">binderhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">registry</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{username}&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{password}&quot;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">binderhub</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">registry</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{username}&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{password}&quot;</span>
 
-<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">services</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">binder</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">apiToken</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{apiToken}&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">proxy</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">secretToken</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{secretToken}&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">jupyterhub</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hub</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">services</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">binder</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">apiToken</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{apiToken}&quot;</span>
+<span class="w">    </span><span class="nt">proxy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">secretToken</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{secretToken}&quot;</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">sed</span></code> commands can be used to populate this template and save it to <code class="docutils literal notranslate"><span class="pre">.secret/</span></code>.</p>
@@ -981,20 +981,20 @@ Add the <a class="reference external" href="https://github.com/helm/helm/blob/ma
 <h2>Installing <code class="docutils literal notranslate"><span class="pre">hub23-chart</span></code><a class="headerlink" href="#installing-hub23-chart" title="Permalink to this headline">#</a></h2>
 <section id="update-the-chart-s-dependencies">
 <h3>Update the chart’s dependencies<a class="headerlink" href="#update-the-chart-s-dependencies" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> hub23-chart <span class="o">&amp;&amp;</span> helm dependency update <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ..
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hub23-chart<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>helm<span class="w"> </span>dependency<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>..
 </pre></div>
 </div>
 </section>
 <section id="install-the-helm-chart">
 <h3>Install the helm chart<a class="headerlink" href="#install-the-helm-chart" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm install ./hub23-chart <span class="se">\</span>
-    --name hub23 <span class="se">\</span>
-    --namespace hub23 <span class="se">\</span>
-    --create-namespace <span class="se">\</span>
-    -f deploy/prod.yaml <span class="se">\</span>
-    -f .secret/prod.yaml <span class="se">\</span>
-    -f deploy/letsencrypt-<span class="o">{</span> staging <span class="p">|</span> prod <span class="o">}</span>.yaml <span class="se">\</span>
-    --cleanup-on-fail
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>install<span class="w"> </span>./hub23-chart<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>hub23<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--namespace<span class="w"> </span>hub23<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--create-namespace<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>deploy/prod.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>.secret/prod.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>deploy/letsencrypt-<span class="o">{</span><span class="w"> </span>staging<span class="w"> </span><span class="p">|</span><span class="w"> </span>prod<span class="w"> </span><span class="o">}</span>.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cleanup-on-fail
 </pre></div>
 </div>
 </section>
@@ -1003,17 +1003,17 @@ Add the <a class="reference external" href="https://github.com/helm/helm/blob/ma
 <h2>Upgrading <code class="docutils literal notranslate"><span class="pre">hub23-chart</span></code><a class="headerlink" href="#upgrading-hub23-chart" title="Permalink to this headline">#</a></h2>
 <section id="id1">
 <h3>Update the chart’s dependencies<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> hub23-chart <span class="o">&amp;&amp;</span> helm dependency update <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ..
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hub23-chart<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>helm<span class="w"> </span>dependency<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>..
 </pre></div>
 </div>
 </section>
 <section id="upgrade-the-helm-chart-itself">
 <h3>Upgrade the helm chart itself<a class="headerlink" href="#upgrade-the-helm-chart-itself" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm upgrade hub23 ./hub23-chart <span class="se">\</span>
-    -f deploy/prod.yaml <span class="se">\</span>
-    -f .secret/prod.yaml <span class="se">\</span>
-    -f deploy/letsencrypt-<span class="o">{</span> staging <span class="p">|</span> prod <span class="o">}</span>.yaml <span class="se">\</span>
-    --cleanup-on-fail
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>upgrade<span class="w"> </span>hub23<span class="w"> </span>./hub23-chart<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>deploy/prod.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>.secret/prod.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span>deploy/letsencrypt-<span class="o">{</span><span class="w"> </span>staging<span class="w"> </span><span class="p">|</span><span class="w"> </span>prod<span class="w"> </span><span class="o">}</span>.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cleanup-on-fail
 </pre></div>
 </div>
 </section>
@@ -1032,7 +1032,7 @@ Add the <a class="reference external" href="https://github.com/helm/helm/blob/ma
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./binderhub"
         },
         predefinedOutput: true

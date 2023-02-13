@@ -616,11 +616,11 @@ A Helm Chart will populate various configuration files with the required info an
 <section id="verify-the-installation">
 <h2>Verify the installation<a class="headerlink" href="#verify-the-installation" title="Permalink to this headline">#</a></h2>
 <p>To verify the installation, run the following command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>list
 </pre></div>
 </div>
 <p>You should see an empty list since no Helm charts have been installed:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME<span class="w">    </span>NAMESPACE<span class="w">       </span>REVISION<span class="w">        </span>UPDATED<span class="w"> </span>STATUS<span class="w">  </span>CHART<span class="w">   </span>APP<span class="w"> </span>VERSION
 </pre></div>
 </div>
 </section>
@@ -638,7 +638,7 @@ A Helm Chart will populate various configuration files with the required info an
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./setup-helm"
         },
         predefinedOutput: true

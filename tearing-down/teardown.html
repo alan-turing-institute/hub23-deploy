@@ -643,19 +643,19 @@ title="Print to PDF"
 <h2>Delete the Helm Release and Kubernetes Namespace<a class="headerlink" href="#delete-the-helm-release-and-kubernetes-namespace" title="Permalink to this headline">#</a></h2>
 <p>First, delete the Helm release.
 This deletes all resources that were created by Helm for Hub23.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm delete hub23
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>delete<span class="w"> </span>hub23
 </pre></div>
 </div>
 <p>Second, delete the Kubernetes namespace the hub was installed in.
 This deletes any disks that may have been created to store user’s data, and any IP addresses that may have been provisioned.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl delete namespace hub23
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>delete<span class="w"> </span>namespace<span class="w"> </span>hub23
 </pre></div>
 </div>
 </section>
 <section id="delete-the-azure-resource-group">
 <h2>Delete the Azure Resource Group<a class="headerlink" href="#delete-the-azure-resource-group" title="Permalink to this headline">#</a></h2>
 <p>The next step is to delete all the resources created and that can be done in one command by deleting the resource group.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az group delete --name hub23
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>group<span class="w"> </span>delete<span class="w"> </span>--name<span class="w"> </span>hub23
 </pre></div>
 </div>
 </section>
@@ -678,7 +678,7 @@ You will still be charged for any that remain.</p>
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./tearing-down"
         },
         predefinedOutput: true

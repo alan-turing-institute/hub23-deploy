@@ -615,7 +615,7 @@ title="Print to PDF"
 <p class="admonition-title">Note</p>
 <p>Key vault names must be lower case and/or numerical and may only include hyphens (<code class="docutils literal notranslate"><span class="pre">-</span></code>), no underscores (<code class="docutils literal notranslate"><span class="pre">_</span></code>) or other non-alphanumeric characters. They must also be unique.</p>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az keyvault create --name hub23-keyvault --resource-group hub23
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>keyvault<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>hub23-keyvault<span class="w"> </span>--resource-group<span class="w"> </span>hub23
 </pre></div>
 </div>
 </section>
@@ -633,7 +633,7 @@ title="Print to PDF"
             mode: "python"
         },
         kernelOptions: {
-            kernelName: "python3",
+            name: "python3",
             path: "./azure-prereqs/key-vault"
         },
         predefinedOutput: true
