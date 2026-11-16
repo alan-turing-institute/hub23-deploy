@@ -76,8 +76,7 @@ def calculate_costs(billing_info):
 def summary_stats(yml, contingency, months):
     # Print cost breakdown
     if months != 1:
-        print(
-            f"""
+        print(f"""
 Cluster cost per month: ${yml["costs"]["cluster_cost_permonth_usd"]:.2f}
 ACR cost per month: ${yml["costs"]["acr_cost_peravgmonth_usd"]:.2f}
 
@@ -91,12 +90,10 @@ ACR cost per month: ${(1.0 + contingency) * months * yml["costs"]["acr_cost_pera
 
 Total cost for {months} months with {contingency}% contingency:
 ${(1.0 + contingency) * months * (yml["costs"]["cluster_cost_permonth_usd"] + yml["costs"]["acr_cost_peravgmonth_usd"]):.2f}
-"""
-        )
+""")
 
     else:
-        print(
-            f"""
+        print(f"""
 Cluster cost per month: ${yml["costs"]["cluster_cost_permonth_usd"]:.2f}
 ACR cost per month: ${yml["costs"]["acr_cost_peravgmonth_usd"]:.2f}
 
@@ -106,8 +103,7 @@ ACR cost per month: ${(1.0 + contingency) * yml["costs"]["acr_cost_peravgmonth_u
 
 Total cost with {contingency}% contingency:
 ${(1.0 + contingency) * (yml["costs"]["cluster_cost_permonth_usd"] + yml["costs"]["acr_cost_peravgmonth_usd"]):.2f}
-"""
-        )
+""")
 
 
 if __name__ == "__main__":
